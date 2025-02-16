@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import java.util.stream.IntStream;
 import javafx.application.Application;
 import org.fxmisc.richtext.InlineCssTextArea;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -18,6 +19,8 @@ public class App extends Application {
     ArrayList<InlineCssTextArea> text_areas = new ArrayList<>();
     
     ArrayList<String> paths = new ArrayList<>();
+    
+    int tab_count = 0;
     
     @Override
     public void start(Stage stage) {
@@ -193,11 +196,53 @@ public class App extends Application {
         
         text_area.appendText(text);
         
-        text_area.addEventFilter(KeyEvent.ANY, key -> {
+        text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             text_area.clearStyle(0, text_area.getText().length());
             
+            if (key.getCode() == KeyCode.TAB) {
+                tab_count += 1;
+                
+                text_area.insertText(text_area.getCaretPosition(), "\t");
+                
+                key.consume();
+            }
+            
+            if (key.getCode() == KeyCode.ENTER) {
+                var tab_builder = new StringBuilder("\n");
+                
+                IntStream.range(0, tab_count).forEachOrdered(i -> {
+                    tab_builder.append("\t");
+                });
+                
+                text_area.insertText(text_area.getCaretPosition(), tab_builder.toString());
+                
+                key.consume();
+            }
+            
+            if (key.getCode() == KeyCode.BACK_SPACE) {
+                var caret = text_area.getCaretPosition();
+                
+                if (caret > 0) {
+                    var ch = text_area.getText(caret - 1, caret);
+                    
+                    if (ch.equals("\t")) {
+                        tab_count -= 1;
+                    }
+                    
+                    if (text_area.getSelectedText().isEmpty()) {
+                        text_area.deleteText(caret - 1, caret);
+                    } else {
+                        text_area.deleteText(text_area.getSelection());
+                    }
+                }
+                
+                key.consume();
+            }
+            
             if (key.isShortcutDown() && key.getCode() == KeyCode.Y) {
-                text_area.redo();
+                if (text_area.isRedoAvailable()) {
+                    text_area.redo();
+                }
                 
                 key.consume();
             }
