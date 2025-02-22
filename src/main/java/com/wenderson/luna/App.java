@@ -1,26 +1,17 @@
 package com.wenderson.luna;
 
 import java.io.*;
-import java.util.*;
-import javafx.event.*;
 import javafx.stage.*;
+import java.util.Scanner;
 import javafx.scene.Scene;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
 import javafx.scene.control.*;
-import java.util.stream.IntStream;
+import javafx.event.ActionEvent;
 import javafx.application.Application;
-import org.fxmisc.richtext.InlineCssTextArea;
-import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.layout.BorderPane;
 
 public class App extends Application {
-    TabPane tabs;
-    
-    ArrayList<InlineCssTextArea> text_areas = new ArrayList<>();
-    
-    ArrayList<String> paths = new ArrayList<>();
-    
-    int tab_count = 0;
+    TabPane tabs = new TabPane();
     
     @Override
     public void start(Stage stage) {
@@ -35,7 +26,7 @@ public class App extends Application {
         new_file.setAccelerator(new_file_shortcut);
         
         new_file.setOnAction((ActionEvent action) -> {
-            new_file("Untitled", "", null);
+            new_file();
         });
         
         var open_file = new MenuItem("Open File...");
@@ -55,7 +46,7 @@ public class App extends Application {
         save.setAccelerator(save_shortcut);
         
         save.setOnAction((ActionEvent action) -> {
-            save();
+            tabActionPerformed("Save");
         });
         
         var save_as = new MenuItem("Save As...");
@@ -65,7 +56,7 @@ public class App extends Application {
         save_as.setAccelerator(save_as_shortcut);
         
         save_as.setOnAction((ActionEvent action) -> {
-            save_as();
+            tabActionPerformed("Save As...");
         });
         
         var exit = new MenuItem("Exit");
@@ -89,7 +80,7 @@ public class App extends Application {
         undo.setAccelerator(undo_shortcut);
         
         undo.setOnAction((ActionEvent action) -> {
-            edit_text("Undo");
+            tabActionPerformed("Undo");
         });
         
         var redo = new MenuItem("Redo");
@@ -99,7 +90,7 @@ public class App extends Application {
         redo.setAccelerator(redo_shortcut);
         
         redo.setOnAction((ActionEvent action) -> {
-            edit_text("Redo");
+            tabActionPerformed("Redo");
         });
         
         var cut = new MenuItem("Cut");
@@ -109,7 +100,7 @@ public class App extends Application {
         cut.setAccelerator(cut_shortcut);
         
         cut.setOnAction((ActionEvent action) -> {
-            edit_text("Cut");
+            tabActionPerformed("Cut");
         });
         
         var copy = new MenuItem("Copy");
@@ -119,7 +110,7 @@ public class App extends Application {
         copy.setAccelerator(copy_shortcut);
         
         copy.setOnAction((ActionEvent action) -> {
-            edit_text("Copy");
+            tabActionPerformed("Copy");
         });
         
         var paste = new MenuItem("Paste");
@@ -129,7 +120,7 @@ public class App extends Application {
         paste.setAccelerator(paste_shortcut);
         
         paste.setOnAction((ActionEvent action) -> {
-            edit_text("Paste");
+            tabActionPerformed("Paste");
         });
         
         var find = new MenuItem("Find...");
@@ -139,7 +130,7 @@ public class App extends Application {
         find.setAccelerator(find_shortcut);
         
         find.setOnAction((ActionEvent action) -> {
-            find();
+            tabActionPerformed("Find...");
         });
         
         var replace = new MenuItem("Replace...");
@@ -149,7 +140,7 @@ public class App extends Application {
         replace.setAccelerator(replace_shortcut);
         
         replace.setOnAction((ActionEvent action) -> {
-            replace();
+            tabActionPerformed("Replace...");
         });
         
         var edit = new Menu("Edit");
@@ -159,8 +150,6 @@ public class App extends Application {
         var menubar = new MenuBar();
         
         menubar.getMenus().addAll(file, edit);
-        
-        tabs = new TabPane();
         
         var border_pane = new BorderPane();
         
@@ -175,108 +164,12 @@ public class App extends Application {
         stage.show();
     }
     
-    void new_file(String title, String text, String path) {
-        var tab = new Tab(title);
-        
-        var selection_model = tabs.getSelectionModel();
-        
-        tab.setOnCloseRequest((Event event) -> {
-            var index = selection_model.getSelectedIndex();
-            
-            text_areas.remove(index);
-            
-            paths.remove(index);
-        });
-        
-        var scroll_pane = new ScrollPane();
-        
-        var text_area = new InlineCssTextArea();
-        
-        text_area.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
-        
-        text_area.appendText(text);
-        
-        text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            text_area.clearStyle(0, text_area.getText().length());
-            
-            if (key.getCode() == KeyCode.TAB) {
-                tab_count += 1;
-                
-                text_area.insertText(text_area.getCaretPosition(), "\t");
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.ENTER) {
-                var tab_builder = new StringBuilder("\n");
-                
-                IntStream.range(0, tab_count).forEachOrdered(i -> {
-                    tab_builder.append("\t");
-                });
-                
-                text_area.insertText(text_area.getCaretPosition(), tab_builder.toString());
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.BACK_SPACE) {
-                var caret = text_area.getCaretPosition();
-                
-                if (caret > 0) {
-                    var ch = text_area.getText(caret - 1, caret);
-                    
-                    if (ch.equals("\t")) {
-                        tab_count -= 1;
-                    }
-                    
-                    if (text_area.getSelectedText().isEmpty()) {
-                        text_area.deleteText(caret - 1, caret);
-                    } else {
-                        text_area.deleteText(text_area.getSelection());
-                    }
-                }
-                
-                key.consume();
-            }
-            
-            if (key.isShortcutDown() && key.getCode() == KeyCode.Y) {
-                if (text_area.isRedoAvailable()) {
-                    text_area.redo();
-                }
-                
-                key.consume();
-            }
-        });
-        
-        text_areas.add(text_area);
-        
-        scroll_pane.setContent(text_area);
-        
-        scroll_pane.fitToWidthProperty().set(true);
-        
-        scroll_pane.fitToHeightProperty().set(true);
-        
-        tab.setContent(scroll_pane);
+    void new_file() {
+        var tab = new CustomTab();
         
         tabs.getTabs().add(tab);
         
-        paths.add(path);
-        
-        selection_model.selectLast();
-    }
-    
-    void show_error(String text) {
-        var dialog = new Dialog<>();
-        
-        dialog.setTitle("ERROR");
-        
-        dialog.setContentText(text);
-        
-        var ok = new ButtonType("OK", ButtonData.OK_DONE);
-        
-        dialog.getDialogPane().getButtonTypes().add(ok);
-        
-        dialog.showAndWait();
+        tabs.getSelectionModel().selectLast();
     }
     
     void open_file() {
@@ -290,10 +183,12 @@ public class App extends Application {
             return;
         }
         
+        Scanner scanner;
+        
         var text = new StringBuilder();
         
         try {
-            var scanner = new Scanner(file);
+            scanner = new Scanner(file);
             
             String line;
             
@@ -306,188 +201,68 @@ public class App extends Application {
                     text.append("\n");
                 }
             }
-            
-            scanner.close();
-        } catch (FileNotFoundException error) {
-            show_error("The file was not found.");
+        } catch (FileNotFoundException ex) {
+            ShowError.show("Um erro ocorreu ao tentar abrir o arquivo.");
             
             return;
         }
         
-        new_file(file.getName(), text.toString(), file.getPath());
+        scanner.close();
+        
+        var tab = new CustomTab(file.getName(), text.toString());
+        
+        tabs.getTabs().add(tab);
+        
+        tabs.getSelectionModel().selectLast();
     }
     
-    void save_as() {
+    void tabActionPerformed(String command) {
         var index = tabs.getSelectionModel().getSelectedIndex();
         
         if (index == -1) {
             return;
         }
         
-        var file_chooser = new FileChooser();
+        var tab = (CustomTab) tabs.getTabs().get(index);
         
-        file_chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        
-        var file = file_chooser.showSaveDialog(null);
-        
-        if (file == null) {
-            return;
-        }
-        
-        try {
-            var writer = new FileWriter(file);
-            
-            writer.write(text_areas.get(index).getText());
-            
-            writer.close();
-        } catch (IOException error) {
-            show_error("An error ocorrur while saving the file.");
-        }
-        
-        if (paths.get(index) == null) {
-            tabs.getTabs().get(index).setText(file.getName());
-            
-            paths.add(file.getPath());
-        }
-    }
-    
-    void save() {
-        var index = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (index == -1) {
-            return;
-        }
-        
-        if (paths.get(index) == null) {
-            save_as();
-            
-            return;
-        }
-        
-        try {
-            var writer = new FileWriter(paths.get(index));
-            
-            writer.write(text_areas.get(index).getText());
-            
-            writer.close();
-        } catch (IOException error) {
-            show_error("An error ocorror when saving the file.");
-        }
-    }
-    
-    void edit_text(String edit) {
-        var index = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (index == -1) {
-            return;
-        }
-        
-        switch (edit) {
+        switch (command) {
+            case "Save":
+                tab.save();
+                
+                break;
+            case "Save As...":
+                tab.save_as();
+                
+                break;
             case "Undo":
-                text_areas.get(index).undo();
+                tab.undo();
                 
                 break;
             case "Redo":
-                text_areas.get(index).redo();
+                tab.redo();
                 
                 break;
             case "Cut":
-                text_areas.get(index).cut();
+                tab.cut();
                 
                 break;
             case "Copy":
-                text_areas.get(index).copy();
+                tab.copy();
                 
                 break;
             case "Paste":
-                text_areas.get(index).paste();
+                tab.paste();
+                
+                break;
+            case "Find...":
+                tab.find();
+                
+                break;
+            case "Replace...":
+                tab.replace();
                 
                 break;
         }
-    }
-    
-    void find() {
-        var index = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (index == -1) {
-            return;
-        }
-        
-        var text_area = text_areas.get(index);
-        
-        var text = text_area.getText();
-        
-        text_area.clearStyle(0, text.length());
-        
-        var find = new TextInputDialog(text_area.getSelectedText());
-        
-        find.setTitle("Find...");
-        
-        find.setHeaderText("Find:");
-        
-        find.showAndWait().ifPresent(word -> {
-            if (word.isEmpty()) {
-                show_error("You need to type what you want to find.");
-                
-                return;
-            }
-            
-            var word_index = text.indexOf(word);
-            
-            while (word_index != -1) {
-                text_area.setStyle(word_index, word_index + word.length(), "-rtfx-background-color: yellow;");
-                
-                word_index = text.indexOf(word, word_index + word.length());
-            }
-        });
-    }
-    
-    void replace() {
-        var index = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (index == -1) {
-            return;
-        }
-        
-        var text_area = text_areas.get(index);
-        
-        var from_tid = new TextInputDialog(text_area.getSelectedText());
-        
-        from_tid.setTitle("Replace...");
-        
-        from_tid.setHeaderText("From:");
-        
-        from_tid.showAndWait().ifPresent(from -> {
-            if (from.isEmpty()) {
-                show_error("Enter the text you wish to replace.");
-                
-                return;
-            }
-            
-            var text = text_area.getText();
-            
-            if (!text.contains(from)) {
-                show_error("The text you entered was not found.");
-                
-                return;
-            }
-            
-            var to_tid = new TextInputDialog();
-            
-            to_tid.setTitle("Replace...");
-            
-            to_tid.setHeaderText("To:");
-            
-            to_tid.showAndWait().ifPresent(to -> {
-                var carret = text_area.getCaretPosition();
-                
-                text_area.clear();
-                
-                text_area.appendText(text.replaceAll(from, to));
-                
-                text_area.moveTo(carret);
-            });
-        });
     }
     
     public static void main(String[] args) {
