@@ -202,7 +202,7 @@ public class App extends Application {
                 }
             }
         } catch (FileNotFoundException ex) {
-            ShowError.show("Um erro ocorreu ao tentar abrir o arquivo.");
+            MsgBox.show("Open File...", "An error occurred while trying to open the file.");
             
             return;
         }

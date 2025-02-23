@@ -173,14 +173,10 @@ public class CustomTab extends Tab {
             return;
         }
         
-        try {
-            var writer = new FileWriter(path);
-            
+        try (var writer = new FileWriter(path)) {
             writer.write(text_area.getText());
-            
-            writer.close();
         } catch (IOException e) {
-            ShowError.show("Um erro ocorreu ao salvar o arquivo.");
+            MsgBox.show("Save", "An error occurred while trying to save the file.");
         }
     }
     
@@ -197,14 +193,10 @@ public class CustomTab extends Tab {
         
         path = file.getPath();
         
-        try {
-            var writer = new FileWriter(path);
-            
+        try (var writer = new FileWriter(path)) {
             writer.write(text_area.getText());
-            
-            writer.close();
         } catch (IOException e) {
-            ShowError.show("Um erro ocorreu ao salvar o arquivo.");
+            MsgBox.show("Save As...", "An error occurred while saving the file.");
             
             return;
         }
@@ -249,13 +241,13 @@ public class CustomTab extends Tab {
         
         find_tid.showAndWait().ifPresent(find -> {
             if (find.isEmpty()) {
-                ShowError.show("You need to type what you want to find.");
+                MsgBox.show("Find...", "You need to type what you want to find.");
                 
                 return;
             }
             
             if (!text.contains(find)) {
-                ShowError.show("A palavra que você digitou não foi encontrado no texto.");
+                MsgBox.show("Find...", "The text you entered was not found.");
                 
                 return;
             }
@@ -279,7 +271,7 @@ public class CustomTab extends Tab {
         
         from_tid.showAndWait().ifPresent(from -> {
             if (from.isEmpty()) {
-                ShowError.show("Enter the text you wish to replace.");
+                MsgBox.show("Replace...", "Enter the text you wish to replace.");
                 
                 return;
             }
@@ -287,7 +279,7 @@ public class CustomTab extends Tab {
             var text = text_area.getText();
             
             if (!text.contains(from)) {
-                ShowError.show("The text you entered was not found.");
+                MsgBox.show("Replace...", "The text you entered was not found.");
                 
                 return;
             }
