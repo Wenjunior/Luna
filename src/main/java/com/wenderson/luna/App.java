@@ -19,51 +19,51 @@ public class App extends Application {
         
         stage.setMaximized(true);
         
-        var new_file = new MenuItem("New File");
+        var newFile = new MenuItem("New File");
         
-        var new_file_shortcut = new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN);
+        var newFileShortcut = new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN);
         
-        new_file.setAccelerator(new_file_shortcut);
+        newFile.setAccelerator(newFileShortcut);
         
-        new_file.setOnAction((ActionEvent action) -> {
-            new_file();
+        newFile.setOnAction((ActionEvent action) -> {
+            newFile();
         });
         
-        var open_file = new MenuItem("Open File...");
+        var openFile = new MenuItem("Open File...");
         
-        var open_file_shortcut = new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN);
+        var openFileShortcut = new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN);
         
-        open_file.setAccelerator(open_file_shortcut);
+        openFile.setAccelerator(openFileShortcut);
         
-        open_file.setOnAction((ActionEvent action) -> {
-            open_file();
+        openFile.setOnAction((ActionEvent action) -> {
+            openFile();
         });
         
         var save = new MenuItem("Save");
         
-        var save_shortcut = new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN);
+        var saveShortcut = new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN);
         
-        save.setAccelerator(save_shortcut);
+        save.setAccelerator(saveShortcut);
         
         save.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Save");
         });
         
-        var save_as = new MenuItem("Save As...");
+        var saveAs = new MenuItem("Save As...");
         
-        var save_as_shortcut = new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
+        var saveAsShortcut = new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN);
         
-        save_as.setAccelerator(save_as_shortcut);
+        saveAs.setAccelerator(saveAsShortcut);
         
-        save_as.setOnAction((ActionEvent action) -> {
+        saveAs.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Save As...");
         });
         
         var exit = new MenuItem("Exit");
         
-        var exit_shortcut = new KeyCodeCombination(KeyCode.E, KeyCodeCombination.CONTROL_DOWN);
+        var exitShortcut = new KeyCodeCombination(KeyCode.Q, KeyCodeCombination.CONTROL_DOWN);
         
-        exit.setAccelerator(exit_shortcut);
+        exit.setAccelerator(exitShortcut);
         
         exit.setOnAction((ActionEvent action) -> {
             System.exit(0);
@@ -71,13 +71,13 @@ public class App extends Application {
         
         var file = new Menu("File");
         
-        file.getItems().addAll(new_file, open_file, save, save_as, exit);
+        file.getItems().addAll(newFile, openFile, save, saveAs, exit);
         
         var undo = new MenuItem("Undo");
         
-        var undo_shortcut = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.CONTROL_DOWN);
+        var undoShortcut = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.CONTROL_DOWN);
         
-        undo.setAccelerator(undo_shortcut);
+        undo.setAccelerator(undoShortcut);
         
         undo.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Undo");
@@ -85,9 +85,9 @@ public class App extends Application {
         
         var redo = new MenuItem("Redo");
         
-        var redo_shortcut = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN);
+        var redoShortcut = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN);
         
-        redo.setAccelerator(redo_shortcut);
+        redo.setAccelerator(redoShortcut);
         
         redo.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Redo");
@@ -95,9 +95,9 @@ public class App extends Application {
         
         var cut = new MenuItem("Cut");
         
-        var cut_shortcut = new KeyCodeCombination(KeyCode.X, KeyCodeCombination.CONTROL_DOWN);
+        var cutShortcut = new KeyCodeCombination(KeyCode.X, KeyCodeCombination.CONTROL_DOWN);
         
-        cut.setAccelerator(cut_shortcut);
+        cut.setAccelerator(cutShortcut);
         
         cut.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Cut");
@@ -105,9 +105,9 @@ public class App extends Application {
         
         var copy = new MenuItem("Copy");
         
-        var copy_shortcut = new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN);
+        var copyShortcut = new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN);
         
-        copy.setAccelerator(copy_shortcut);
+        copy.setAccelerator(copyShortcut);
         
         copy.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Copy");
@@ -115,9 +115,9 @@ public class App extends Application {
         
         var paste = new MenuItem("Paste");
         
-        var paste_shortcut = new KeyCodeCombination(KeyCode.V, KeyCodeCombination.CONTROL_DOWN);
+        var pasteShortcut = new KeyCodeCombination(KeyCode.V, KeyCodeCombination.CONTROL_DOWN);
         
-        paste.setAccelerator(paste_shortcut);
+        paste.setAccelerator(pasteShortcut);
         
         paste.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Paste");
@@ -125,9 +125,9 @@ public class App extends Application {
         
         var find = new MenuItem("Find...");
         
-        var find_shortcut = new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN);
+        var findShortcut = new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN);
         
-        find.setAccelerator(find_shortcut);
+        find.setAccelerator(findShortcut);
         
         find.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Find...");
@@ -135,9 +135,9 @@ public class App extends Application {
         
         var replace = new MenuItem("Replace...");
         
-        var replace_shortcut = new KeyCodeCombination(KeyCode.R, KeyCodeCombination.CONTROL_DOWN);
+        var replaceShortcut = new KeyCodeCombination(KeyCode.R, KeyCodeCombination.CONTROL_DOWN);
         
-        replace.setAccelerator(replace_shortcut);
+        replace.setAccelerator(replaceShortcut);
         
         replace.setOnAction((ActionEvent action) -> {
             tabActionPerformed("Replace...");
@@ -151,20 +151,20 @@ public class App extends Application {
         
         menubar.getMenus().addAll(file, edit);
         
-        var border_pane = new BorderPane();
+        var borderPane = new BorderPane();
         
-        border_pane.setTop(menubar);
+        borderPane.setTop(menubar);
         
-        border_pane.setCenter(tabs);
+        borderPane.setCenter(tabs);
         
-        var scene = new Scene(border_pane, 1280, 720);
+        var scene = new Scene(borderPane, 1280, 720);
         
         stage.setScene(scene);
         
         stage.show();
     }
     
-    void new_file() {
+    void newFile() {
         var tab = new CustomTab();
         
         tabs.getTabs().add(tab);
@@ -172,12 +172,12 @@ public class App extends Application {
         tabs.getSelectionModel().selectLast();
     }
     
-    void open_file() {
-        var file_chooser = new FileChooser();
+    void openFile() {
+        var fileChooser = new FileChooser();
         
-        file_chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         
-        var file = file_chooser.showOpenDialog(null);
+        var file = fileChooser.showOpenDialog(null);
         
         if (file == null) {
             return;
@@ -231,7 +231,7 @@ public class App extends Application {
                 
                 break;
             case "Save As...":
-                tab.save_as();
+                tab.saveAs();
                 
                 break;
             case "Undo":

@@ -10,167 +10,167 @@ import org.fxmisc.richtext.InlineCssTextArea;
 public class CustomTab extends Tab {
     String title = "Untitled";
     
-    InlineCssTextArea text_area = new InlineCssTextArea();
+    InlineCssTextArea textArea = new InlineCssTextArea();
     
     String path = null;
     
-    int tab_count = 0;
+    int tabCount = 0;
     
     CustomTab() {
         setText(title);
         
-        var scroll_pane = new ScrollPane();
+        var scrollPane = new ScrollPane();
         
-        scroll_pane.fitToWidthProperty().set(true);
+        scrollPane.fitToWidthProperty().set(true);
         
-        scroll_pane.fitToHeightProperty().set(true);
+        scrollPane.fitToHeightProperty().set(true);
         
-        text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+        textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             setText(title + " *");
             
-            text_area.clearStyle(0, text_area.getText().length());
+            textArea.clearStyle(0, textArea.getText().length());
             
             if (key.getCode() == KeyCode.TAB) {
-                tab_count += 1;
+                tabCount += 1;
                 
-                text_area.insertText(text_area.getCaretPosition(), "\t");
+                textArea.insertText(textArea.getCaretPosition(), "\t");
                 
                 key.consume();
             }
             
             if (key.getCode() == KeyCode.ENTER) {
-                var tab_builder = new StringBuilder("\n");
+                var tabBuilder = new StringBuilder("\n");
                 
-                IntStream.range(0, tab_count).forEachOrdered(i -> {
-                    tab_builder.append("\t");
+                IntStream.range(0, tabCount).forEachOrdered(i -> {
+                    tabBuilder.append("\t");
                 });
                 
-                text_area.insertText(text_area.getCaretPosition(), tab_builder.toString());
+                textArea.insertText(textArea.getCaretPosition(), tabBuilder.toString());
                 
                 key.consume();
             }
             
             if (key.getCode() == KeyCode.BACK_SPACE) {
-                var text = text_area.getSelectedText();
+                var text = textArea.getSelectedText();
                 
                 if (text.isEmpty()) {
-                    var caret = text_area.getCaretPosition();
+                    var caret = textArea.getCaretPosition();
                     
                     if (caret > 0) {
-                        var ch = text_area.getText(caret - 1, caret);
+                        var character = textArea.getText(caret - 1, caret);
                         
-                        if (ch.equals("\t")) {
-                            tab_count -= 1;
+                        if (character.equals("\t")) {
+                            tabCount -= 1;
                         }
                         
-                        text_area.deleteText(caret - 1, caret);
+                        textArea.deleteText(caret - 1, caret);
                     }
                 } else {
-                    var index_of_tab = text.indexOf("\n");
+                    var indexOfTab = text.indexOf("\n");
                     
-                    while (index_of_tab != -1) {
-                        tab_count -= 1;
+                    while (indexOfTab != -1) {
+                        tabCount -= 1;
                         
-                        index_of_tab = text.indexOf("\n", index_of_tab + 1);
+                        indexOfTab = text.indexOf("\n", indexOfTab + 1);
                     }
                     
-                    text_area.deleteText(text_area.getSelection());
+                    textArea.deleteText(textArea.getSelection());
                 }
                 
                 key.consume();
             }
         });
         
-        text_area.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
+        textArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
         
-        scroll_pane.setContent(text_area);
+        scrollPane.setContent(textArea);
         
-        setContent(scroll_pane);
+        setContent(scrollPane);
     }
     
     CustomTab(String title, String content) {
         setText(title);
         
-        var scroll_pane = new ScrollPane();
+        var scrollPane = new ScrollPane();
         
-        scroll_pane.fitToWidthProperty().set(true);
+        scrollPane.fitToWidthProperty().set(true);
         
-        scroll_pane.fitToHeightProperty().set(true);
+        scrollPane.fitToHeightProperty().set(true);
         
-        text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+        textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             setText(title + " *");
             
-            text_area.clearStyle(0, text_area.getText().length());
+            textArea.clearStyle(0, textArea.getText().length());
             
             if (key.getCode() == KeyCode.TAB) {
-                tab_count += 1;
+                tabCount += 1;
                 
-                text_area.insertText(text_area.getCaretPosition(), "\t");
+                textArea.insertText(textArea.getCaretPosition(), "\t");
                 
                 key.consume();
             }
             
             if (key.getCode() == KeyCode.ENTER) {
-                var tab_builder = new StringBuilder("\n");
+                var tabBuilder = new StringBuilder("\n");
                 
-                IntStream.range(0, tab_count).forEachOrdered(i -> {
-                    tab_builder.append("\t");
+                IntStream.range(0, tabCount).forEachOrdered(i -> {
+                    tabBuilder.append("\t");
                 });
                 
-                text_area.insertText(text_area.getCaretPosition(), tab_builder.toString());
+                textArea.insertText(textArea.getCaretPosition(), tabBuilder.toString());
                 
                 key.consume();
             }
             
             if (key.getCode() == KeyCode.BACK_SPACE) {
-                var text = text_area.getSelectedText();
+                var text = textArea.getSelectedText();
                 
                 if (text.isEmpty()) {
-                    var caret = text_area.getCaretPosition();
+                    var caret = textArea.getCaretPosition();
                     
                     if (caret > 0) {
-                        var ch = text_area.getText(caret - 1, caret);
+                        var character = textArea.getText(caret - 1, caret);
                         
-                        if (ch.equals("\t")) {
-                            tab_count -= 1;
+                        if (character.equals("\t")) {
+                            tabCount -= 1;
                         }
                         
-                        text_area.deleteText(caret - 1, caret);
+                        textArea.deleteText(caret - 1, caret);
                     }
                 } else {
-                    var index_of_tab = text.indexOf("\n");
+                    var indexOfTab = text.indexOf("\n");
                     
-                    while (index_of_tab != -1) {
-                        tab_count -= 1;
+                    while (indexOfTab != -1) {
+                        tabCount -= 1;
                         
-                        index_of_tab = text.indexOf("\n", index_of_tab + 1);
+                        indexOfTab = text.indexOf("\n", indexOfTab + 1);
                     }
                     
-                    text_area.deleteText(text_area.getSelection());
+                    textArea.deleteText(textArea.getSelection());
                 }
                 
                 key.consume();
             }
         });
         
-        text_area.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
+        textArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
         
-        text_area.appendText(content);
+        textArea.appendText(content);
         
-        scroll_pane.setContent(text_area);
+        scrollPane.setContent(textArea);
         
-        setContent(scroll_pane);
+        setContent(scrollPane);
     }
     
     void save() {
         if (path == null) {
-            save_as();
+            saveAs();
             
             return;
         }
         
         try (var writer = new FileWriter(path)) {
-            writer.write(text_area.getText());
+            writer.write(textArea.getText());
         } catch (IOException e) {
             MsgBox.show("Save", "An error occurred while trying to save the file.");
             
@@ -182,12 +182,12 @@ public class CustomTab extends Tab {
         setText(title);
     }
     
-    void save_as() {
-        var file_chooser = new FileChooser();
+    void saveAs() {
+        var fileChooser = new FileChooser();
         
-        file_chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         
-        var file = file_chooser.showSaveDialog(null);
+        var file = fileChooser.showSaveDialog(null);
         
         if (file == null) {
             return;
@@ -196,7 +196,7 @@ public class CustomTab extends Tab {
         path = file.getPath();
         
         try (var writer = new FileWriter(path)) {
-            writer.write(text_area.getText());
+            writer.write(textArea.getText());
         } catch (IOException e) {
             MsgBox.show("Save As...", "An error occurred while saving the file.");
             
@@ -209,41 +209,41 @@ public class CustomTab extends Tab {
     }
     
     void undo() {
-        if (text_area.isUndoAvailable()) {
-            text_area.undo();
+        if (textArea.isUndoAvailable()) {
+            textArea.undo();
         }
     }
     
     void redo() {
-        if (text_area.isRedoAvailable()) {
-            text_area.redo();
+        if (textArea.isRedoAvailable()) {
+            textArea.redo();
         }
     }
     
     void cut() {
-        text_area.cut();
+        textArea.cut();
     }
     
     void copy() {
-        text_area.copy();
+        textArea.copy();
     }
     
     void paste() {
-        text_area.paste();
+        textArea.paste();
     }
     
     void find() {
-        var text = text_area.getText();
+        var text = textArea.getText();
         
-        text_area.clearStyle(0, text.length());
+        textArea.clearStyle(0, text.length());
         
-        var find_tid = new TextInputDialog(text_area.getSelectedText());
+        var findTID = new TextInputDialog(textArea.getSelectedText());
         
-        find_tid.setTitle("Find...");
+        findTID.setTitle("Find...");
         
-        find_tid.setHeaderText("Find:");
+        findTID.setHeaderText("Find:");
         
-        find_tid.showAndWait().ifPresent(find -> {
+        findTID.showAndWait().ifPresent(find -> {
             if (find.isEmpty()) {
                 MsgBox.show("Find...", "You need to type what you want to find.");
                 
@@ -256,31 +256,31 @@ public class CustomTab extends Tab {
                 return;
             }
             
-            var word_index = text.indexOf(find);
+            var wordIndex = text.indexOf(find);
             
-            while (word_index != -1) {
-                text_area.setStyle(word_index, word_index + text.length(), "-rtfx-background-color: yellow;");
+            while (wordIndex != -1) {
+                textArea.setStyle(wordIndex, wordIndex + text.length(), "-rtfx-background-color: yellow;");
                 
-                word_index = text.indexOf(find, word_index + find.length());
+                wordIndex = text.indexOf(find, wordIndex + find.length());
             }
         });
     }
     
     void replace() {
-        var from_tid = new TextInputDialog(text_area.getSelectedText());
+        var fromTID = new TextInputDialog(textArea.getSelectedText());
         
-        from_tid.setTitle("Replace...");
+        fromTID.setTitle("Replace...");
         
-        from_tid.setHeaderText("From:");
+        fromTID.setHeaderText("From:");
         
-        from_tid.showAndWait().ifPresent(from -> {
+        fromTID.showAndWait().ifPresent(from -> {
             if (from.isEmpty()) {
                 MsgBox.show("Replace...", "Enter the text you wish to replace.");
                 
                 return;
             }
             
-            var text = text_area.getText();
+            var text = textArea.getText();
             
             if (!text.contains(from)) {
                 MsgBox.show("Replace...", "The text you entered was not found.");
@@ -288,20 +288,20 @@ public class CustomTab extends Tab {
                 return;
             }
             
-            var to_tid = new TextInputDialog();
+            var toTID = new TextInputDialog();
             
-            to_tid.setTitle("Replace...");
+            toTID.setTitle("Replace...");
             
-            to_tid.setHeaderText("To:");
+            toTID.setHeaderText("To:");
             
-            to_tid.showAndWait().ifPresent(to -> {
-                var carret = text_area.getCaretPosition();
+            toTID.showAndWait().ifPresent(to -> {
+                var carret = textArea.getCaretPosition();
                 
-                text_area.clear();
+                textArea.clear();
                 
-                text_area.appendText(text.replaceAll(from, to));
+                textArea.appendText(text.replaceAll(from, to));
                 
-                text_area.moveTo(carret);
+                textArea.moveTo(carret);
             });
         });
     }
