@@ -8,16 +8,16 @@ import java.util.stream.IntStream;
 import org.fxmisc.richtext.InlineCssTextArea;
 
 public class CustomTab extends Tab {
-    InlineCssTextArea text_area = new InlineCssTextArea();
+    String title = "Untitled";
     
-    boolean was_saved = true;
+    InlineCssTextArea text_area = new InlineCssTextArea();
     
     String path = null;
     
-    int count = 0;
+    int tab_count = 0;
     
     CustomTab() {
-        setText("Untitled");
+        setText(title);
         
         var scroll_pane = new ScrollPane();
         
@@ -26,12 +26,12 @@ public class CustomTab extends Tab {
         scroll_pane.fitToHeightProperty().set(true);
         
         text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            was_saved = false;
+            setText(title + " *");
             
             text_area.clearStyle(0, text_area.getText().length());
             
             if (key.getCode() == KeyCode.TAB) {
-                count += 1;
+                tab_count += 1;
                 
                 text_area.insertText(text_area.getCaretPosition(), "\t");
                 
@@ -41,7 +41,7 @@ public class CustomTab extends Tab {
             if (key.getCode() == KeyCode.ENTER) {
                 var tab_builder = new StringBuilder("\n");
                 
-                IntStream.range(0, count).forEachOrdered(i -> {
+                IntStream.range(0, tab_count).forEachOrdered(i -> {
                     tab_builder.append("\t");
                 });
                 
@@ -60,7 +60,7 @@ public class CustomTab extends Tab {
                         var ch = text_area.getText(caret - 1, caret);
                         
                         if (ch.equals("\t")) {
-                            count -= 1;
+                            tab_count -= 1;
                         }
                         
                         text_area.deleteText(caret - 1, caret);
@@ -69,7 +69,7 @@ public class CustomTab extends Tab {
                     var index_of_tab = text.indexOf("\n");
                     
                     while (index_of_tab != -1) {
-                        count -= 1;
+                        tab_count -= 1;
                         
                         index_of_tab = text.indexOf("\n", index_of_tab + 1);
                     }
@@ -88,8 +88,8 @@ public class CustomTab extends Tab {
         setContent(scroll_pane);
     }
     
-    CustomTab(String name, String content) {
-        setText(name);
+    CustomTab(String title, String content) {
+        setText(title);
         
         var scroll_pane = new ScrollPane();
         
@@ -98,12 +98,12 @@ public class CustomTab extends Tab {
         scroll_pane.fitToHeightProperty().set(true);
         
         text_area.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            was_saved = false;
+            setText(title + " *");
             
             text_area.clearStyle(0, text_area.getText().length());
             
             if (key.getCode() == KeyCode.TAB) {
-                count += 1;
+                tab_count += 1;
                 
                 text_area.insertText(text_area.getCaretPosition(), "\t");
                 
@@ -113,7 +113,7 @@ public class CustomTab extends Tab {
             if (key.getCode() == KeyCode.ENTER) {
                 var tab_builder = new StringBuilder("\n");
                 
-                IntStream.range(0, count).forEachOrdered(i -> {
+                IntStream.range(0, tab_count).forEachOrdered(i -> {
                     tab_builder.append("\t");
                 });
                 
@@ -132,7 +132,7 @@ public class CustomTab extends Tab {
                         var ch = text_area.getText(caret - 1, caret);
                         
                         if (ch.equals("\t")) {
-                            count -= 1;
+                            tab_count -= 1;
                         }
                         
                         text_area.deleteText(caret - 1, caret);
@@ -141,7 +141,7 @@ public class CustomTab extends Tab {
                     var index_of_tab = text.indexOf("\n");
                     
                     while (index_of_tab != -1) {
-                        count -= 1;
+                        tab_count -= 1;
                         
                         index_of_tab = text.indexOf("\n", index_of_tab + 1);
                     }
@@ -162,14 +162,10 @@ public class CustomTab extends Tab {
         setContent(scroll_pane);
     }
     
-    public void save() {
+    void save() {
         if (path == null) {
             save_as();
             
-            return;
-        }
-        
-        if (was_saved) {
             return;
         }
         
@@ -177,10 +173,16 @@ public class CustomTab extends Tab {
             writer.write(text_area.getText());
         } catch (IOException e) {
             MsgBox.show("Save", "An error occurred while trying to save the file.");
+            
+            return;
         }
+        
+        title = title.replace(" *", "");
+        
+        setText(title);
     }
     
-    public void save_as() {
+    void save_as() {
         var file_chooser = new FileChooser();
         
         file_chooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -201,34 +203,36 @@ public class CustomTab extends Tab {
             return;
         }
         
-        was_saved = true;
+        title = file.getName();
+        
+        setText(title);
     }
     
-    public void undo() {
+    void undo() {
         if (text_area.isUndoAvailable()) {
             text_area.undo();
         }
     }
     
-    public void redo() {
+    void redo() {
         if (text_area.isRedoAvailable()) {
             text_area.redo();
         }
     }
     
-    public void cut() {
+    void cut() {
         text_area.cut();
     }
     
-    public void copy() {
+    void copy() {
         text_area.copy();
     }
     
-    public void paste() {
+    void paste() {
         text_area.paste();
     }
     
-    public void find() {
+    void find() {
         var text = text_area.getText();
         
         text_area.clearStyle(0, text.length());
@@ -262,7 +266,7 @@ public class CustomTab extends Tab {
         });
     }
     
-    public void replace() {
+    void replace() {
         var from_tid = new TextInputDialog(text_area.getSelectedText());
         
         from_tid.setTitle("Replace...");
