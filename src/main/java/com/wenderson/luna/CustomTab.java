@@ -16,6 +16,8 @@ public class CustomTab extends Tab {
     
     int tabCount = 0;
     
+    boolean wasSaved = false;
+    
     CustomTab() {
         setText(title);
         
@@ -27,6 +29,10 @@ public class CustomTab extends Tab {
         
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             setText(title + " *");
+            
+            if (wasSaved) {
+                wasSaved = false;
+            }
             
             textArea.clearStyle(0, textArea.getText().length());
             
@@ -88,8 +94,12 @@ public class CustomTab extends Tab {
         setContent(scrollPane);
     }
     
-    CustomTab(String title, String content) {
+    CustomTab(String title, String content, String path) {
         setText(title);
+        
+        wasSaved = true;
+        
+        this.path = path;
         
         var scrollPane = new ScrollPane();
         
@@ -99,6 +109,10 @@ public class CustomTab extends Tab {
         
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             setText(title + " *");
+            
+            if (wasSaved) {
+                wasSaved = false;
+            }
             
             textArea.clearStyle(0, textArea.getText().length());
             
@@ -180,6 +194,8 @@ public class CustomTab extends Tab {
         title = title.replace(" *", "");
         
         setText(title);
+        
+        wasSaved = true;
     }
     
     void saveAs() {
@@ -206,6 +222,8 @@ public class CustomTab extends Tab {
         title = file.getName();
         
         setText(title);
+        
+        wasSaved = true;
     }
     
     void undo() {

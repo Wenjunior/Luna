@@ -1,12 +1,12 @@
 package com.wenderson.luna;
 
 import java.io.*;
+import org.json.*;
+import java.util.*;
 import javafx.stage.*;
-import java.util.Scanner;
 import javafx.scene.Scene;
 import javafx.scene.input.*;
 import javafx.scene.control.*;
-import javafx.event.ActionEvent;
 import javafx.application.Application;
 import javafx.scene.layout.BorderPane;
 
@@ -19,13 +19,17 @@ public class App extends Application {
         
         stage.setMaximized(true);
         
+        stage.setOnCloseRequest(event -> {
+            exit();
+        });
+        
         var newFile = new MenuItem("New File");
         
         var newFileShortcut = new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN);
         
         newFile.setAccelerator(newFileShortcut);
         
-        newFile.setOnAction((ActionEvent action) -> {
+        newFile.setOnAction(action -> {
             newFile();
         });
         
@@ -35,7 +39,7 @@ public class App extends Application {
         
         openFile.setAccelerator(openFileShortcut);
         
-        openFile.setOnAction((ActionEvent action) -> {
+        openFile.setOnAction(action -> {
             openFile();
         });
         
@@ -45,7 +49,7 @@ public class App extends Application {
         
         save.setAccelerator(saveShortcut);
         
-        save.setOnAction((ActionEvent action) -> {
+        save.setOnAction(action -> {
             tabActionPerformed("Save");
         });
         
@@ -55,7 +59,7 @@ public class App extends Application {
         
         saveAs.setAccelerator(saveAsShortcut);
         
-        saveAs.setOnAction((ActionEvent action) -> {
+        saveAs.setOnAction(action -> {
             tabActionPerformed("Save As...");
         });
         
@@ -65,8 +69,8 @@ public class App extends Application {
         
         exit.setAccelerator(exitShortcut);
         
-        exit.setOnAction((ActionEvent action) -> {
-            System.exit(0);
+        exit.setOnAction(action -> {
+            exit();
         });
         
         var file = new Menu("File");
@@ -79,7 +83,7 @@ public class App extends Application {
         
         undo.setAccelerator(undoShortcut);
         
-        undo.setOnAction((ActionEvent action) -> {
+        undo.setOnAction(action -> {
             tabActionPerformed("Undo");
         });
         
@@ -89,7 +93,7 @@ public class App extends Application {
         
         redo.setAccelerator(redoShortcut);
         
-        redo.setOnAction((ActionEvent action) -> {
+        redo.setOnAction(action -> {
             tabActionPerformed("Redo");
         });
         
@@ -99,7 +103,7 @@ public class App extends Application {
         
         cut.setAccelerator(cutShortcut);
         
-        cut.setOnAction((ActionEvent action) -> {
+        cut.setOnAction(action -> {
             tabActionPerformed("Cut");
         });
         
@@ -109,7 +113,7 @@ public class App extends Application {
         
         copy.setAccelerator(copyShortcut);
         
-        copy.setOnAction((ActionEvent action) -> {
+        copy.setOnAction(action -> {
             tabActionPerformed("Copy");
         });
         
@@ -119,7 +123,7 @@ public class App extends Application {
         
         paste.setAccelerator(pasteShortcut);
         
-        paste.setOnAction((ActionEvent action) -> {
+        paste.setOnAction(action -> {
             tabActionPerformed("Paste");
         });
         
@@ -129,7 +133,7 @@ public class App extends Application {
         
         find.setAccelerator(findShortcut);
         
-        find.setOnAction((ActionEvent action) -> {
+        find.setOnAction(action -> {
             tabActionPerformed("Find...");
         });
         
@@ -139,7 +143,7 @@ public class App extends Application {
         
         replace.setAccelerator(replaceShortcut);
         
-        replace.setOnAction((ActionEvent action) -> {
+        replace.setOnAction(action -> {
             tabActionPerformed("Replace...");
         });
         
@@ -157,11 +161,71 @@ public class App extends Application {
         
         borderPane.setCenter(tabs);
         
+        reopenFiles();
+        
         var scene = new Scene(borderPane, 1280, 720);
         
         stage.setScene(scene);
         
         stage.show();
+    }
+    
+    void reopenFiles() {
+        var sessionFile = new File(String.format("%s/.luna/session.json", System.getProperty("user.home")));
+        
+        if (!sessionFile.exists()) {
+            return;
+        }
+        
+        try (var json = new Scanner(sessionFile)) {
+            var session = new JSONObject(json.nextLine());
+            
+            var paths = session.getJSONArray("paths");
+            
+            for (int i = 0; i < paths.length(); i++) {
+                var path = paths.getString(i);
+                
+                var file = new File(path);
+                
+                var scanner = new Scanner(file);
+                
+                String line;
+                
+                var text = new StringBuilder();
+                
+                while (scanner.hasNextLine()) {
+                    line = scanner.nextLine();
+                    
+                    text.append(line);
+                    
+                    if (scanner.hasNextLine()) {
+                        text.append("\n");
+                    }
+                }
+                
+                if (path.startsWith(String.format("%s/.luna/tmp/", System.getProperty("user.home")))) {
+                    var tmpFile = new File(path);
+                    
+                    tmpFile.delete();
+                    
+                    var customTab = new CustomTab("Untitled", text.toString(), path);
+                    
+                    customTab.wasSaved = false;
+                    
+                    tabs.getTabs().add(customTab);
+                } else {
+                    var bananaSplit = path.split("/");
+                    
+                    var customTab = new CustomTab(bananaSplit[bananaSplit.length - 1], text.toString(), path);
+                    
+                    tabs.getTabs().add(customTab);
+                }
+            }
+            
+            var index = session.getInt("index");
+            
+            tabs.getSelectionModel().select(index);
+        } catch (IOException e) {}
     }
     
     void newFile() {
@@ -209,7 +273,7 @@ public class App extends Application {
         
         scanner.close();
         
-        var tab = new CustomTab(file.getName(), text.toString());
+        var tab = new CustomTab(file.getName(), text.toString(), file.getPath());
         
         tabs.getTabs().add(tab);
         
@@ -263,6 +327,50 @@ public class App extends Application {
                 
                 break;
         }
+    }
+    
+    void exit() {
+        var home = System.getProperty("user.home");
+        
+        var dir = new File(String.format("%s/.luna/tmp", home));
+        
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        
+        var count = 0;
+        
+        var paths = new JSONArray();
+        
+        for (var tab : tabs.getTabs()) {
+            var customTab = (CustomTab) tab;
+            
+            if (!customTab.wasSaved) {
+                if (customTab.path == null) {
+                    customTab.path = String.format("%s/.luna/tmp/%s.txt", home, count);
+                    
+                    count++;
+                }
+                
+                try (var writer = new FileWriter(customTab.path)) {
+                    writer.write(customTab.textArea.getText());
+                } catch (IOException e) {}
+            }
+            
+            paths.put(customTab.path);
+        }
+        
+        var session = new JSONObject();
+        
+        session.put("index", tabs.getSelectionModel().getSelectedIndex());
+        
+        session.put("paths", paths);
+        
+        try (var writer = new FileWriter(String.format("%s/.luna/session.json", home))) {
+            writer.write(session.toString());
+        } catch (IOException e) {}
+        
+        System.exit(0);
     }
     
     public static void main(String[] args) {
