@@ -182,30 +182,32 @@ public class App extends Application {
             
             var tabsData = data.getJSONObject("tabs");
             
-            for (var title : tabsData.names()) {
-                var tabData = tabsData.getJSONObject((String) title);
+            try {
+                for (var title : tabsData.names()) {
+                    var tabData = tabsData.getJSONObject((String) title);
+                    
+                    var customTab = new CustomTab((String) title, tabData.getString("text"), tabData.getString("path"));
+                    
+                    customTab.tabCount = tabData.getInt("tabCount");
+                    
+                    customTab.wasSaved = tabData.getBoolean("wasSaved");
+                    
+                    tabs.getTabs().add(customTab);
+                }
                 
-                var customTab = new CustomTab((String) title, tabData.getString("text"), tabData.getString("path"));
+                var index = data.getInt("selectedIndex");
                 
-                customTab.tabCount = tabData.getInt("tabCount");
+                tabs.getSelectionModel().select(index);
                 
-                customTab.wasSaved = tabData.getBoolean("wasSaved");
+                var currentTab = (CustomTab) tabs.getTabs().get(index);
                 
-                tabs.getTabs().add(customTab);
-            }
-            
-            var index = data.getInt("selectedIndex");
-            
-            tabs.getSelectionModel().select(index);
-            
-            var currentTab = (CustomTab) tabs.getTabs().get(index);
-            
-            currentTab.textArea.moveTo(data.getInt("carret"));
+                currentTab.textArea.moveTo(data.getInt("carret"));
+            } catch (NullPointerException e) {}
         } catch (FileNotFoundException e) {}
     }
     
     void newFile() {
-        var tab = new CustomTab();
+        var tab = new CustomTab("Untitled", "", "");
         
         tabs.getTabs().add(tab);
         

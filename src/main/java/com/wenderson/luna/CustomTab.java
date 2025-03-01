@@ -9,85 +9,15 @@ import org.fxmisc.richtext.InlineCssTextArea;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 public class CustomTab extends Tab {
-    String title = "Untitled";
+    String title;
     
     InlineCssTextArea textArea = new InlineCssTextArea();
     
-    String path = "";
+    String path;
     
     int tabCount = 0;
     
     boolean wasSaved = true;
-    
-    CustomTab() {
-        setText(title);
-        
-        textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (!key.getCode().isNavigationKey() && !key.isControlDown()&& wasSaved) {
-                setText(title + " *");
-                
-                wasSaved = false;
-            }
-            
-            textArea.clearStyle(0, textArea.getText().length());
-            
-            if (key.getCode() == KeyCode.TAB) {
-                tabCount += 1;
-                
-                textArea.insertText(textArea.getCaretPosition(), "\t");
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.ENTER) {
-                var tabBuilder = new StringBuilder("\n");
-                
-                IntStream.range(0, tabCount).forEachOrdered(i -> {
-                    tabBuilder.append("\t");
-                });
-                
-                textArea.insertText(textArea.getCaretPosition(), tabBuilder.toString());
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.BACK_SPACE) {
-                var text = textArea.getSelectedText();
-                
-                if (text.isEmpty()) {
-                    var caret = textArea.getCaretPosition();
-                    
-                    if (caret > 0) {
-                        var character = textArea.getText(caret - 1, caret);
-                        
-                        if (character.equals("\t")) {
-                            tabCount -= 1;
-                        }
-                        
-                        textArea.deleteText(caret - 1, caret);
-                    }
-                } else {
-                    var indexOfTab = text.indexOf("\n");
-                    
-                    while (indexOfTab != -1) {
-                        tabCount -= 1;
-                        
-                        indexOfTab = text.indexOf("\n", indexOfTab + 1);
-                    }
-                    
-                    textArea.deleteText(textArea.getSelection());
-                }
-                
-                key.consume();
-            }
-        });
-        
-        textArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
-        
-        var scrollPane = new VirtualizedScrollPane(textArea);
-        
-        setContent(scrollPane);
-    }
     
     CustomTab(String title, String content, String path) {
         this.title = title;
@@ -163,6 +93,24 @@ public class CustomTab extends Tab {
         var scrollPane = new VirtualizedScrollPane(textArea);
         
         setContent(scrollPane);
+        
+        setOnCloseRequest(event -> {
+            if (!wasSaved) {
+                var dialog = new Dialog<>();
+                
+                dialog.setTitle("Warning");
+                
+                dialog.setContentText("The file has not been saved. Do you want to save the changes?");
+                
+                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                
+                dialog.showAndWait().ifPresent(action -> {
+                    if (action == ButtonType.YES) {
+                        save();
+                    }
+                });
+            }
+        });
     }
     
     void save() {
