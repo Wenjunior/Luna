@@ -6,31 +6,26 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import java.util.stream.IntStream;
 import org.fxmisc.richtext.InlineCssTextArea;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 
 public class CustomTab extends Tab {
     String title = "Untitled";
     
     InlineCssTextArea textArea = new InlineCssTextArea();
     
-    String path = null;
+    String path = "";
     
     int tabCount = 0;
     
-    boolean wasSaved = false;
+    boolean wasSaved = true;
     
     CustomTab() {
         setText(title);
         
-        var scrollPane = new ScrollPane();
-        
-        scrollPane.fitToWidthProperty().set(true);
-        
-        scrollPane.fitToHeightProperty().set(true);
-        
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            setText(title + " *");
-            
-            if (wasSaved) {
+            if (!key.getCode().isNavigationKey() && !key.isControlDown()&& wasSaved) {
+                setText(title + " *");
+                
                 wasSaved = false;
             }
             
@@ -89,28 +84,22 @@ public class CustomTab extends Tab {
         
         textArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
         
-        scrollPane.setContent(textArea);
+        var scrollPane = new VirtualizedScrollPane(textArea);
         
         setContent(scrollPane);
     }
     
     CustomTab(String title, String content, String path) {
-        setText(title);
+        this.title = title;
         
-        wasSaved = true;
+        setText(title);
         
         this.path = path;
         
-        var scrollPane = new ScrollPane();
-        
-        scrollPane.fitToWidthProperty().set(true);
-        
-        scrollPane.fitToHeightProperty().set(true);
-        
         textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            setText(title + " *");
-            
-            if (wasSaved) {
+            if (!key.getCode().isNavigationKey() && !key.isControlDown() && wasSaved) {
+                setText(title + " *");
+                
                 wasSaved = false;
             }
             
@@ -171,13 +160,13 @@ public class CustomTab extends Tab {
         
         textArea.appendText(content);
         
-        scrollPane.setContent(textArea);
+        var scrollPane = new VirtualizedScrollPane(textArea);
         
         setContent(scrollPane);
     }
     
     void save() {
-        if (path == null) {
+        if (path.isEmpty()) {
             saveAs();
             
             return;

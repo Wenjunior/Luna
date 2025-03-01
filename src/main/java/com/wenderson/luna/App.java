@@ -171,61 +171,37 @@ public class App extends Application {
     }
     
     void reopenFiles() {
-        var sessionFile = new File(String.format("%s/.luna/session.json", System.getProperty("user.home")));
+        var file = new File(String.format("%s/.luna.json", System.getProperty("user.home")));
         
-        if (!sessionFile.exists()) {
+        if (!file.exists()) {
             return;
         }
         
-        try (var json = new Scanner(sessionFile)) {
-            var session = new JSONObject(json.nextLine());
+        try (var scanner = new Scanner(file)) {
+            var data = new JSONObject(scanner.nextLine());
             
-            var paths = session.getJSONArray("paths");
+            var tabsData = data.getJSONObject("tabs");
             
-            for (int i = 0; i < paths.length(); i++) {
-                var path = paths.getString(i);
+            for (var title : tabsData.names()) {
+                var tabData = tabsData.getJSONObject((String) title);
                 
-                var file = new File(path);
+                var customTab = new CustomTab((String) title, tabData.getString("text"), tabData.getString("path"));
                 
-                var scanner = new Scanner(file);
+                customTab.tabCount = tabData.getInt("tabCount");
                 
-                String line;
+                customTab.wasSaved = tabData.getBoolean("wasSaved");
                 
-                var text = new StringBuilder();
-                
-                while (scanner.hasNextLine()) {
-                    line = scanner.nextLine();
-                    
-                    text.append(line);
-                    
-                    if (scanner.hasNextLine()) {
-                        text.append("\n");
-                    }
-                }
-                
-                if (path.startsWith(String.format("%s/.luna/tmp/", System.getProperty("user.home")))) {
-                    var tmpFile = new File(path);
-                    
-                    tmpFile.delete();
-                    
-                    var customTab = new CustomTab("Untitled", text.toString(), path);
-                    
-                    customTab.wasSaved = false;
-                    
-                    tabs.getTabs().add(customTab);
-                } else {
-                    var bananaSplit = path.split("/");
-                    
-                    var customTab = new CustomTab(bananaSplit[bananaSplit.length - 1], text.toString(), path);
-                    
-                    tabs.getTabs().add(customTab);
-                }
+                tabs.getTabs().add(customTab);
             }
             
-            var index = session.getInt("index");
+            var index = data.getInt("selectedIndex");
             
             tabs.getSelectionModel().select(index);
-        } catch (IOException e) {}
+            
+            var currentTab = (CustomTab) tabs.getTabs().get(index);
+            
+            currentTab.textArea.moveTo(data.getInt("carret"));
+        } catch (FileNotFoundException e) {}
     }
     
     void newFile() {
@@ -330,44 +306,40 @@ public class App extends Application {
     }
     
     void exit() {
-        var home = System.getProperty("user.home");
-        
-        var dir = new File(String.format("%s/.luna/tmp", home));
-        
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        
-        var count = 0;
-        
-        var paths = new JSONArray();
+        var tabsData = new JSONObject();
         
         for (var tab : tabs.getTabs()) {
             var customTab = (CustomTab) tab;
             
-            if (!customTab.wasSaved) {
-                if (customTab.path == null) {
-                    customTab.path = String.format("%s/.luna/tmp/%s.txt", home, count);
-                    
-                    count++;
-                }
-                
-                try (var writer = new FileWriter(customTab.path)) {
-                    writer.write(customTab.textArea.getText());
-                } catch (IOException e) {}
-            }
+            var tabData = new JSONObject();
             
-            paths.put(customTab.path);
+            tabData.put("text", customTab.textArea.getText());
+            
+            tabData.put("path", customTab.path);
+            
+            tabData.put("tabCount", customTab.tabCount);
+            
+            tabData.put("wasSaved", customTab.wasSaved);
+            
+            tabsData.put(customTab.title, tabData);
         }
         
-        var session = new JSONObject();
+        var data = new JSONObject();
         
-        session.put("index", tabs.getSelectionModel().getSelectedIndex());
+        data.put("tabs", tabsData);
         
-        session.put("paths", paths);
+        var index = tabs.getSelectionModel().getSelectedIndex();
         
-        try (var writer = new FileWriter(String.format("%s/.luna/session.json", home))) {
-            writer.write(session.toString());
+        if (index != -1) {
+            data.put("selectedIndex", index);
+            
+            var selectedTab = (CustomTab) tabs.getTabs().get(index);
+            
+            data.put("carret", selectedTab.textArea.getCaretPosition());
+        }
+        
+        try (var writer = new FileWriter(String.format("%s/.luna.json", System.getProperty("user.home")))) {
+            writer.write(data.toString());
         } catch (IOException e) {}
         
         System.exit(0);
