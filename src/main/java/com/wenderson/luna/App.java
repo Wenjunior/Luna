@@ -201,7 +201,7 @@ public class App extends Application {
                 
                 var currentTab = (CustomTab) tabs.getTabs().get(index);
                 
-                currentTab.textArea.moveTo(data.getInt("carret"));
+                currentTab.codeArea.moveTo(data.getInt("carret"));
             } catch (NullPointerException e) {}
         } catch (FileNotFoundException e) {}
     }
@@ -315,7 +315,7 @@ public class App extends Application {
             
             var tabData = new JSONObject();
             
-            tabData.put("text", customTab.textArea.getText());
+            tabData.put("text", customTab.codeArea.getText());
             
             tabData.put("path", customTab.path);
             
@@ -337,7 +337,7 @@ public class App extends Application {
             
             var selectedTab = (CustomTab) tabs.getTabs().get(index);
             
-            data.put("carret", selectedTab.textArea.getCaretPosition());
+            data.put("carret", selectedTab.codeArea.getCaretPosition());
         }
         
         try (var writer = new FileWriter(String.format("%s/.luna.json", System.getProperty("user.home")))) {

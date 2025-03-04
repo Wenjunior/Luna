@@ -2,16 +2,17 @@ package com.wenderson.luna;
 
 import java.io.*;
 import javafx.scene.input.*;
+import java.util.Collections;
+import org.fxmisc.richtext.*;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import java.util.stream.IntStream;
-import org.fxmisc.richtext.InlineCssTextArea;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 public class CustomTab extends Tab {
     String title;
     
-    InlineCssTextArea textArea = new InlineCssTextArea();
+    CodeArea codeArea = new CodeArea();
     
     String path;
     
@@ -26,19 +27,21 @@ public class CustomTab extends Tab {
         
         this.path = path;
         
-        textArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
+        codeArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             if (!key.getCode().isNavigationKey() && !key.isControlDown() && wasSaved) {
-                setText(title + " *");
+                this.title = title + " *";
+                
+                setText(this.title);
                 
                 wasSaved = false;
             }
             
-            textArea.clearStyle(0, textArea.getText().length());
+            codeArea.clearStyle(0, codeArea.getText().length());
             
             if (key.getCode() == KeyCode.TAB) {
                 tabCount += 1;
                 
-                textArea.insertText(textArea.getCaretPosition(), "\t");
+                codeArea.insertText(codeArea.getCaretPosition(), "\t");
                 
                 key.consume();
             }
@@ -50,47 +53,49 @@ public class CustomTab extends Tab {
                     tabBuilder.append("\t");
                 });
                 
-                textArea.insertText(textArea.getCaretPosition(), tabBuilder.toString());
+                codeArea.insertText(codeArea.getCaretPosition(), tabBuilder.toString());
                 
                 key.consume();
             }
             
             if (key.getCode() == KeyCode.BACK_SPACE) {
-                var text = textArea.getSelectedText();
+                var selectedText = codeArea.getSelectedText();
                 
-                if (text.isEmpty()) {
-                    var caret = textArea.getCaretPosition();
+                if (selectedText.isEmpty()) {
+                    var caret = codeArea.getCaretPosition();
                     
                     if (caret > 0) {
-                        var character = textArea.getText(caret - 1, caret);
+                        var character = codeArea.getText(caret - 1, caret);
                         
                         if (character.equals("\t")) {
                             tabCount -= 1;
                         }
                         
-                        textArea.deleteText(caret - 1, caret);
+                        codeArea.deleteText(caret - 1, caret);
                     }
                 } else {
-                    var indexOfTab = text.indexOf("\n");
+                    var indexOfTab = selectedText.indexOf("\n");
                     
                     while (indexOfTab != -1) {
                         tabCount -= 1;
                         
-                        indexOfTab = text.indexOf("\n", indexOfTab + 1);
+                        indexOfTab = selectedText.indexOf("\n", indexOfTab + 1);
                     }
                     
-                    textArea.deleteText(textArea.getSelection());
+                    codeArea.deleteText(codeArea.getSelection());
                 }
                 
                 key.consume();
             }
         });
         
-        textArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
+        codeArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
         
-        textArea.appendText(content);
+        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         
-        var scrollPane = new VirtualizedScrollPane(textArea);
+        codeArea.replaceText(0, 0, content);
+        
+        var scrollPane = new VirtualizedScrollPane(codeArea);
         
         setContent(scrollPane);
         
@@ -102,11 +107,15 @@ public class CustomTab extends Tab {
                 
                 dialog.setContentText("The file has not been saved. Do you want to save the changes?");
                 
-                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                dialog.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                 
                 dialog.showAndWait().ifPresent(action -> {
                     if (action == ButtonType.YES) {
                         save();
+                    }
+                    
+                    if (action == ButtonType.CANCEL) {
+                        event.consume();
                     }
                 });
             }
@@ -121,7 +130,7 @@ public class CustomTab extends Tab {
         }
         
         try (var writer = new FileWriter(path)) {
-            writer.write(textArea.getText());
+            writer.write(codeArea.getText());
         } catch (IOException e) {
             MsgBox.show("Save", "An error occurred while trying to save the file.");
             
@@ -149,7 +158,7 @@ public class CustomTab extends Tab {
         path = file.getPath();
         
         try (var writer = new FileWriter(path)) {
-            writer.write(textArea.getText());
+            writer.write(codeArea.getText());
         } catch (IOException e) {
             MsgBox.show("Save As...", "An error occurred while saving the file.");
             
@@ -164,65 +173,65 @@ public class CustomTab extends Tab {
     }
     
     void undo() {
-        if (textArea.isUndoAvailable()) {
-            textArea.undo();
+        if (codeArea.isUndoAvailable()) {
+            codeArea.undo();
         }
     }
     
     void redo() {
-        if (textArea.isRedoAvailable()) {
-            textArea.redo();
+        if (codeArea.isRedoAvailable()) {
+            codeArea.redo();
         }
     }
     
     void cut() {
-        textArea.cut();
+        codeArea.cut();
     }
     
     void copy() {
-        textArea.copy();
+        codeArea.copy();
     }
     
     void paste() {
-        textArea.paste();
+        codeArea.paste();
     }
     
     void find() {
-        var text = textArea.getText();
+        var text = codeArea.getText();
         
-        textArea.clearStyle(0, text.length());
+        codeArea.clearStyle(0, text.length());
         
-        var findTID = new TextInputDialog(textArea.getSelectedText());
+        var findTID = new TextInputDialog(codeArea.getSelectedText());
         
         findTID.setTitle("Find...");
         
         findTID.setHeaderText("Find:");
         
-        findTID.showAndWait().ifPresent(find -> {
-            if (find.isEmpty()) {
+        findTID.showAndWait().ifPresent(word -> {
+            if (word.isEmpty()) {
                 MsgBox.show("Find...", "You need to type what you want to find.");
                 
                 return;
             }
             
-            if (!text.contains(find)) {
+            if (!text.contains(word)) {
                 MsgBox.show("Find...", "The text you entered was not found.");
                 
                 return;
             }
             
-            var wordIndex = text.indexOf(find);
+            var wordIndex = text.indexOf(word);
             
             while (wordIndex != -1) {
-                textArea.setStyle(wordIndex, wordIndex + text.length(), "-rtfx-background-color: yellow;");
+                codeArea.setStyle(wordIndex, wordIndex + word.length(), Collections.singleton("-rtfx-background-color: yellow;"));
                 
-                wordIndex = text.indexOf(find, wordIndex + find.length());
+                wordIndex = text.indexOf(word, wordIndex + word.length());
             }
         });
     }
     
     void replace() {
-        var fromTID = new TextInputDialog(textArea.getSelectedText());
+        var fromTID = new TextInputDialog(codeArea.getSelectedText());
         
         fromTID.setTitle("Replace...");
         
@@ -235,7 +244,7 @@ public class CustomTab extends Tab {
                 return;
             }
             
-            var text = textArea.getText();
+            var text = codeArea.getText();
             
             if (!text.contains(from)) {
                 MsgBox.show("Replace...", "The text you entered was not found.");
@@ -250,13 +259,13 @@ public class CustomTab extends Tab {
             toTID.setHeaderText("To:");
             
             toTID.showAndWait().ifPresent(to -> {
-                var carret = textArea.getCaretPosition();
+                var carret = codeArea.getCaretPosition();
                 
-                textArea.clear();
+                codeArea.clear();
                 
-                textArea.appendText(text.replaceAll(from, to));
+                codeArea.appendText(text.replaceAll(from, to));
                 
-                textArea.moveTo(carret);
+                codeArea.moveTo(carret);
             });
         });
     }
