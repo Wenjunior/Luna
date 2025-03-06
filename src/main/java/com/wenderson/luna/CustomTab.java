@@ -223,7 +223,7 @@ public class CustomTab extends Tab {
             var wordIndex = text.indexOf(word);
             
             while (wordIndex != -1) {
-                codeArea.setStyle(wordIndex, wordIndex + word.length(), Collections.singleton("-rtfx-background-color: yellow;"));
+                codeArea.setStyleClass(wordIndex, wordIndex + word.length(), "highlight");
                 
                 wordIndex = text.indexOf(word, wordIndex + word.length());
             }

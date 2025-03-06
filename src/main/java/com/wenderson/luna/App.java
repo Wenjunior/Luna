@@ -165,6 +165,8 @@ public class App extends Application {
         
         var scene = new Scene(borderPane, 1280, 720);
         
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        
         stage.setScene(scene);
         
         stage.show();
