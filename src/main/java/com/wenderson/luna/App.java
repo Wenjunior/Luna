@@ -185,10 +185,10 @@ public class App extends Application {
             var tabsData = data.getJSONObject("tabs");
             
             try {
-                for (var title : tabsData.names()) {
-                    var tabData = tabsData.getJSONObject((String) title);
+                for (var id : tabsData.names()) {
+                    var tabData = tabsData.getJSONObject((String) id);
                     
-                    var customTab = new CustomTab((String) title, tabData.getString("text"), tabData.getString("path"));
+                    var customTab = new CustomTab((String) tabData.getString("title"), tabData.getString("text"), tabData.getString("path"));
                     
                     customTab.tabCount = tabData.getInt("tabCount");
                     
@@ -203,7 +203,7 @@ public class App extends Application {
                 
                 var currentTab = (CustomTab) tabs.getTabs().get(index);
                 
-                currentTab.codeArea.moveTo(data.getInt("carret"));
+                currentTab.codeArea.moveTo(data.getInt("carretPosition"));
             } catch (NullPointerException e) {}
         } catch (FileNotFoundException e) {}
     }
@@ -312,10 +312,14 @@ public class App extends Application {
     void exit() {
         var tabsData = new JSONObject();
         
+        var count = 0;
+        
         for (var tab : tabs.getTabs()) {
+            var tabData = new JSONObject();
+            
             var customTab = (CustomTab) tab;
             
-            var tabData = new JSONObject();
+            tabData.put("title", customTab.title);
             
             tabData.put("text", customTab.codeArea.getText());
             
@@ -325,7 +329,9 @@ public class App extends Application {
             
             tabData.put("wasSaved", customTab.wasSaved);
             
-            tabsData.put(customTab.title, tabData);
+            tabsData.put(Integer.toString(count), tabData);
+            
+            count++;
         }
         
         var data = new JSONObject();
@@ -339,7 +345,7 @@ public class App extends Application {
             
             var selectedTab = (CustomTab) tabs.getTabs().get(index);
             
-            data.put("carret", selectedTab.codeArea.getCaretPosition());
+            data.put("carretPosition", selectedTab.codeArea.getCaretPosition());
         }
         
         try (var writer = new FileWriter(String.format("%s/.luna.json", System.getProperty("user.home")))) {
