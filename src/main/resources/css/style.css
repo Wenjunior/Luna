@@ -1,3 +1,70 @@
+.root {
+    -fx-background-color: #1f1f1f;
+}
+
+.label {
+    -fx-text-fill: #dcdcdc;
+}
+
+.menu-bar {
+    -fx-background-color: #181818;
+}
+
+.menu-bar .menu-button:hover {
+    -fx-background-color: #313335;
+}
+
+.menu-bar .menu-button:showing {
+    -fx-background-color: #313335;
+}
+
+.context-menu {
+    -fx-background-color: #181818;
+}
+
+.menu-item {
+    -fx-background-color: #181818;
+}
+
+.menu-item:hover {
+    -fx-background-color: #313335;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: #2B2B2B;
+}
+
+.tab {
+    -fx-background-color: #181818;
+    -fx-border-color: #181818;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #dcdcdc;
+}
+
+.tab-header-background {
+    -fx-background-color: #2B2B2B;
+}
+
+.code-area {
+    -fx-background-color: #181818;
+}
+
+.code-area .caret {
+    -fx-stroke: #dcdcdc;
+}
+
+.code-area .text {
+    -fx-fill: #dcdcdc;
+    -fx-font-family: Consolas;
+    -fx-font-size: 120%;
+}
+
+.lineno { /* LineNumberFactory */
+    -fx-background-color: #2B2B2B;
+}
+
 .highlight {
-    -rtfx-background-color: yellow;
+    -rtfx-background-color: #cc00cc;
 }

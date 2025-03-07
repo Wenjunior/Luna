@@ -2,7 +2,6 @@ package com.wenderson.luna;
 
 import java.io.*;
 import javafx.scene.input.*;
-import java.util.Collections;
 import org.fxmisc.richtext.*;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
@@ -28,12 +27,8 @@ public class CustomTab extends Tab {
         this.path = path;
         
         codeArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
-            if (!key.getCode().isNavigationKey() && !key.isControlDown() && wasSaved) {
-                this.title = title + " *";
-                
-                setText(this.title);
-                
-                wasSaved = false;
+            if (!key.getCode().isNavigationKey() && !key.isControlDown()) {
+                changeTitle();
             }
             
             codeArea.clearStyle(0, codeArea.getText().length());
@@ -89,8 +84,6 @@ public class CustomTab extends Tab {
             }
         });
         
-        codeArea.setStyle("-fx-font-family: Consolas; -fx-font-size: 120%;");
-        
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         
         codeArea.replaceText(0, 0, content);
@@ -120,6 +113,16 @@ public class CustomTab extends Tab {
                 });
             }
         });
+    }
+    
+    void changeTitle() {
+        if (wasSaved) {
+            this.title = title + " *";
+            
+            setText(this.title);
+            
+            wasSaved = false;
+        }
     }
     
     void save() {
@@ -176,24 +179,34 @@ public class CustomTab extends Tab {
         if (codeArea.isUndoAvailable()) {
             codeArea.undo();
         }
+        
+        changeTitle();
     }
     
     void redo() {
         if (codeArea.isRedoAvailable()) {
             codeArea.redo();
         }
+        
+        changeTitle();
     }
     
     void cut() {
         codeArea.cut();
+        
+        changeTitle();
     }
     
     void copy() {
         codeArea.copy();
+        
+        changeTitle();
     }
     
     void paste() {
         codeArea.paste();
+        
+        changeTitle();
     }
     
     void find() {
@@ -268,5 +281,7 @@ public class CustomTab extends Tab {
                 codeArea.moveTo(carret);
             });
         });
+        
+        changeTitle();
     }
 }
