@@ -65,6 +65,18 @@
     -fx-background-color: #262626;
 }
 
+.scroll-bar { /* VirtualizedScrollBar */
+    -fx-background-color: #262626;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #6e7f80;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #6e7f80;
+}
+
 .highlight {
     -rtfx-background-color: #cc00cc;
 }
