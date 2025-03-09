@@ -135,7 +135,7 @@ public class CustomTab extends Tab {
         try (var writer = new FileWriter(path)) {
             writer.write(codeArea.getText());
         } catch (IOException e) {
-            MsgBox.show("Save", "An error occurred while trying to save the file.");
+            MsgBox.show("Save", "Um erro ocorreu ao salvar o arquivo.");
             
             return;
         }
@@ -163,7 +163,7 @@ public class CustomTab extends Tab {
         try (var writer = new FileWriter(path)) {
             writer.write(codeArea.getText());
         } catch (IOException e) {
-            MsgBox.show("Save As...", "An error occurred while saving the file.");
+            MsgBox.show("Save As...", "Um erro ocorreu ao salvar o arquivo.");
             
             return;
         }
@@ -222,13 +222,13 @@ public class CustomTab extends Tab {
         
         findTID.showAndWait().ifPresent(word -> {
             if (word.isEmpty()) {
-                MsgBox.show("Find...", "You need to type what you want to find.");
+                MsgBox.show("Find...", "Digite o que você quer encontrar.");
                 
                 return;
             }
             
             if (!text.contains(word)) {
-                MsgBox.show("Find...", "The text you entered was not found.");
+                MsgBox.show("Find...", "O texto que você digitou não foi encontrado.");
                 
                 return;
             }
@@ -252,7 +252,7 @@ public class CustomTab extends Tab {
         
         fromTID.showAndWait().ifPresent(from -> {
             if (from.isEmpty()) {
-                MsgBox.show("Replace...", "Enter the text you wish to replace.");
+                MsgBox.show("Replace...", "Digite o que você quer encontrar.");
                 
                 return;
             }
@@ -260,7 +260,7 @@ public class CustomTab extends Tab {
             var text = codeArea.getText();
             
             if (!text.contains(from)) {
-                MsgBox.show("Replace...", "The text you entered was not found.");
+                MsgBox.show("Replace...", "O texto que você digitou não foi encontrado.");
                 
                 return;
             }

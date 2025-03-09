@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #1f1f1f;
+    -fx-background-color: #a020f0;
 }
 
 .label {
@@ -7,7 +7,7 @@
 }
 
 .menu-bar {
-    -fx-background-color: #181818;
+    -fx-background-color: #0f0f0f;
 }
 
 .menu-bar .menu-button:hover {
@@ -19,11 +19,11 @@
 }
 
 .context-menu {
-    -fx-background-color: #181818;
+    -fx-background-color: #0f0f0f;
 }
 
 .menu-item {
-    -fx-background-color: #181818;
+    -fx-background-color: #0f0f0f;
 }
 
 .menu-item:hover {
@@ -31,12 +31,12 @@
 }
 
 .tab-pane .tab-header-area {
-    -fx-background-color: #2B2B2B;
+    -fx-background-color: #a020f0;
 }
 
 .tab {
-    -fx-background-color: #181818;
-    -fx-border-color: #181818;
+    -fx-background-color: #0f0f0f;
+    -fx-border-color: #0f0f0f;
 }
 
 .tab .tab-label {
@@ -44,11 +44,11 @@
 }
 
 .tab-header-background {
-    -fx-background-color: #2B2B2B;
+    -fx-background-color: #a020f0;
 }
 
 .code-area {
-    -fx-background-color: #181818;
+    -fx-background-color: #0f0f0f;
 }
 
 .code-area .caret {
@@ -57,16 +57,16 @@
 
 .code-area .text {
     -fx-fill: #dcdcdc;
-    -fx-font-family: Consolas;
-    -fx-font-size: 120%;
+    -fx-font-family: Arial;
+    -fx-font-size: 110%;
 }
 
 .lineno { /* LineNumberFactory */
-    -fx-background-color: #262626;
+    -fx-background-color: #1c1c1c;
 }
 
 .scroll-bar { /* VirtualizedScrollBar */
-    -fx-background-color: #262626;
+    -fx-background-color: #1c1c1c;
 }
 
 .scroll-bar:horizontal .thumb {
