@@ -1,9 +1,9 @@
 .root {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #1c1c1c;
 }
 
 .label {
-    -fx-text-fill: #dcdcdc;
+    -fx-text-fill: white;
 }
 
 .menu-bar {
@@ -11,11 +11,11 @@
 }
 
 .menu-bar .menu-button:hover {
-    -fx-background-color: #313335;
+    -fx-background-color: #a020f0;
 }
 
 .menu-bar .menu-button:showing {
-    -fx-background-color: #313335;
+    -fx-background-color: #a020f0;
 }
 
 .context-menu {
@@ -27,7 +27,7 @@
 }
 
 .menu-item:hover {
-    -fx-background-color: #313335;
+    -fx-background-color: #a020f0;
 }
 
 .tab-pane .tab-header-area {
@@ -36,15 +36,23 @@
 
 .tab {
     -fx-background-color: #0f0f0f;
-    -fx-border-color: #0f0f0f;
+    -fx-border-color: transparent transparent #0f0f0f transparent;
 }
 
 .tab .tab-label {
-    -fx-text-fill: #dcdcdc;
+    -fx-text-fill: white;
 }
 
 .tab-header-background {
     -fx-background-color: #a020f0;
+}
+
+.tab:selected .focus-indicator {
+    -fx-border-color: #0f0f0f;
+}
+
+.tab:selected {
+    -fx-border-color: yellow transparent #0f0f0f transparent;
 }
 
 .code-area {
@@ -52,13 +60,16 @@
 }
 
 .code-area .caret {
-    -fx-stroke: #dcdcdc;
+    -fx-stroke: white;
 }
 
 .code-area .text {
-    -fx-fill: #dcdcdc;
-    -fx-font-family: Arial;
-    -fx-font-size: 110%;
+    -fx-fill: white;
+}
+
+.code-area .selection {
+    -fx-fill: grey;
+    -fx-opacity: 0.5;
 }
 
 .lineno { /* LineNumberFactory */
@@ -78,5 +89,5 @@
 }
 
 .highlight {
-    -rtfx-background-color: #cc00cc;
+    -rtfx-background-color: #a020f0;
 }

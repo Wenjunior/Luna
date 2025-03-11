@@ -1,7 +1,6 @@
 package com.wenderson.luna;
 
 import java.io.*;
-import org.json.*;
 import java.util.*;
 import javafx.stage.*;
 import javafx.scene.Scene;
@@ -161,7 +160,7 @@ public class App extends Application {
         
         borderPane.setCenter(tabs);
         
-        reopenFiles();
+        Data.reopenFiles(tabs);
         
         var scene = new Scene(borderPane, 1280, 720);
         
@@ -170,42 +169,6 @@ public class App extends Application {
         stage.setScene(scene);
         
         stage.show();
-    }
-    
-    void reopenFiles() {
-        var file = new File(String.format("%s/.luna.json", System.getProperty("user.home")));
-        
-        if (!file.exists()) {
-            return;
-        }
-        
-        try (var scanner = new Scanner(file)) {
-            var data = new JSONObject(scanner.nextLine());
-            
-            var tabsData = data.getJSONObject("tabs");
-            
-            try {
-                for (var id : tabsData.names()) {
-                    var tabData = tabsData.getJSONObject((String) id);
-                    
-                    var customTab = new CustomTab((String) tabData.getString("title"), tabData.getString("text"), tabData.getString("path"));
-                    
-                    customTab.tabCount = tabData.getInt("tabCount");
-                    
-                    customTab.wasSaved = tabData.getBoolean("wasSaved");
-                    
-                    tabs.getTabs().add(customTab);
-                }
-                
-                var index = data.getInt("selectedIndex");
-                
-                tabs.getSelectionModel().select(index);
-                
-                var currentTab = (CustomTab) tabs.getTabs().get(index);
-                
-                currentTab.codeArea.moveTo(data.getInt("carretPosition"));
-            } catch (NullPointerException e) {}
-        } catch (FileNotFoundException e) {}
     }
     
     void newFile() {
@@ -310,47 +273,17 @@ public class App extends Application {
     }
     
     void exit() {
-        var tabsData = new JSONObject();
+        var selectedIndex = tabs.getSelectionModel().getSelectedIndex();
         
-        var count = 0;
-        
-        for (var tab : tabs.getTabs()) {
-            var tabData = new JSONObject();
-            
-            var customTab = (CustomTab) tab;
-            
-            tabData.put("title", customTab.title);
-            
-            tabData.put("text", customTab.codeArea.getText());
-            
-            tabData.put("path", customTab.path);
-            
-            tabData.put("tabCount", customTab.tabCount);
-            
-            tabData.put("wasSaved", customTab.wasSaved);
-            
-            tabsData.put(Integer.toString(count), tabData);
-            
-            count++;
+        if (selectedIndex == -1) {
+            System.exit(0);
         }
         
-        var data = new JSONObject();
+        var customTab = (CustomTab) tabs.getTabs().get(selectedIndex);
         
-        data.put("tabs", tabsData);
+        var caretPosition = customTab.codeArea.getCaretPosition();
         
-        var index = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (index != -1) {
-            data.put("selectedIndex", index);
-            
-            var selectedTab = (CustomTab) tabs.getTabs().get(index);
-            
-            data.put("carretPosition", selectedTab.codeArea.getCaretPosition());
-        }
-        
-        try (var writer = new FileWriter(String.format("%s/.luna.json", System.getProperty("user.home")))) {
-            writer.write(data.toString());
-        } catch (IOException e) {}
+        Data.save(tabs, selectedIndex, caretPosition);
         
         System.exit(0);
     }
