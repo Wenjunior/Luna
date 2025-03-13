@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #1c1c1c;
+    -fx-background-color: #4F565E;
 }
 
 .label {
@@ -7,7 +7,7 @@
 }
 
 .menu-bar {
-    -fx-background-color: #0f0f0f;
+    -fx-background-color: #2F2F2F;
 }
 
 .menu-bar .menu-button:hover {
@@ -19,11 +19,11 @@
 }
 
 .context-menu {
-    -fx-background-color: #0f0f0f;
+    -fx-background-color: #2F2F2F;
 }
 
 .menu-item {
-    -fx-background-color: #0f0f0f;
+    -fx-background-color: #2F2F2F;
 }
 
 .menu-item:hover {
@@ -31,12 +31,12 @@
 }
 
 .tab-pane .tab-header-area {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #2F2F2F;
 }
 
 .tab {
-    -fx-background-color: #0f0f0f;
-    -fx-border-color: transparent transparent #0f0f0f transparent;
+    -fx-background-color: #303841;
+    -fx-border-color: transparent transparent #303841 transparent;
 }
 
 .tab .tab-label {
@@ -44,19 +44,19 @@
 }
 
 .tab-header-background {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #4F565E;
 }
 
 .tab:selected .focus-indicator {
-    -fx-border-color: #0f0f0f;
+    -fx-border-color: transparent;
 }
 
 .tab:selected {
-    -fx-border-color: yellow transparent #0f0f0f transparent;
+    -fx-border-color: #a020f0 transparent #303841 transparent;
 }
 
 .code-area {
-    -fx-background-color: #0f0f0f;
+    -fx-background-color: #303841;
 }
 
 .code-area .caret {
@@ -68,16 +68,15 @@
 }
 
 .code-area .selection {
-    -fx-fill: grey;
-    -fx-opacity: 0.5;
+    -fx-fill: #a020f0;
 }
 
 .lineno { /* LineNumberFactory */
-    -fx-background-color: #1c1c1c;
+    -fx-background-color: #3b4550;
 }
 
 .scroll-bar { /* VirtualizedScrollBar */
-    -fx-background-color: #1c1c1c;
+    -fx-background-color: #303841;
 }
 
 .scroll-bar:horizontal .thumb {
@@ -88,6 +87,14 @@
     -fx-background-color: #6e7f80;
 }
 
+.scroll-bar .decrement-button {
+    -fx-background-color: #303841;
+}
+
+.scroll-bar .increment-button {
+    -fx-background-color: #303841;
+}
+
 .highlight {
-    -rtfx-background-color: #a020f0;
+    -fx-background-color: #a020f0;
 }

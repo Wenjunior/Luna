@@ -26,6 +26,10 @@ public class CustomTab extends Tab {
         
         this.path = path;
         
+        var scrollPane = new VirtualizedScrollPane<>(codeArea);
+        
+        setContent(scrollPane);
+        
         codeArea.addEventFilter(KeyEvent.KEY_PRESSED, key -> {
             if (!key.getCode().isNavigationKey() && !key.isControlDown()) {
                 changeTitle();
@@ -87,10 +91,6 @@ public class CustomTab extends Tab {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         
         codeArea.replaceText(0, 0, content);
-        
-        var scrollPane = new VirtualizedScrollPane(codeArea);
-        
-        setContent(scrollPane);
         
         setOnCloseRequest(event -> {
             if (!wasSaved) {
