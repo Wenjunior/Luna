@@ -37,8 +37,6 @@ public class Data {
         
         data.put("selectedIndex", selectedIndex);
         
-        data.put("caretPosition", carretPosition);
-        
         var path = String.format("%s/.luna.json", System.getProperty("user.home"));
         
         try (var writer = new FileWriter(path)) {
@@ -70,8 +68,6 @@ public class Data {
                 customTab.wasSaved = tabData.getBoolean("wasSaved");
                 
                 tabs.getTabs().add(customTab);
-                
-                customTab.codeArea.moveTo(data.getInt("caretPosition"));
             }
             
             tabs.getSelectionModel().select(data.getInt("selectedIndex"));

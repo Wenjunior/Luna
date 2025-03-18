@@ -98,7 +98,7 @@ public class CustomTab extends Tab {
                 
                 dialog.setTitle("Warning");
                 
-                dialog.setContentText("The file has not been saved. Do you want to save the changes?");
+                dialog.setContentText("O arquivo não foi salvo. Você quer salvar as alterações?");
                 
                 dialog.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                 

@@ -11,11 +11,11 @@
 }
 
 .menu-bar .menu-button:hover {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #866CBA;
 }
 
 .menu-bar .menu-button:showing {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #866CBA;
 }
 
 .context-menu {
@@ -27,7 +27,7 @@
 }
 
 .menu-item:hover {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #866CBA;
 }
 
 .tab-pane .tab-header-area {
@@ -52,7 +52,7 @@
 }
 
 .tab:selected {
-    -fx-border-color: #a020f0 transparent #303841 transparent;
+    -fx-border-color: #866CBA transparent #303841 transparent;
 }
 
 .code-area {
@@ -68,7 +68,7 @@
 }
 
 .code-area .selection {
-    -fx-fill: #a020f0;
+    -fx-fill: #866CBA;
 }
 
 .lineno { /* LineNumberFactory */
@@ -96,5 +96,5 @@
 }
 
 .highlight {
-    -fx-background-color: #a020f0;
+    -fx-background-color: #866CBA;
 }
