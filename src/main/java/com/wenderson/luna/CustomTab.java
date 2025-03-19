@@ -15,8 +15,6 @@ public class CustomTab extends Tab {
     
     String path;
     
-    int tabCount = 0;
-    
     boolean wasSaved = true;
     
     CustomTab(String title, String content, String path) {
@@ -36,56 +34,6 @@ public class CustomTab extends Tab {
             }
             
             codeArea.clearStyle(0, codeArea.getText().length());
-            
-            if (key.getCode() == KeyCode.TAB) {
-                tabCount += 1;
-                
-                codeArea.insertText(codeArea.getCaretPosition(), "\t");
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.ENTER) {
-                var tabBuilder = new StringBuilder("\n");
-                
-                IntStream.range(0, tabCount).forEachOrdered(i -> {
-                    tabBuilder.append("\t");
-                });
-                
-                codeArea.insertText(codeArea.getCaretPosition(), tabBuilder.toString());
-                
-                key.consume();
-            }
-            
-            if (key.getCode() == KeyCode.BACK_SPACE) {
-                var selectedText = codeArea.getSelectedText();
-                
-                if (selectedText.isEmpty()) {
-                    var caret = codeArea.getCaretPosition();
-                    
-                    if (caret > 0) {
-                        var character = codeArea.getText(caret - 1, caret);
-                        
-                        if (character.equals("\t")) {
-                            tabCount -= 1;
-                        }
-                        
-                        codeArea.deleteText(caret - 1, caret);
-                    }
-                } else {
-                    var indexOfTab = selectedText.indexOf("\n");
-                    
-                    while (indexOfTab != -1) {
-                        tabCount -= 1;
-                        
-                        indexOfTab = selectedText.indexOf("\n", indexOfTab + 1);
-                    }
-                    
-                    codeArea.deleteText(codeArea.getSelection());
-                }
-                
-                key.consume();
-            }
         });
         
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));

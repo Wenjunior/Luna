@@ -35,7 +35,7 @@
 }
 
 .tab {
-    -fx-background-color: #303841;
+    -fx-background-color: #2b323e;
     -fx-border-color: transparent transparent #303841 transparent;
 }
 
@@ -52,6 +52,7 @@
 }
 
 .tab:selected {
+    -fx-background-color: #303841;
     -fx-border-color: #866CBA transparent #303841 transparent;
 }
 

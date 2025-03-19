@@ -18,10 +18,6 @@ public class App extends Application {
         
         stage.setMaximized(true);
         
-        stage.setOnCloseRequest(event -> {
-            exit();
-        });
-        
         var newFile = new MenuItem("New File");
         
         var newFileShortcut = new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN);
@@ -69,7 +65,7 @@ public class App extends Application {
         exit.setAccelerator(exitShortcut);
         
         exit.setOnAction(action -> {
-            exit();
+            System.exit(0);
         });
         
         var file = new Menu("File");
@@ -159,8 +155,6 @@ public class App extends Application {
         borderPane.setTop(menubar);
         
         borderPane.setCenter(tabs);
-        
-        Data.reopenFiles(tabs);
         
         var scene = new Scene(borderPane, 1280, 720);
         
@@ -270,22 +264,6 @@ public class App extends Application {
                 
                 break;
         }
-    }
-    
-    void exit() {
-        var selectedIndex = tabs.getSelectionModel().getSelectedIndex();
-        
-        if (selectedIndex == -1) {
-            System.exit(0);
-        }
-        
-        var customTab = (CustomTab) tabs.getTabs().get(selectedIndex);
-        
-        var caretPosition = customTab.codeArea.getCaretPosition();
-        
-        Data.save(tabs, selectedIndex, caretPosition);
-        
-        System.exit(0);
     }
     
     public static void main(String[] args) {
