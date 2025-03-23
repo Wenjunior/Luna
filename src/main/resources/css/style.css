@@ -1,101 +1,94 @@
 .root {
-    -fx-background-color: #4F565E;
-}
-
-.label {
-    -fx-text-fill: white;
+	-fx-background-color: #4F565E;
 }
 
 .menu-bar {
-    -fx-background-color: #2F2F2F;
+	-fx-background-color: #2F2F2F;
+}
+
+.label {
+	-fx-text-fill: white;
 }
 
 .menu-bar .menu-button:hover {
-    -fx-background-color: #866CBA;
+	-fx-background-color: #866CBA;
 }
 
 .menu-bar .menu-button:showing {
-    -fx-background-color: #866CBA;
+	-fx-background-color: #866CBA;
 }
 
 .context-menu {
-    -fx-background-color: #2F2F2F;
+	-fx-background-color: #2F2F2F;
 }
 
 .menu-item {
-    -fx-background-color: #2F2F2F;
+	-fx-background-color: #2F2F2F;
 }
 
 .menu-item:hover {
-    -fx-background-color: #866CBA;
-}
-
-.tab-pane .tab-header-area {
-    -fx-background-color: #2F2F2F;
-}
-
-.tab {
-    -fx-background-color: #2b323e;
-    -fx-border-color: transparent transparent #303841 transparent;
-}
-
-.tab .tab-label {
-    -fx-text-fill: white;
+	-fx-background-color: #866CBA;
 }
 
 .tab-header-background {
-    -fx-background-color: #4F565E;
+	-fx-background-color: #4F565E;
 }
 
-.tab:selected .focus-indicator {
-    -fx-border-color: transparent;
+.tab {
+	-fx-background-color: #2b323e;
+	-fx-border-color: transparent transparent #303841 transparent;
+}
+
+.tab .tab-label {
+	-fx-text-fill: white;
 }
 
 .tab:selected {
-    -fx-background-color: #303841;
-    -fx-border-color: #866CBA transparent #303841 transparent;
+	-fx-background-color: #303841;
+	-fx-border-color: #866CBA transparent #303841 transparent;
+}
+
+.tab:selected .focus-indicator {
+	-fx-border-color: transparent;
 }
 
 .code-area {
-    -fx-background-color: #303841;
-}
-
-.code-area .caret {
-    -fx-stroke: white;
+	-fx-background-color: #303841;
 }
 
 .code-area .text {
-    -fx-fill: white;
+	-fx-fill: white;
+}
+
+.code-area .caret {
+	-fx-stroke: white;
 }
 
 .code-area .selection {
-    -fx-fill: #866CBA;
+	-fx-fill: #866CBA;
+	-fx-opacity: 0.5;
 }
 
 .lineno { /* LineNumberFactory */
-    -fx-background-color: #3b4550;
+	-fx-background-color: #3b4550;
 }
 
 .scroll-bar { /* VirtualizedScrollBar */
-    -fx-background-color: #303841;
-}
-
-.scroll-bar:horizontal .thumb {
-    -fx-background-color: #6e7f80;
+	-fx-background-color: #303841;
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #6e7f80;
+	-fx-background-color: #696F75;
+}
+
+.scroll-bar:horizontal .thumb {
+	-fx-background-color: #696F75;
 }
 
 .scroll-bar .decrement-button {
-    -fx-background-color: #303841;
+	-fx-background-color: #303841;
 }
 
 .scroll-bar .increment-button {
-    -fx-background-color: #303841;
-}
-
-.highlight {
-    -fx-background-color: #866CBA;
+	-fx-background-color: #303841;
 }
