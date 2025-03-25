@@ -10,7 +10,7 @@ import javafx.application.Application;
 import javafx.scene.layout.BorderPane;
 
 public class Luna extends Application {
-	TabPane tabs = new TabPane();
+	private TabPane tabs = new TabPane();
 
 	@Override
 	public void start(Stage stage) {
@@ -120,12 +120,14 @@ public class Luna extends Application {
 
 		scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
+		scene.getStylesheets().add(getClass().getResource("/css/highlight.css").toExternalForm());
+
 		stage.setScene(scene);
 
 		stage.show();
 	}
 
-	void newFile() {
+	private void newFile() {
 		var codeTab = new CodeTab();
 
 		tabs.getTabs().add(codeTab);
@@ -133,7 +135,7 @@ public class Luna extends Application {
 		tabs.getSelectionModel().selectLast();
 	}
 
-	void openFile() {
+	private void openFile() {
 		var fileChooser = new FileChooser();
 
 		var selectedFile = fileChooser.showOpenDialog(null);
@@ -175,7 +177,7 @@ public class Luna extends Application {
 		tabs.getSelectionModel().selectLast();
 	}
 
-	void actionPerformed(String action) {
+	private void actionPerformed(String action) {
 		var selectedIndex = tabs.getSelectionModel().getSelectedIndex();
 
 		if (selectedIndex == -1) {

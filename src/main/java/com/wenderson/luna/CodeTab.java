@@ -8,23 +8,21 @@ import javafx.stage.FileChooser;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 public class CodeTab extends Tab {
-	String name;
+	private String name = "Untitled";
 
-	String path;
+	private CodeArea codeArea = new CodeArea();
 
-	CodeArea codeArea;
+	private String path = null;
 
 	CodeTab() {
-		this.name = "Untitled";
-
 		setText(this.name);
-
-		codeArea = new CodeArea();
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-		codeArea.textProperty().addListener(action -> {
+		codeArea.textProperty().addListener((obs, oldText, newText) -> {
 			setText(this.name + " *");
+
+			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(newText));
 		});
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
@@ -37,14 +35,14 @@ public class CodeTab extends Tab {
 
 		setText(this.name);
 
-		codeArea = new CodeArea();
-
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
 		codeArea.replaceText(text);
 
-		codeArea.textProperty().addListener(action -> {
+		codeArea.textProperty().addListener((obs, oldText, newText) -> {
 			setText(this.name + " *");
+
+			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(newText));
 		});
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);

@@ -1,0 +1,27 @@
+.code-area .keyword {
+	-fx-fill: purple;
+}
+
+.code-area .paren {
+	-fx-fill: firebrick;
+}
+
+.code-area .brace {
+	-fx-fill: teal;
+}
+
+.code-area .bracket {
+	-fx-fill: darkgreen;
+}
+
+.code-area .semicolon {
+	-fx-fill: grey;
+}
+
+.code-area .string {
+	-fx-fill: green;
+}
+
+.code-area .comment {
+	-fx-fill: grey;
+}
