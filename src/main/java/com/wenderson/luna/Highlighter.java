@@ -38,14 +38,14 @@ public class Highlighter {
 	);
 
 	static StyleSpans<Collection<String>> highlightSyntax(String text) {
-		Matcher matcher = PATTERN.matcher(text);
+		var matcher = PATTERN.matcher(text);
 
-		int lastKeywordEnd = 0;
+		var lastKeywordEnd = 0;
 
-		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+		var styleSpansBuilder = new StyleSpansBuilder<Collection<String>>();
 
 		while(matcher.find()) {
-			String styleClass = matcher.group("KEYWORD") != null ? "keyword" :
+			var styleClass = matcher.group("KEYWORD") != null ? "keyword" :
 				matcher.group("PAREN") != null ? "paren" :
 				matcher.group("BRACE") != null ? "brace" :
 				matcher.group("BRACKET") != null ? "bracket" :
@@ -54,15 +54,15 @@ public class Highlighter {
 				matcher.group("COMMENT") != null ? "comment" :
 				null; assert styleClass != null;
 
-			spansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
+			styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
-			spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+			styleSpansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
 
 			lastKeywordEnd = matcher.end();
 		}
 
-		spansBuilder.add(Collections.emptyList(), text.length() - lastKeywordEnd);
+		styleSpansBuilder.add(Collections.emptyList(), text.length() - lastKeywordEnd);
 
-		return spansBuilder.create();
+		return styleSpansBuilder.create();
 	}
 }
