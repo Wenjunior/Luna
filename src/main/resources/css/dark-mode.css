@@ -40,12 +40,16 @@
 }
 
 .tab .tab-label {
-	-fx-text-fill: white;
+	-fx-text-fill: grey;
 }
 
 .tab:selected {
 	-fx-background-color: #303841;
 	-fx-border-color: #866CBA transparent #303841 transparent;
+}
+
+.tab:selected .tab-label {
+	-fx-text-fill: white;
 }
 
 .tab:selected .focus-indicator {

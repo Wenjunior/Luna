@@ -120,7 +120,7 @@ public class App extends Application {
 
 		scene.getStylesheets().add(getClass().getResource("/css/dark-mode.css").toExternalForm());
 
-		scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/css/luna-theme.css").toExternalForm());
 
 		stage.setScene(scene);
 

@@ -45,6 +45,8 @@ public class CodeTab extends Tab {
 			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(newText));
 		});
 
+		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(text));
+
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
@@ -98,6 +100,8 @@ public class CodeTab extends Tab {
 		codeArea.cut();
 
 		setText(this.name + " *");
+
+		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	void copy() {
@@ -108,6 +112,8 @@ public class CodeTab extends Tab {
 		codeArea.paste();
 
 		setText(this.name + " *");
+
+		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	void undo() {
@@ -115,6 +121,8 @@ public class CodeTab extends Tab {
 			codeArea.undo();
 
 			setText(this.name + " *");
+
+			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 
@@ -123,6 +131,8 @@ public class CodeTab extends Tab {
 			codeArea.redo();
 
 			setText(this.name + " *");
+
+			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 }

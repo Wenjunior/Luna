@@ -1,0 +1,19 @@
+.code-area .keyword {
+	-fx-fill: #E95C5E;
+}
+
+.code-area .semicolon {
+	-fx-fill: grey;
+}
+
+.code-area .string {
+	-fx-fill: #51AC92;
+}
+
+.code-area .comment {
+	-fx-fill: #b2beb5;
+}
+
+.code-area .number {
+	-fx-fill: #5d8aa8;
+}

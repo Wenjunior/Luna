@@ -10,31 +10,25 @@ public class Highlighter {
 		"continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
 		"for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
 		"new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
-		"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while"
+		"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "var"
 	};
 
 	private static String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
 
-	private static String PAREN_PATTERN = "\\(|\\)";
-
-	private static String BRACE_PATTERN = "\\{|\\}";
-
-	private static String BRACKET_PATTERN = "\\[|\\]";
-
 	private static String SEMICOLON_PATTERN = "\\;";
 
-	private static String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+	private static String STRING_PATTERN = "\'([^\"\\\\]|\\\\.)*\'|\"([^\"\\\\]|\\\\.)*\"";
 
 	private static String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/" + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";
 
+	private static String NUMBER_PATTERN = "[0-9]";
+
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-		+ "|(?<PAREN>" + PAREN_PATTERN + ")"
-		+ "|(?<BRACE>" + BRACE_PATTERN + ")"
-		+ "|(?<BRACKET>" + BRACKET_PATTERN + ")"
 		+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
 		+ "|(?<STRING>" + STRING_PATTERN + ")"
 		+ "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+		+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
 	);
 
 	static StyleSpans<Collection<String>> highlightSyntax(String text) {
@@ -46,12 +40,10 @@ public class Highlighter {
 
 		while(matcher.find()) {
 			var styleClass = matcher.group("KEYWORD") != null ? "keyword" :
-				matcher.group("PAREN") != null ? "paren" :
-				matcher.group("BRACE") != null ? "brace" :
-				matcher.group("BRACKET") != null ? "bracket" :
 				matcher.group("SEMICOLON") != null ? "semicolon" :
 				matcher.group("STRING") != null ? "string" :
 				matcher.group("COMMENT") != null ? "comment" :
+				matcher.group("NUMBER") != null ? "number" :
 				null; assert styleClass != null;
 
 			styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
