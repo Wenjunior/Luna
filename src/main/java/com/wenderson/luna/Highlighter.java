@@ -41,10 +41,10 @@ public class Highlighter {
 		while(matcher.find()) {
 			var styleClass = matcher.group("KEYWORD") != null ? "keyword" :
 				matcher.group("SEMICOLON") != null ? "semicolon" :
-				matcher.group("STRING") != null ? "string" :
-				matcher.group("COMMENT") != null ? "comment" :
-				matcher.group("NUMBER") != null ? "number" :
-				null; assert styleClass != null;
+					matcher.group("STRING") != null ? "string" :
+						matcher.group("COMMENT") != null ? "comment" :
+							matcher.group("NUMBER") != null ? "number" :
+							null; assert styleClass != null;
 
 			styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
