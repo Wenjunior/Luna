@@ -102,17 +102,17 @@
 /* TreeView */
 
 .tree-cell {
-	-fx-background-color: #22262A;
+	-fx-background-color: #2d3338;
 	-fx-text-fill: white;
 }
 
 .tree-view {
-	-fx-background-color: #22262A;
-	-fx-border-color: #22262A;
+	-fx-background-color: #2d3338;
+	-fx-border-color: #2d3338;
 }
 
 .tree-view .corner {
-	-fx-background-color: #22262A;
+	-fx-background-color: #2d3338;
 }
 
 .tree-cell > .tree-disclosure-node > .arrow {
