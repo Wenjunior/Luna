@@ -114,9 +114,9 @@ public class App extends Application {
 
 		borderPane.setTop(menuBar);
 
-		var fileTreeView = new FileTreeView(tabs);
+		var fileExplorer = new FileExplorer(tabs);
 
-		borderPane.setLeft(fileTreeView);
+		borderPane.setLeft(fileExplorer);
 
 		borderPane.setCenter(tabs);
 

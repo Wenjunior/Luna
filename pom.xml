@@ -43,7 +43,7 @@
 					<execution>
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>com.wenderson.luna.Luna</mainClass>
+							<mainClass>com.wenderson.luna/com.wenderson.luna.Luna</mainClass>
 						</configuration>
 					</execution>
 				</executions>

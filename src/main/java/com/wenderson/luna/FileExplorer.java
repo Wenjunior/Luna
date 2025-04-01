@@ -6,19 +6,23 @@ import javafx.scene.control.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
-public class FileTreeView extends TreeView {
+public class FileExplorer extends TreeView {
 	TabPane tabs;
 
-	FileTreeView(TabPane tabs) {
+	FileExplorer(TabPane tabs) {
 		this.tabs = tabs;
 
 		var home = new File(System.getProperty("user.home"));
 
 		var root = new TreeItem(home.getName());
 
-		appendItems(home.getPath(), root);
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				appendItems(home.getPath(), root);
+			}
+		});
 
-		setRoot(root);
+		thread.start();
 
 		getSelectionModel().selectedItemProperty().addListener(action -> {
 			var path = new ArrayList<String>();
@@ -51,6 +55,8 @@ public class FileTreeView extends TreeView {
 
 			openFile(String.join("/", path));
 		});
+
+		setRoot(root);
 	}
 
 	private void openFile(String path) {
