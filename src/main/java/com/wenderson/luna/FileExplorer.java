@@ -2,6 +2,7 @@ package com.wenderson.luna;
 
 import java.io.*;
 import java.util.*;
+import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -15,6 +16,8 @@ public class FileExplorer extends TreeView {
 		var home = new File(System.getProperty("user.home"));
 
 		var root = new TreeItem(home.getName());
+
+		root.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
 
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
@@ -106,9 +109,17 @@ public class FileExplorer extends TreeView {
 			if (!file.isHidden()) {
 				var children = new TreeItem(file.getName());
 
+				InputStream img;
+
 				if (file.isDirectory()) {
+					img = getClass().getResourceAsStream("/icons/folder.png");
+
 					appendItems(file.getPath(), children);
+				} else {
+					img = getClass().getResourceAsStream("/icons/file.png");
 				}
+
+				children.setGraphic(new ImageView(new Image(img)));
 
 				mother.getChildren().add(children);
 			}
