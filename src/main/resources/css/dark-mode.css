@@ -118,3 +118,7 @@
 .tree-cell > .tree-disclosure-node > .arrow {
 	-fx-background-color: grey;
 }
+
+.tree-cell > .tree-disclosure-node > .arrow {
+	-fx-background-color: grey;
+}

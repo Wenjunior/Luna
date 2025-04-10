@@ -1,7 +1,6 @@
 package com.wenderson.luna;
 
 import java.io.*;
-import javafx.scene.input.*;
 import org.fxmisc.richtext.*;
 import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;

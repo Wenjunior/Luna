@@ -26,7 +26,7 @@ public class App extends Application {
 			newFile();
 		});
 
-		var openFile = new MenuItem("Open File");
+		var openFile = new MenuItem("Open File...");
 
 		openFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN));
 

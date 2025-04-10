@@ -19,7 +19,7 @@ public class FileExplorer extends TreeView {
 
 		root.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
 
-		Thread thread = new Thread(new Runnable() {
+		var thread = new Thread(new Runnable() {
 			public void run() {
 				appendItems(home.getPath(), root);
 			}
@@ -112,9 +112,9 @@ public class FileExplorer extends TreeView {
 				InputStream img;
 
 				if (file.isDirectory()) {
-					img = getClass().getResourceAsStream("/icons/folder.png");
-
 					appendItems(file.getPath(), children);
+
+					img = getClass().getResourceAsStream("/icons/folder.png");
 				} else {
 					img = getClass().getResourceAsStream("/icons/file.png");
 				}
