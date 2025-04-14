@@ -13,7 +13,7 @@ public class CodeTab extends Tab {
 
 	private String path = null;
 
-	CodeTab() {
+	public CodeTab() {
 		setText(this.name);
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
@@ -29,7 +29,7 @@ public class CodeTab extends Tab {
 		setContent(scrollPane);
 	}
 
-	CodeTab(String name, String text, String path) {
+	public CodeTab(String name, String text, String path) {
 		this.name = name;
 
 		setText(this.name);
@@ -53,7 +53,7 @@ public class CodeTab extends Tab {
 		this.path = path;
 	}
 
-	void save() {
+	public void save() {
 		if (path == null) {
 			saveAs();
 
@@ -71,7 +71,7 @@ public class CodeTab extends Tab {
 		setText(this.name);
 	}
 
-	void saveAs() {
+	public void saveAs() {
 		var fileChooser = new FileChooser();
 
 		var selectedFile = fileChooser.showSaveDialog(null);
@@ -95,7 +95,7 @@ public class CodeTab extends Tab {
 		this.path = selectedFile.getPath();
 	}
 
-	void cut() {
+	public void cut() {
 		codeArea.cut();
 
 		setText(this.name + " *");
@@ -103,11 +103,11 @@ public class CodeTab extends Tab {
 		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 	}
 
-	void copy() {
+	public void copy() {
 		codeArea.copy();
 	}
 
-	void paste() {
+	public void paste() {
 		codeArea.paste();
 
 		setText(this.name + " *");
@@ -115,7 +115,7 @@ public class CodeTab extends Tab {
 		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
 	}
 
-	void undo() {
+	public void undo() {
 		if (codeArea.isUndoAvailable()) {
 			codeArea.undo();
 
@@ -125,7 +125,7 @@ public class CodeTab extends Tab {
 		}
 	}
 
-	void redo() {
+	public void redo() {
 		if (codeArea.isRedoAvailable()) {
 			codeArea.redo();
 

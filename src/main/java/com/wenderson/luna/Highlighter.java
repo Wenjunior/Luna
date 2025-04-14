@@ -10,18 +10,21 @@ public class Highlighter {
 		"continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
 		"for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
 		"new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
-		"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "var"
+		"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while",
+		"var"
 	};
 
 	private static String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
 
 	private static String SEMICOLON_PATTERN = "\\;";
 
-	private static String STRING_PATTERN = "\'([^\"\\\\]|\\\\.)*\'|\"([^\"\\\\]|\\\\.)*\"";
+	private static String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 
 	private static String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/" + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";
 
 	private static String NUMBER_PATTERN = "[0-9]";
+
+	private static String CLASS_PATTERN = "([A-Z])\\w+";
 
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
@@ -29,9 +32,10 @@ public class Highlighter {
 		+ "|(?<STRING>" + STRING_PATTERN + ")"
 		+ "|(?<COMMENT>" + COMMENT_PATTERN + ")"
 		+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+		+ "|(?<CLASS>" + CLASS_PATTERN + ")"
 	);
 
-	static StyleSpans<Collection<String>> highlightSyntax(String text) {
+	public static StyleSpans<Collection<String>> highlightSyntax(String text) {
 		var matcher = PATTERN.matcher(text);
 
 		var lastKeywordEnd = 0;
@@ -44,7 +48,8 @@ public class Highlighter {
 					matcher.group("STRING") != null ? "string" :
 						matcher.group("COMMENT") != null ? "comment" :
 							matcher.group("NUMBER") != null ? "number" :
-							null; assert styleClass != null;
+								matcher.group("CLASS") != null ? "class" :
+								null; assert styleClass != null;
 
 			styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 

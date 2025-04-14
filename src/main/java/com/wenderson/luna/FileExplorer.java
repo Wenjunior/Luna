@@ -7,10 +7,11 @@ import javafx.scene.control.*;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
+@SuppressWarnings({"unchecked"})
 public class FileExplorer extends TreeView {
-	TabPane tabs;
+	private TabPane tabs;
 
-	FileExplorer(TabPane tabs) {
+	public FileExplorer(TabPane tabs) {
 		this.tabs = tabs;
 
 		var home = new File(System.getProperty("user.home"));

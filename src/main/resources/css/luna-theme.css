@@ -17,3 +17,7 @@
 .code-area .number {
 	-fx-fill: #5d8aa8;
 }
+
+.code-area .class {
+	-fx-fill: #9966cc;
+}
