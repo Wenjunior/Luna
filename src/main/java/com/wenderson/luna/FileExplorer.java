@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 
 @SuppressWarnings({"unchecked"})
 public class FileExplorer extends TreeView {
@@ -14,53 +12,139 @@ public class FileExplorer extends TreeView {
 	public FileExplorer(TabPane tabs) {
 		this.tabs = tabs;
 
-		var home = new File(System.getProperty("user.home"));
+		var home = System.getProperty("user.home");
 
-		var root = new TreeItem(home.getName());
+		var folder = new File(home);
+
+		var root = new TreeItem(folder.getName());
 
 		root.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
 
+		setRoot(root);
+
 		var thread = new Thread(new Runnable() {
 			public void run() {
-				appendItems(home.getPath(), root);
+				while (true) {
+					update(root, home);
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {}
+				}
 			}
 		});
 
 		thread.start();
 
 		getSelectionModel().selectedItemProperty().addListener(action -> {
-			var path = new ArrayList<String>();
+			getPath(home);
+		});
+	}
 
-			var item = (TreeItem) getSelectionModel().getSelectedItem();
+	private void update(TreeItem mother, String path) {
+		var folder = new File(path);
 
-			path.add((String) item.getValue());
+		if (folder.isHidden()) {
+			return;
+		}
 
-			var oldParent = item.getParent();
+		for (var file : folder.listFiles()) {
+			if (!file.isHidden()) {
+				var iterator = mother.getChildren().iterator();
 
-			path.add((String) oldParent.getValue());
+				var filename = file.getName();
 
-			while (true) {
-				var parent = oldParent.getParent();
+				var hasChildren = false;
 
-				if (parent == null) {
-					break;
+				while (iterator.hasNext()) {
+					var children = (TreeItem) iterator.next();
+
+					var fullName = children.getValue();
+
+					if (filename.equals(fullName)) {
+						hasChildren = true;
+					}
 				}
 
-				path.add((String) parent.getValue());
+				if (!hasChildren) {
+					var children = new TreeItem(filename);
 
-				oldParent = parent;
+					if (file.isDirectory()) {
+						update(children, String.format("%s/%s", path, filename));
+
+						children.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
+					} else {
+						children.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/file.png"))));
+					}
+
+					mother.getChildren().add(children);
+				}
+			}
+		}
+
+		var iterator = mother.getChildren().iterator();
+
+		ArrayList<TreeItem> removeTheseChildrens = new ArrayList<>();
+
+		while (iterator.hasNext()) {
+			var children = (TreeItem) iterator.next();
+
+			var fullName = children.getValue();
+
+			var file = new File(String.format("%s/%s", path, fullName));
+
+			if (!file.exists()) {
+				removeTheseChildrens.add(children);
+			}
+		}
+
+		for (var children : removeTheseChildrens) {
+			mother.getChildren().remove(children);
+		}
+	}
+
+	private void getPath(String home) {
+		var path = new ArrayList<String>();
+
+		var item = (TreeItem) getSelectionModel().getSelectedItem();
+
+		path.add((String) item.getValue());
+
+		var oldParent = item.getParent();
+
+		if (oldParent == null) { // Não sei o porque, mas de vez em quando essa variável fica nula e causa um erro no programa.
+			return;
+		}
+
+		path.add((String) oldParent.getValue());
+
+		while (true) {
+			var parent = oldParent.getParent();
+
+			if (parent == null) {
+				break;
 			}
 
-			path.remove(path.size() - 1);
+			path.add((String) parent.getValue());
 
-			path.add(home.getPath());
+			oldParent = parent;
+		}
 
-			Collections.reverse(path);
+		path.remove(path.size() - 1);
 
-			openFile(String.join("/", path));
-		});
+		path.add(home);
 
-		setRoot(root);
+		Collections.reverse(path);
+
+		var filePath = String.join("/", path);
+
+		var file = new File(filePath);
+
+		if (file.isDirectory()) { // Tambem não sei o porque, mas as vezes quando clico em uma pasta ele entende que eu to abrindo um arquivo.
+			return;
+		}
+
+		openFile(filePath);
 	}
 
 	private void openFile(String path) {
@@ -97,33 +181,5 @@ public class FileExplorer extends TreeView {
 		tabs.getTabs().add(codeTab);
 
 		tabs.getSelectionModel().selectLast();
-	}
-
-	private void appendItems(String path, TreeItem mother) {
-		var dir = new File(path);
-
-		if (dir.isHidden()) {
-			return;
-		}
-
-		for (var file : dir.listFiles()) {
-			if (!file.isHidden()) {
-				var children = new TreeItem(file.getName());
-
-				InputStream img;
-
-				if (file.isDirectory()) {
-					appendItems(file.getPath(), children);
-
-					img = getClass().getResourceAsStream("/icons/folder.png");
-				} else {
-					img = getClass().getResourceAsStream("/icons/file.png");
-				}
-
-				children.setGraphic(new ImageView(new Image(img)));
-
-				mother.getChildren().add(children);
-			}
-		}
 	}
 }

@@ -222,6 +222,13 @@ public class App extends Application {
 		}
 	}
 
+	// Adicionei essa função porque quando a janela principal é fechada, a thread do explorador de arquivos mantém o programa rodando em segundo plano.
+
+	@Override
+	public void stop() {
+		System.exit(0);
+	}
+
 	public static void main(String[] args) {
 		launch();
 	}

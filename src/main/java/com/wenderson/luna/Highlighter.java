@@ -24,7 +24,7 @@ public class Highlighter {
 
 	private static String NUMBER_PATTERN = "[0-9]";
 
-	private static String CLASS_PATTERN = "([A-Z])\\w+";
+	private static String CLASS_PATTERN = "\b[A-Z][a-z][A-Za-z0-9_$]*\b";
 
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
