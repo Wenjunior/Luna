@@ -13,6 +13,8 @@ public class CodeTab extends Tab {
 
 	private String path = null;
 
+	private Highlighter highlighter = new Highlighter();
+
 	public CodeTab() {
 		setText(this.name);
 
@@ -21,7 +23,7 @@ public class CodeTab extends Tab {
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
 			setText(this.name + " *");
 
-			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(newText));
+			codeArea.setStyleSpans(0, highlighter.highlightSyntax(newText));
 		});
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
@@ -34,6 +36,10 @@ public class CodeTab extends Tab {
 
 		setText(this.name);
 
+		if (this.name.endsWith(".java")) {
+			highlighter.setSyntax("Java");
+		}
+
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
 		codeArea.replaceText(text);
@@ -41,10 +47,10 @@ public class CodeTab extends Tab {
 		codeArea.textProperty().addListener((obs, oldText, newText) -> {
 			setText(this.name + " *");
 
-			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(newText));
+			codeArea.setStyleSpans(0, highlighter.highlightSyntax(newText));
 		});
 
-		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(text));
+		codeArea.setStyleSpans(0, highlighter.highlightSyntax(text));
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
 
@@ -93,6 +99,12 @@ public class CodeTab extends Tab {
 		setText(this.name);
 
 		this.path = selectedFile.getPath();
+
+		highlighter.setSyntax("Simple text");
+
+		if (this.name.endsWith(".java")) {
+			highlighter.setSyntax("Java");
+		}
 	}
 
 	public void cut() {
@@ -100,7 +112,7 @@ public class CodeTab extends Tab {
 
 		setText(this.name + " *");
 
-		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
+		codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	public void copy() {
@@ -112,7 +124,7 @@ public class CodeTab extends Tab {
 
 		setText(this.name + " *");
 
-		codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
+		codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	public void undo() {
@@ -121,7 +133,7 @@ public class CodeTab extends Tab {
 
 			setText(this.name + " *");
 
-			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
+			codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 
@@ -131,7 +143,7 @@ public class CodeTab extends Tab {
 
 			setText(this.name + " *");
 
-			codeArea.setStyleSpans(0, Highlighter.highlightSyntax(codeArea.getText()));
+			codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 }

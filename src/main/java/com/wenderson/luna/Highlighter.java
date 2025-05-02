@@ -11,7 +11,7 @@ public class Highlighter {
 		"for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
 		"new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
 		"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while",
-		"var"
+		"var", "module", "requires", "exports"
 	};
 
 	private static String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
@@ -24,7 +24,9 @@ public class Highlighter {
 
 	private static String NUMBER_PATTERN = "[0-9]";
 
-	private static String CLASS_PATTERN = "\b[A-Z][a-z][A-Za-z0-9_$]*\b";
+	private static String CLASS_PATTERN = "(?<![a-z])[A-Z]\\w+";
+
+	private static String CHARS_PATTERN = "=|\\+|-|\\*|\\/|!|&|\\|";
 
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
@@ -33,29 +35,39 @@ public class Highlighter {
 		+ "|(?<COMMENT>" + COMMENT_PATTERN + ")"
 		+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
 		+ "|(?<CLASS>" + CLASS_PATTERN + ")"
+		+ "|(?<CHARS>" + CHARS_PATTERN + ")"
 	);
 
-	public static StyleSpans<Collection<String>> highlightSyntax(String text) {
+	private String programmingLanguage = "Simple text";
+
+	public void setSyntax(String programmingLanguage) {
+		this.programmingLanguage = programmingLanguage;
+	}
+
+	public StyleSpans<Collection<String>> highlightSyntax(String text) {
 		var matcher = PATTERN.matcher(text);
 
 		var lastKeywordEnd = 0;
 
 		var styleSpansBuilder = new StyleSpansBuilder<Collection<String>>();
 
-		while(matcher.find()) {
-			var styleClass = matcher.group("KEYWORD") != null ? "keyword" :
-				matcher.group("SEMICOLON") != null ? "semicolon" :
-					matcher.group("STRING") != null ? "string" :
-						matcher.group("COMMENT") != null ? "comment" :
-							matcher.group("NUMBER") != null ? "number" :
-								matcher.group("CLASS") != null ? "class" :
-								null; assert styleClass != null;
+		if (this.programmingLanguage.equals("Java")) {
+			while (matcher.find()) {
+				var styleClass = matcher.group("KEYWORD") != null ? "keyword" :
+					matcher.group("SEMICOLON") != null ? "semicolon" :
+						matcher.group("STRING") != null ? "string" :
+							matcher.group("COMMENT") != null ? "comment" :
+								matcher.group("NUMBER") != null ? "number" :
+									matcher.group("CLASS") != null ? "class" :
+										matcher.group("CHARS") != null ? "chars" :
+										null; assert styleClass != null;
 
-			styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
+				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
-			styleSpansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+				styleSpansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
 
-			lastKeywordEnd = matcher.end();
+				lastKeywordEnd = matcher.end();
+			}
 		}
 
 		styleSpansBuilder.add(Collections.emptyList(), text.length() - lastKeywordEnd);
