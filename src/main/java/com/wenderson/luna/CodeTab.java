@@ -100,7 +100,7 @@ public class CodeTab extends Tab {
 
 		this.path = selectedFile.getPath();
 
-		highlighter.setSyntax("Simple text");
+		highlighter.setSyntax("Plain text");
 
 		if (this.name.endsWith(".java")) {
 			highlighter.setSyntax("Java");

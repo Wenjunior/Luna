@@ -20,13 +20,17 @@ public class Highlighter {
 
 	private static String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 
-	private static String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/" + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";
+	private static String COMMENT_PATTERN = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
 
 	private static String NUMBER_PATTERN = "[0-9]";
 
-	private static String CLASS_PATTERN = "(?<![a-z])[A-Z]\\w+";
+	private static String CLASS_PATTERN = "(?<=\\.)[A-Z]\\w+(?=\\;)|[A-Z]\\w+(?=\\[\\])|(?<=class\\s)[A-Z]\\w+|(?<=new\\s)[A-Z]\\w+|(?<=extends\\s)[A-Z]\\w+|(?<![a-z]\\w+)[A-Z]\\w+(?=\\.)|[A-Z]\\w+(?=\\s[a-z])";
 
-	private static String CHARS_PATTERN = "=|\\+|-|\\*|\\/|!|&|\\|";
+	private static String CHARS_PATTERN = "=|\\+|-|\\*|\\/|!|&|\\|@|:|\\>|\\<|@";
+
+	private static String BOOLEAN_PATTERN = "true|false";
+
+	private static String SINGLE_QUOTE_STRING = "'(.*?)'";
 
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
@@ -36,9 +40,11 @@ public class Highlighter {
 		+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
 		+ "|(?<CLASS>" + CLASS_PATTERN + ")"
 		+ "|(?<CHARS>" + CHARS_PATTERN + ")"
+		+ "|(?<BOOLEAN>" + BOOLEAN_PATTERN + ")"
+		+ "|(?<SINGLEQUOTESTRING>" + SINGLE_QUOTE_STRING + ")" // O nome do grupo não pode conter underline.
 	);
 
-	private String programmingLanguage = "Simple text";
+	private String programmingLanguage = "Plain text";
 
 	public void setSyntax(String programmingLanguage) {
 		this.programmingLanguage = programmingLanguage;
@@ -60,7 +66,9 @@ public class Highlighter {
 								matcher.group("NUMBER") != null ? "number" :
 									matcher.group("CLASS") != null ? "class" :
 										matcher.group("CHARS") != null ? "chars" :
-										null; assert styleClass != null;
+											matcher.group("BOOLEAN") != null ? "boolean" :
+												matcher.group("SINGLEQUOTESTRING") != null ? "single_quote_string" :
+												null; assert styleClass != null;
 
 				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
