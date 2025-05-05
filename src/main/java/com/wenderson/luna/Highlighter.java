@@ -24,13 +24,19 @@ public class Highlighter {
 
 	private static String NUMBER_PATTERN = "[0-9]";
 
-	private static String CLASS_PATTERN = "(?<=\\.)[A-Z]\\w+(?=\\;)|[A-Z]\\w+(?=\\[\\])|(?<=class\\s)[A-Z]\\w+|(?<=new\\s)[A-Z]\\w+|(?<=extends\\s)[A-Z]\\w+|(?<![a-z]\\w+)[A-Z]\\w+(?=\\.)|[A-Z]\\w+(?=\\s[a-z])";
+	private static String CLASS_PATTERN = "(?<=\\.)[A-Z]\\w+(?=\\;)|[A-Z]\\w+(?=\\[)|[A-Z]\\w+(?=\\<)|(?<=class\\s)[A-Z]\\w+|(?<=new\\s)[A-Z]\\w+|(?<=extends\\s)[A-Z]\\w+|(?<=implements\\s)[A-Z]\\w+|(?<![a-z]\\w+)[A-Z]\\w+(?=\\.)|[A-Z]\\w+(?=\\s[a-z])";
 
-	private static String CHARS_PATTERN = "=|\\+|-|\\*|\\/|!|&|\\|@|:|\\>|\\<|@";
+	private static String CHARS_PATTERN = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
 
 	private static String BOOLEAN_PATTERN = "true|false";
 
-	private static String SINGLE_QUOTE_STRING = "'(.*?)'";
+	private static String SINGLE_QUOTE_STRING_PATTERN = "'(.*?)'";
+
+	private static String FUNCTION_PATTERN = "[a-z]\\w+(?=\\()";
+
+	private static String CONSTANT_PATTERN = "(?-i)[A-Z]+(?![a-z])";
+
+	private static String ANOTATION_PATTERN = "@([A-Z]\\w+|[A-Z])";
 
 	private static Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
@@ -41,7 +47,10 @@ public class Highlighter {
 		+ "|(?<CLASS>" + CLASS_PATTERN + ")"
 		+ "|(?<CHARS>" + CHARS_PATTERN + ")"
 		+ "|(?<BOOLEAN>" + BOOLEAN_PATTERN + ")"
-		+ "|(?<SINGLEQUOTESTRING>" + SINGLE_QUOTE_STRING + ")" // O nome do grupo não pode conter underline.
+		+ "|(?<SINGLEQUOTESTRING>" + SINGLE_QUOTE_STRING_PATTERN + ")"
+		+ "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
+		+ "|(?<CONSTANT>" + CONSTANT_PATTERN + ")"
+		+ "|(?<ANOTATION>" + ANOTATION_PATTERN + ")"
 	);
 
 	private String programmingLanguage = "Plain text";
@@ -68,7 +77,10 @@ public class Highlighter {
 										matcher.group("CHARS") != null ? "chars" :
 											matcher.group("BOOLEAN") != null ? "boolean" :
 												matcher.group("SINGLEQUOTESTRING") != null ? "single_quote_string" :
-												null; assert styleClass != null;
+													matcher.group("FUNCTION") != null ? "function" :
+														matcher.group("CONSTANT") != null ? "constant" :
+															matcher.group("ANOTATION") != null ? "anotation" :
+															null; assert styleClass != null;
 
 				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 

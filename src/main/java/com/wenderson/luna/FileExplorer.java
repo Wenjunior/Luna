@@ -112,7 +112,7 @@ public class FileExplorer extends TreeView {
 
 		var oldParent = item.getParent();
 
-		if (oldParent == null) { // Não sei o porque, mas de vez em quando essa variável fica nula e causa um erro no programa.
+		if (oldParent == null) {
 			return;
 		}
 
@@ -140,7 +140,7 @@ public class FileExplorer extends TreeView {
 
 		var file = new File(filePath);
 
-		if (file.isDirectory()) { // Tambem não sei o porque, mas as vezes quando clico em uma pasta ele entende que eu to abrindo um arquivo.
+		if (file.isDirectory()) {
 			return;
 		}
 

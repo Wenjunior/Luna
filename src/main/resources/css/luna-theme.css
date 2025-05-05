@@ -33,3 +33,15 @@
 .code-area .single_quote_string {
 	-fx-fill: #66A899;
 }
+
+.code-area .function {
+	-fx-fill: #ff55a3;
+}
+
+.code-area .constant {
+	-fx-fill: #ffe135;
+}
+
+.code-area .anotation {
+	-fx-fill: #9f8170;
+}
