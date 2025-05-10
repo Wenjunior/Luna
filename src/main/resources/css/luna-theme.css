@@ -30,7 +30,7 @@
 	-fx-fill: #87cefa;
 }
 
-.code-area .single_quote_string {
+.code-area .singleQuoteString {
 	-fx-fill: #66A899;
 }
 
@@ -42,6 +42,6 @@
 	-fx-fill: #ffe135;
 }
 
-.code-area .anotation {
+.code-area .annotation {
 	-fx-fill: #9f8170;
 }
