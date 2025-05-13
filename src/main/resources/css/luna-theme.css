@@ -1,47 +1,43 @@
-.code-area .keyword {
+.code-area .red {
 	-fx-fill: #E95C5E;
 }
 
-.code-area .semicolon {
+.code-area .grey {
 	-fx-fill: grey;
 }
 
-.code-area .string {
+.code-area .green {
 	-fx-fill: #66A899;
 }
 
-.code-area .comment {
+.code-area .lightGrey {
 	-fx-fill: #b2beb5;
 }
 
-.code-area .number {
+.code-area .darkBlue {
 	-fx-fill: #5d8aa8;
 }
 
-.code-area .class {
+.code-area .purple {
 	-fx-fill: #C695C6;
 }
 
-.code-area .chars {
+.code-area .orange {
 	-fx-fill: #F9AE58;
 }
 
-.code-area .boolean {
+.code-area .lightBlue {
 	-fx-fill: #87cefa;
 }
 
-.code-area .singleQuoteString {
-	-fx-fill: #66A899;
-}
-
-.code-area .function {
+.code-area .darkPink {
 	-fx-fill: #ff55a3;
 }
 
-.code-area .constant {
+.code-area .yellow {
 	-fx-fill: #ffe135;
 }
 
-.code-area .annotation {
+.code-area .brown {
 	-fx-fill: #9f8170;
 }

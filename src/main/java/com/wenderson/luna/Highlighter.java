@@ -67,29 +67,43 @@ public class Highlighter {
 
 			groups.clear();
 
-			groups.put("KEYWORD", "keyword");
+			groups.put("KEYWORD", "red");
 
-			groups.put("SEMICOLON", "semicolon");
+			groups.put("SEMICOLON", "grey");
 
-			groups.put("STRING", "string");
+			groups.put("STRING", "green");
 
-			groups.put("COMMENT", "comment");
+			groups.put("COMMENT", "lightGrey");
 
-			groups.put("NUMBER", "number");
+			groups.put("NUMBER", "darkBlue");
 
-			groups.put("CLASS", "class");
+			groups.put("CLASS", "purple");
 
-			groups.put("CHARS", "chars");
+			groups.put("CHARS", "orange");
 
-			groups.put("BOOLEAN", "boolean");
+			groups.put("BOOLEAN", "lightBlue");
 
-			groups.put("SINGLEQUOTESTRING", "singleQuoteString");
+			groups.put("SINGLEQUOTESTRING", "green");
 
-			groups.put("FUNCTION", "function");
+			groups.put("FUNCTION", "darkPink");
 
-			groups.put("CONSTANT", "constant");
+			groups.put("CONSTANT", "yellow");
 
-			groups.put("ANNOTATION", "annotation");
+			groups.put("ANNOTATION", "brown");
+		}
+
+		if (programmingLanguage.equals("CSS")) {
+			var selectorPattern = "(?<![A-Z])([a-z]\\w+|[a-z])(?=(\\s\\{))";
+
+			var keywordPattern = "black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen";
+
+			pattern = Pattern.compile("(?<SELECTOR>" + selectorPattern + ")|(?<KEYWORD>" + keywordPattern + ")");
+
+			groups.clear();
+
+			groups.put("SELECTOR", "purple");
+
+			groups.put("KEYWORD", "lightBlue");
 		}
 	}
 
