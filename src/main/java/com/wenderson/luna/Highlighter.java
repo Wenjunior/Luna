@@ -17,16 +17,7 @@ public class Highlighter {
 		}
 
 		if (programmingLanguage.equals("Java")) {
-			var keywords = new String[] {
-				"abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
-				"continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
-				"for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
-				"new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
-				"switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while",
-				"var", "module", "requires", "exports"
-			};
-
-			var keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
+			var keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while|var|module|requires|exports)\\b";
 
 			var semicolonPattern = "\\;";
 
@@ -93,17 +84,35 @@ public class Highlighter {
 		}
 
 		if (programmingLanguage.equals("CSS")) {
+			var dotPattern = "\\.";
+
 			var selectorPattern = "(?<![A-Z])([a-z]\\w+|[a-z])(?=(\\s\\{))";
 
-			var keywordPattern = "black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen";
+			var colorPattern = "black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen";
 
-			pattern = Pattern.compile("(?<SELECTOR>" + selectorPattern + ")|(?<KEYWORD>" + keywordPattern + ")");
+			var semicolonPattern = "\\;";
+
+			pattern = Pattern.compile("(?<DOT>" + dotPattern + ")|(?<SELECTOR>" + selectorPattern + ")|(?<COLOR>" + colorPattern + ")|(?<SEMICOLON>" + semicolonPattern + ")");
 
 			groups.clear();
 
+			groups.put("DOT", "gray");
+
 			groups.put("SELECTOR", "purple");
 
-			groups.put("KEYWORD", "lightBlue");
+			groups.put("COLOR", "lightBlue");
+
+			groups.put("SEMICOLON", "gray");
+		}
+
+		if (programmingLanguage.equals("XML")) {
+			var tagPattern = "(?<=(\\<|\\</))([0-9]\\w+|[a-z]\\w+|[A-Z]\\w+|[0-9]|[a-z]|[A-Z])";
+
+			pattern = Pattern.compile("(?<TAG>" + tagPattern + ")");
+
+			groups.clear();
+
+			groups.put("TAG", "yellow");
 		}
 	}
 

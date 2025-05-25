@@ -85,18 +85,22 @@
 
 .scroll-bar:vertical .thumb {
 	-fx-background-color: #696F75;
+	-fx-pref-width: 10px;
 }
 
 .scroll-bar:horizontal .thumb {
 	-fx-background-color: #696F75;
+	-fx-pref-height: 10px;
 }
 
 .scroll-bar .decrement-button {
 	-fx-background-color: #303841;
+	-fx-padding: 2.25;
 }
 
 .scroll-bar .increment-button {
 	-fx-background-color: #303841;
+	-fx-padding: 2.25;
 }
 
 /* TreeView */

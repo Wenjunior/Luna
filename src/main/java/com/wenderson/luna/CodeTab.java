@@ -44,6 +44,10 @@ public class CodeTab extends Tab {
 			highlighter.setSyntax("CSS");
 		}
 
+		if (this.name.endsWith(".xml")) {
+			highlighter.setSyntax("XML");
+		}
+
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
 		codeArea.replaceText(text);
@@ -112,6 +116,10 @@ public class CodeTab extends Tab {
 
 		if (this.name.endsWith(".css")) {
 			highlighter.setSyntax("CSS");
+		}
+
+		if (this.name.endsWith(".xml")) {
+			highlighter.setSyntax("XML");
 		}
 	}
 

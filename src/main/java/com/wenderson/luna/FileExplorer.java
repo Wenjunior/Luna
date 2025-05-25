@@ -5,8 +5,7 @@ import java.util.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
 
-@SuppressWarnings({"unchecked"})
-public class FileExplorer extends TreeView {
+public class FileExplorer extends TreeView<String> {
 	private TabPane tabs;
 
 	public FileExplorer(TabPane tabs) {
@@ -16,7 +15,7 @@ public class FileExplorer extends TreeView {
 
 		var folder = new File(home);
 
-		var root = new TreeItem(folder.getName());
+		var root = new TreeItem<String>(folder.getName());
 
 		root.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
 
@@ -41,7 +40,7 @@ public class FileExplorer extends TreeView {
 		});
 	}
 
-	private void update(TreeItem mother, String path) {
+	private void update(TreeItem<String> mother, String path) {
 		var folder = new File(path);
 
 		if (folder.isHidden()) {
@@ -57,7 +56,7 @@ public class FileExplorer extends TreeView {
 				var hasChildren = false;
 
 				while (iterator.hasNext()) {
-					var children = (TreeItem) iterator.next();
+					var children = (TreeItem<String>) iterator.next();
 
 					var fullName = children.getValue();
 
@@ -67,7 +66,7 @@ public class FileExplorer extends TreeView {
 				}
 
 				if (!hasChildren) {
-					var children = new TreeItem(filename);
+					var children = new TreeItem<String>(filename);
 
 					if (file.isDirectory()) {
 						update(children, String.format("%s/%s", path, filename));
@@ -84,10 +83,10 @@ public class FileExplorer extends TreeView {
 
 		var iterator = mother.getChildren().iterator();
 
-		ArrayList<TreeItem> removeTheseChildrens = new ArrayList<>();
+		ArrayList<TreeItem<String>> removeTheseChildrens = new ArrayList<>();
 
 		while (iterator.hasNext()) {
-			var children = (TreeItem) iterator.next();
+			var children = (TreeItem<String>) iterator.next();
 
 			var fullName = children.getValue();
 
@@ -106,7 +105,7 @@ public class FileExplorer extends TreeView {
 	private void getPath(String home) {
 		var path = new ArrayList<String>();
 
-		var item = (TreeItem) getSelectionModel().getSelectedItem();
+		var item = (TreeItem<String>) getSelectionModel().getSelectedItem();
 
 		path.add((String) item.getValue());
 
