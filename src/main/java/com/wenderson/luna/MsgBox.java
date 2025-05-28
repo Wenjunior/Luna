@@ -1,17 +1,18 @@
 package com.wenderson.luna;
 
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class MsgBox {
 	public static void show(String title, String msg) {
-		var dialog = new Dialog<>();
+		var alert = new Alert(AlertType.WARNING);
 
-		dialog.setTitle(title);
+		alert.setTitle(title);
 
-		dialog.setContentText(msg);
+		alert.setHeaderText(null);
 
-		dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+		alert.setContentText(msg);
 
-		dialog.showAndWait();
+		alert.showAndWait();
 	}
 }

@@ -102,9 +102,17 @@ public class App extends Application {
 			actionPerformed("Redo");
 		});
 
+		var find = new MenuItem("Find...");
+
+		find.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN));
+
+		find.setOnAction(action -> {
+			actionPerformed("Find...");
+		});
+
 		var edit = new Menu("Edit");
 
-		edit.getItems().addAll(cut, copy, paste, undo, redo);
+		edit.getItems().addAll(cut, copy, paste, undo, redo, find);
 
 		var menuBar = new MenuBar();
 
@@ -217,6 +225,10 @@ public class App extends Application {
 			break;
 		case "Redo":
 			codeTab.redo();
+
+			break;
+		case "Find...":
+			codeTab.find();
 
 			break;
 		}
