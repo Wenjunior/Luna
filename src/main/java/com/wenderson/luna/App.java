@@ -163,7 +163,7 @@ public class App extends Application {
 		try {
 			scanner = new Scanner(selectedFile);
 		} catch (FileNotFoundException e) {
-			MsgBox.show("Open File...", "O arquivo selecionado não foi encontrado.");
+			MsgBox.show("Open File...", "The selected file was not found.");
 
 			return;
 		}

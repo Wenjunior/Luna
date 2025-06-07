@@ -92,7 +92,7 @@ public class CodeTab extends Tab {
 		try (var writer = new FileWriter(path)) {
 			writer.write(codeArea.getText());
 		} catch (IOException e) {
-			MsgBox.show("Save", "Um erro ocorreu ao salvar o arquivo.");
+			MsgBox.show("Save", "An error occurred while saving the file.");
 
 			return;
 		}
@@ -112,7 +112,7 @@ public class CodeTab extends Tab {
 		try (var writer = new FileWriter(selectedFile)) {
 			writer.write(codeArea.getText());
 		} catch (IOException e) {
-			MsgBox.show("Save As...", "Um erro ocorreu ao salvar o arquivo.");
+			MsgBox.show("Save As...", "An error occurred while saving the file.");
 
 			return;
 		}
@@ -175,7 +175,7 @@ public class CodeTab extends Tab {
 
 		tid.setTitle("Find...");
 
-		tid.setContentText("Encontre:");
+		tid.setContentText("Find:");
 
 		var result = tid.showAndWait();
 
