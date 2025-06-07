@@ -39,17 +39,7 @@ public class CodeTab extends Tab {
 
 		setText(this.name);
 
-		if (this.name.endsWith(".java")) {
-			highlighter.setSyntax("Java");
-		}
-
-		if (this.name.endsWith(".css")) {
-			highlighter.setSyntax("CSS");
-		}
-
-		if (this.name.endsWith(".xml")) {
-			highlighter.setSyntax("XML");
-		}
+		updateHighlighter();
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
@@ -68,6 +58,28 @@ public class CodeTab extends Tab {
 		setContent(scrollPane);
 
 		this.path = path;
+	}
+
+	public void updateHighlighter() {
+		if (this.name.endsWith(".java")) {
+			highlighter.setSyntax("Java");
+
+			return;
+		}
+
+		if (this.name.endsWith(".css")) {
+			highlighter.setSyntax("CSS");
+
+			return;
+		}
+
+		if (this.name.endsWith(".xml")) {
+			highlighter.setSyntax("XML");
+
+			return;
+		}
+
+		highlighter.setSyntax("Plain Text");
 	}
 
 	public void save() {
@@ -111,19 +123,7 @@ public class CodeTab extends Tab {
 
 		this.path = selectedFile.getPath();
 
-		highlighter.setSyntax("Plain text");
-
-		if (this.name.endsWith(".java")) {
-			highlighter.setSyntax("Java");
-		}
-
-		if (this.name.endsWith(".css")) {
-			highlighter.setSyntax("CSS");
-		}
-
-		if (this.name.endsWith(".xml")) {
-			highlighter.setSyntax("XML");
-		}
+		updateHighlighter();
 	}
 
 	public void cut() {
@@ -193,7 +193,7 @@ public class CodeTab extends Tab {
 			while (matcher.find()) {
 				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
-				styleSpansBuilder.add(Collections.singleton("red"), matcher.end() - matcher.start());
+				styleSpansBuilder.add(Collections.singleton("highlight"), matcher.end() - matcher.start());
 
 				lastKeywordEnd = matcher.end();
 			}

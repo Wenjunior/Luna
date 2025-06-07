@@ -5,15 +5,15 @@ import java.util.regex.*;
 import org.fxmisc.richtext.model.*;
 
 public class Highlighter {
-	private Pattern pattern = Pattern.compile("");;
+	private Pattern pattern = Pattern.compile("");
 
 	private HashMap<String, String> groups = new HashMap<>();
 
 	public void setSyntax(String programmingLanguage) {
-		if (programmingLanguage.equals("Plain text")) {
-			pattern = Pattern.compile("");
+		groups.clear();
 
-			groups.clear();
+		if (programmingLanguage.equals("Plain Text")) {
+			pattern = Pattern.compile("");
 		}
 
 		if (programmingLanguage.equals("Java")) {
@@ -29,7 +29,7 @@ public class Highlighter {
 
 			var classPattern = "(?<=\\.)[A-Z]\\w+(?=\\;)|[A-Z]\\w+(?=\\[)|[A-Z]\\w+(?=\\<)|(?<=class\\s)[A-Z]\\w+|(?<=new\\s)[A-Z]\\w+|(?<=extends\\s)[A-Z]\\w+|(?<=implements\\s)[A-Z]\\w+|(?<![a-z]\\w+)[A-Z]\\w+(?=\\.)|[A-Z]\\w+(?=\\s[a-z])";
 
-			var charPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
+			var specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
 
 			var booleanPattern = "true|false";
 
@@ -48,15 +48,13 @@ public class Highlighter {
 				+ "|(?<COMMENT>" + commentPattern + ")"
 				+ "|(?<NUMBER>" + numberPattern + ")"
 				+ "|(?<CLASS>" + classPattern + ")"
-				+ "|(?<CHARS>" + charPattern + ")"
+				+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
 				+ "|(?<BOOLEAN>" + booleanPattern + ")"
 				+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
 				+ "|(?<FUNCTION>" + functionPattern + ")"
 				+ "|(?<CONSTANT>" + constantPattern + ")"
 				+ "|(?<ANNOTATION>" + annotationPattern + ")"
 			);
-
-			groups.clear();
 
 			groups.put("KEYWORD", "red");
 
@@ -70,7 +68,7 @@ public class Highlighter {
 
 			groups.put("CLASS", "purple");
 
-			groups.put("CHARS", "orange");
+			groups.put("SPECIALCHAR", "orange");
 
 			groups.put("BOOLEAN", "lightBlue");
 
@@ -88,13 +86,11 @@ public class Highlighter {
 
 			var selectorPattern = "(?<![A-Z])([a-z]\\w+|[a-z])(?=(\\s\\{))";
 
-			var colorPattern = "black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen";
+			var colorPattern = "\\b(black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen)\\b";
 
 			var semicolonPattern = "\\;";
 
 			pattern = Pattern.compile("(?<DOT>" + dotPattern + ")|(?<SELECTOR>" + selectorPattern + ")|(?<COLOR>" + colorPattern + ")|(?<SEMICOLON>" + semicolonPattern + ")");
-
-			groups.clear();
 
 			groups.put("DOT", "gray");
 
@@ -106,13 +102,15 @@ public class Highlighter {
 		}
 
 		if (programmingLanguage.equals("XML")) {
-			var tagPattern = "(?<=(\\<|\\</))([0-9]\\w+|[a-z]\\w+|[A-Z]\\w+|[0-9]|[a-z]|[A-Z])";
+			var tagPattern = "(?<=\\<)([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])|(?<=\\<\\/)([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])";
 
-			pattern = Pattern.compile("(?<TAG>" + tagPattern + ")");
+			var specialCharPattern = "<|(?<=\\<)\\/|>";
 
-			groups.clear();
+			pattern = Pattern.compile("(?<TAG>" + tagPattern + ")|(?<SPECIALCHAR>" + specialCharPattern + ")");
 
 			groups.put("TAG", "yellow");
+
+			groups.put("SPECIALCHAR", "orange");
 		}
 	}
 
