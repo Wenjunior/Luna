@@ -10,11 +10,11 @@
 	-fx-fill: #66A899;
 }
 
-.code-area .lightGrey {
+.code-area .light-grey {
 	-fx-fill: #B2BEB5;
 }
 
-.code-area .airForceBlue {
+.code-area .dark-blue {
 	-fx-fill: #5D8AA8;
 }
 
@@ -26,12 +26,12 @@
 	-fx-fill: #F9AE58;
 }
 
-.code-area .lightSkyBlue {
+.code-area .light-blue {
 	-fx-fill: #87CEFA;
 }
 
-.code-area .darkPink {
-	-fx-fill: #FF55A3;
+.code-area .pink {
+	-fx-fill: #FFB6C1;
 }
 
 .code-area .yellow {

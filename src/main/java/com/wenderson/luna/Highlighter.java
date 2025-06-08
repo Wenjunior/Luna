@@ -62,19 +62,19 @@ public class Highlighter {
 
 			groups.put("STRING", "green");
 
-			groups.put("COMMENT", "lightGrey");
+			groups.put("COMMENT", "light-grey");
 
-			groups.put("NUMBER", "airForceBlue");
+			groups.put("NUMBER", "dark-blue");
 
 			groups.put("CLASS", "purple");
 
 			groups.put("SPECIALCHAR", "orange");
 
-			groups.put("BOOLEAN", "lightSkyBlue");
+			groups.put("BOOLEAN", "light-blue");
 
 			groups.put("SINGLEQUOTESTRING", "green");
 
-			groups.put("FUNCTION", "darkPink");
+			groups.put("FUNCTION", "pink");
 
 			groups.put("CONSTANT", "yellow");
 
@@ -96,7 +96,7 @@ public class Highlighter {
 
 			groups.put("SELECTOR", "purple");
 
-			groups.put("COLOR", "lightSkyBlue");
+			groups.put("COLOR", "light-blue");
 
 			groups.put("SEMICOLON", "gray");
 		}
