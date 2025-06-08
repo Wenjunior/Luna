@@ -33,6 +33,8 @@ public class FileExplorer extends TreeView<String> {
 			}
 		});
 
+		thread.setDaemon(true);
+
 		thread.start();
 
 		getSelectionModel().selectedItemProperty().addListener(action -> {

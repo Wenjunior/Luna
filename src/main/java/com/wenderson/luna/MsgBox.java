@@ -13,6 +13,10 @@ public class MsgBox {
 
 		alert.setContentText(msg);
 
+		alert.getDialogPane().getStylesheets().add(MsgBox.class.getResource("/css/dark-theme.css").toString());
+
+		alert.getDialogPane().getStyleClass().add("msg-box");
+
 		alert.showAndWait();
 	}
 }

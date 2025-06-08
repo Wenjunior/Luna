@@ -64,13 +64,13 @@ public class Highlighter {
 
 			groups.put("COMMENT", "lightGrey");
 
-			groups.put("NUMBER", "darkBlue");
+			groups.put("NUMBER", "airForceBlue");
 
 			groups.put("CLASS", "purple");
 
 			groups.put("SPECIALCHAR", "orange");
 
-			groups.put("BOOLEAN", "lightBlue");
+			groups.put("BOOLEAN", "lightSkyBlue");
 
 			groups.put("SINGLEQUOTESTRING", "green");
 
@@ -96,7 +96,7 @@ public class Highlighter {
 
 			groups.put("SELECTOR", "purple");
 
-			groups.put("COLOR", "lightBlue");
+			groups.put("COLOR", "lightSkyBlue");
 
 			groups.put("SEMICOLON", "gray");
 		}

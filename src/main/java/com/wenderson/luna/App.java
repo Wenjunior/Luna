@@ -130,11 +130,9 @@ public class App extends Application {
 
 		var scene = new Scene(borderPane, 1280, 720);
 
-		scene.getStylesheets().add(getClass().getResource("/css/dark-mode.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/css/dark-theme.css").toExternalForm());
 
 		scene.getStylesheets().add(getClass().getResource("/css/colors.css").toExternalForm());
-
-		scene.getStylesheets().add(getClass().getResource("/css/highlight.css").toExternalForm());
 
 		stage.setScene(scene);
 
@@ -234,13 +232,6 @@ public class App extends Application {
 
 			break;
 		}
-	}
-
-	// Adicionei essa função porque quando a janela principal é fechada, a thread do explorador de arquivos mantém o programa rodando em segundo plano.
-
-	@Override
-	public void stop() {
-		System.exit(0);
 	}
 
 	public static void main(String[] args) {

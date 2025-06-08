@@ -35,7 +35,7 @@
 }
 
 .tab {
-	-fx-background-color: #2b323e;
+	-fx-background-color: #2B323E;
 	-fx-border-color: transparent transparent #303841 transparent;
 }
 
@@ -74,10 +74,8 @@
 }
 
 .lineno { /* LineNumberFactory */
-	-fx-background-color: #3b4550;
+	-fx-background-color: #3B4550;
 }
-
-/* VirtualizedScrollBar */
 
 .scroll-bar {
 	-fx-background-color: #303841;
@@ -85,12 +83,12 @@
 
 .scroll-bar:vertical .thumb {
 	-fx-background-color: #696F75;
-	-fx-pref-width: 10px;
+	-fx-pref-width: 5px;
 }
 
 .scroll-bar:horizontal .thumb {
 	-fx-background-color: #696F75;
-	-fx-pref-height: 10px;
+	-fx-pref-height: 5px;
 }
 
 .scroll-bar .decrement-button {
@@ -103,20 +101,18 @@
 	-fx-padding: 2.25;
 }
 
-/* TreeView */
-
 .tree-cell {
-	-fx-background-color: #2d3338;
+	-fx-background-color: #2D3338;
 	-fx-text-fill: white;
 }
 
 .tree-view {
-	-fx-background-color: #2d3338;
-	-fx-border-color: #2d3338;
+	-fx-background-color: #2D3338;
+	-fx-border-color: #2D3338;
 }
 
 .tree-view .corner {
-	-fx-background-color: #2d3338;
+	-fx-background-color: #2D3338;
 }
 
 .tree-cell > .tree-disclosure-node > .arrow {
@@ -125,4 +121,18 @@
 
 .tree-cell > .tree-disclosure-node > .arrow {
 	-fx-background-color: grey;
+}
+
+.msg-box {
+	-fx-background-color: #2E3238;
+}
+
+.button:focused {
+	-fx-background-color: #3E3E40;
+	-fx-text-fill: white;
+}
+
+.button:hover {
+	-fx-background-color: #3E3E40;
+	-fx-text-fill: white;
 }

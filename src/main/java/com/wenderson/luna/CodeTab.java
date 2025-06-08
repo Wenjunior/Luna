@@ -193,7 +193,7 @@ public class CodeTab extends Tab {
 			while (matcher.find()) {
 				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
 
-				styleSpansBuilder.add(Collections.singleton("highlight"), matcher.end() - matcher.start());
+				styleSpansBuilder.add(Collections.singleton("yellow"), matcher.end() - matcher.start());
 
 				lastKeywordEnd = matcher.end();
 			}

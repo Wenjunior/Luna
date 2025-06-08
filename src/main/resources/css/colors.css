@@ -11,11 +11,11 @@
 }
 
 .code-area .lightGrey {
-	-fx-fill: #b2beb5;
+	-fx-fill: #B2BEB5;
 }
 
-.code-area .darkBlue {
-	-fx-fill: #5d8aa8;
+.code-area .airForceBlue {
+	-fx-fill: #5D8AA8;
 }
 
 .code-area .purple {
@@ -26,18 +26,18 @@
 	-fx-fill: #F9AE58;
 }
 
-.code-area .lightBlue {
-	-fx-fill: #87cefa;
+.code-area .lightSkyBlue {
+	-fx-fill: #87CEFA;
 }
 
 .code-area .darkPink {
-	-fx-fill: #ff55a3;
+	-fx-fill: #FF55A3;
 }
 
 .code-area .yellow {
-	-fx-fill: #ffe135;
+	-fx-fill: #FAFE66;
 }
 
 .code-area .brown {
-	-fx-fill: #9f8170;
+	-fx-fill: #9F8170;
 }
