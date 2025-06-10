@@ -5,18 +5,18 @@ import javafx.scene.control.Alert.AlertType;
 
 public class MsgBox {
 	public static void show(String title, String msg) {
-		var alert = new Alert(AlertType.WARNING);
+		var msgBox = new Alert(AlertType.WARNING);
 
-		alert.setTitle(title);
+		msgBox.setTitle(title);
 
-		alert.setHeaderText(null);
+		msgBox.setHeaderText(null);
 
-		alert.setContentText(msg);
+		msgBox.setContentText(msg);
 
-		alert.getDialogPane().getStylesheets().add(MsgBox.class.getResource("/css/dark-theme.css").toString());
+		msgBox.getDialogPane().getStylesheets().add(MsgBox.class.getResource("/css/dark-theme.css").toString());
 
-		alert.getDialogPane().getStyleClass().add("msg-box");
+		msgBox.getDialogPane().getStyleClass().add("msg-box");
 
-		alert.showAndWait();
+		msgBox.showAndWait();
 	}
 }
