@@ -234,6 +234,17 @@ public class App extends Application {
 		}
 	}
 
+	@Override
+	public void stop() {
+		for (var tab : tabs.getTabs()) {
+			var codeTab = (CodeTab) tab;
+
+			codeTab.shutdownExecutorService();
+		}
+
+		System.exit(0);
+	}
+
 	public static void main(String[] args) {
 		launch();
 	}

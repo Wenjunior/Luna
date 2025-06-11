@@ -2,12 +2,15 @@ package com.wenderson.luna;
 
 import java.io.*;
 import java.util.*;
+import java.time.Duration;
 import org.fxmisc.richtext.*;
+import java.util.concurrent.*;
+import javafx.concurrent.Task;
 import javafx.scene.control.*;
 import java.util.regex.Pattern;
 import javafx.stage.FileChooser;
+import org.fxmisc.richtext.model.*;
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class CodeTab extends Tab {
 	private String name = "Untitled";
@@ -15,6 +18,8 @@ public class CodeTab extends Tab {
 	private CodeArea codeArea = new CodeArea();
 
 	private String path = null;
+
+	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	private Highlighter highlighter = new Highlighter();
 
@@ -25,13 +30,25 @@ public class CodeTab extends Tab {
 
 		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
 			setText(this.name + " *");
-
-			codeArea.setStyleSpans(0, highlighter.highlightSyntax(newCode));
 		});
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
+
+		codeArea.multiPlainChanges()
+			.successionEnds(Duration.ofMillis(10))
+				.retainLatestUntilLater(executorService)
+					.supplyTask(this::computeHighlightingAsync)
+						.awaitLatest(codeArea.multiPlainChanges())
+							.filterMap(task -> {
+								if (task.isSuccess()) {
+									return Optional.of(task.get());
+								}
+
+								return Optional.empty();
+							})
+								.subscribe(this::applyHighlighting);
 	}
 
 	public CodeTab(String name, String code, String path) {
@@ -47,8 +64,6 @@ public class CodeTab extends Tab {
 
 		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
 			setText(this.name + " *");
-
-			codeArea.setStyleSpans(0, highlighter.highlightSyntax(newCode));
 		});
 
 		codeArea.setStyleSpans(0, highlighter.highlightSyntax(code));
@@ -57,10 +72,24 @@ public class CodeTab extends Tab {
 
 		setContent(scrollPane);
 
+		codeArea.multiPlainChanges()
+			.successionEnds(Duration.ofMillis(10))
+				.retainLatestUntilLater(executorService)
+					.supplyTask(this::computeHighlightingAsync)
+						.awaitLatest(codeArea.multiPlainChanges())
+							.filterMap(task -> {
+								if (task.isSuccess()) {
+									return Optional.of(task.get());
+								}
+
+								return Optional.empty();
+							})
+								.subscribe(this::applyHighlighting);
+
 		this.path = path;
 	}
 
-	public void updateHighlighter() {
+	private void updateHighlighter() {
 		if (this.name.endsWith(".java")) {
 			highlighter.setSyntax("Java");
 
@@ -80,6 +109,25 @@ public class CodeTab extends Tab {
 		}
 
 		highlighter.setSyntax("Plain Text");
+	}
+
+	private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
+		var code = codeArea.getText();
+
+		var task = new Task<StyleSpans<Collection<String>>>() {
+			@Override
+			protected StyleSpans<Collection<String>> call() throws Exception {
+				return highlighter.highlightSyntax(code);
+			}
+		};
+
+		executorService.execute(task);
+
+		return task;
+	}
+
+	private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
+		codeArea.setStyleSpans(0, highlighting);
 	}
 
 	public void save() {
@@ -202,5 +250,9 @@ public class CodeTab extends Tab {
 
 			codeArea.setStyleSpans(0, styleSpansBuilder.create());
 		}
+	}
+
+	public void shutdownExecutorService() {
+		executorService.shutdown();
 	}
 }
