@@ -13,7 +13,7 @@ public class MsgBox {
 
 		msgBox.setContentText(msg);
 
-		msgBox.getDialogPane().getStylesheets().add(MsgBox.class.getResource("/css/dark-theme.css").toString());
+		msgBox.getDialogPane().getStylesheets().add(MsgBox.class.getResource("/css/dark-theme.css").toExternalForm());
 
 		msgBox.getDialogPane().getStyleClass().add("msg-box");
 

@@ -123,12 +123,21 @@
 	-fx-background-color: grey;
 }
 
+.text-input-dialog {
+	-fx-fill: #2E3238;
+}
+
+.button {
+	-fx-background-color: #4B4B4D;
+	-fx-text-fill: white;
+}
+
 .msg-box {
 	-fx-background-color: #2E3238;
 }
 
 .button:focused {
-	-fx-background-color: #3E3E40;
+	-fx-background-color: #4B4B4D;
 	-fx-text-fill: white;
 }
 

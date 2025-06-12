@@ -55,7 +55,7 @@ public class App extends Application {
 		exit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCodeCombination.CONTROL_DOWN));
 
 		exit.setOnAction(action -> {
-			System.exit(0);
+			stop();
 		});
 
 		var file = new Menu("File");
@@ -110,9 +110,17 @@ public class App extends Application {
 			actionPerformed("Find...");
 		});
 
+		var replace = new MenuItem("Replace...");
+
+		replace.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCodeCombination.CONTROL_DOWN));
+
+		replace.setOnAction(action -> {
+			actionPerformed("Replace...");
+		});
+
 		var edit = new Menu("Edit");
 
-		edit.getItems().addAll(cut, copy, paste, undo, redo, find);
+		edit.getItems().addAll(cut, copy, paste, undo, redo, find, replace);
 
 		var menuBar = new MenuBar();
 
@@ -229,6 +237,10 @@ public class App extends Application {
 			break;
 		case "Find...":
 			codeTab.find();
+
+			break;
+		case "Replace...":
+			codeTab.replace();
 
 			break;
 		}
