@@ -35,6 +35,7 @@
 }
 
 .tab {
+	-fx-pref-width: 200;
 	-fx-background-color: #2B323E;
 	-fx-border-color: transparent transparent #303841 transparent;
 }

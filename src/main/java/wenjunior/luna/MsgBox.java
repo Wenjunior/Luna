@@ -1,4 +1,4 @@
-package com.wenderson.luna;
+package wenjunior.luna;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

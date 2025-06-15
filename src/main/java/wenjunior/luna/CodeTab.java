@@ -1,4 +1,4 @@
-package com.wenderson.luna;
+package wenjunior.luna;
 
 import java.io.*;
 import java.util.*;
@@ -40,18 +40,17 @@ public class CodeTab extends Tab {
 		setContent(scrollPane);
 
 		codeArea.multiPlainChanges()
-			.successionEnds(Duration.ofMillis(10))
-				.retainLatestUntilLater(executorService)
-					.supplyTask(this::computeHighlightingAsync)
-						.awaitLatest(codeArea.multiPlainChanges())
-							.filterMap(task -> {
-								if (task.isSuccess()) {
-									return Optional.of(task.get());
-								}
+			.retainLatestUntilLater(executorService)
+				.supplyTask(this::computeHighlightingAsync)
+					.awaitLatest(codeArea.multiPlainChanges())
+						.filterMap(task -> {
+							if (task.isSuccess()) {
+								return Optional.of(task.get());
+							}
 
-								return Optional.empty();
-							})
-								.subscribe(this::applyHighlighting);
+							return Optional.empty();
+						})
+							.subscribe(this::applyHighlighting);
 	}
 
 	public CodeTab(String name, String code, String path) {
@@ -76,18 +75,17 @@ public class CodeTab extends Tab {
 		setContent(scrollPane);
 
 		codeArea.multiPlainChanges()
-			.successionEnds(Duration.ofMillis(10))
-				.retainLatestUntilLater(executorService)
-					.supplyTask(this::computeHighlightingAsync)
-						.awaitLatest(codeArea.multiPlainChanges())
-							.filterMap(task -> {
-								if (task.isSuccess()) {
-									return Optional.of(task.get());
-								}
+			.retainLatestUntilLater(executorService)
+				.supplyTask(this::computeHighlightingAsync)
+					.awaitLatest(codeArea.multiPlainChanges())
+						.filterMap(task -> {
+							if (task.isSuccess()) {
+								return Optional.of(task.get());
+							}
 
-								return Optional.empty();
-							})
-								.subscribe(this::applyHighlighting);
+							return Optional.empty();
+						})
+							.subscribe(this::applyHighlighting);
 
 		this.path = path;
 	}
@@ -181,8 +179,6 @@ public class CodeTab extends Tab {
 		codeArea.cut();
 
 		setText(this.name + " *");
-
-		codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	public void copy() {
@@ -193,8 +189,6 @@ public class CodeTab extends Tab {
 		codeArea.paste();
 
 		setText(this.name + " *");
-
-		codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 	}
 
 	public void undo() {
@@ -202,8 +196,6 @@ public class CodeTab extends Tab {
 			codeArea.undo();
 
 			setText(this.name + " *");
-
-			codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 
@@ -212,8 +204,6 @@ public class CodeTab extends Tab {
 			codeArea.redo();
 
 			setText(this.name + " *");
-
-			codeArea.setStyleSpans(0, highlighter.highlightSyntax(codeArea.getText()));
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.wenderson.luna;
+package wenjunior.luna;
 
 import java.io.*;
 import java.util.*;

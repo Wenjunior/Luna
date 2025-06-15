@@ -10,4 +10,5 @@ Para executar o projeto digite os comandos a seguir:
 git clone https://github.com/Wenjunior/Luna.git
 cd Luna
 mvn clean javafx:run
+mvn package
 ```

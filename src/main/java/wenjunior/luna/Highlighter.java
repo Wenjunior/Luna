@@ -1,4 +1,4 @@
-package com.wenderson.luna;
+package wenjunior.luna;
 
 import java.util.*;
 import java.util.regex.*;

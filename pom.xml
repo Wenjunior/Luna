@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.wenderson.luna</groupId>
+	<groupId>wenjunior.luna</groupId>
 	<artifactId>Luna</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<properties>
@@ -49,7 +49,7 @@
 					<execution>
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>com.wenderson.luna/com.wenderson.luna.Luna</mainClass>
+							<mainClass>wenjunior.luna/wenjunior.luna.Luna</mainClass>
 						</configuration>
 					</execution>
 				</executions>
@@ -67,7 +67,7 @@
 						<configuration>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.wenderson.luna.Luna</mainClass>
+									<mainClass>wenjunior.luna.Luna</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
