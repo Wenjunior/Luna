@@ -80,38 +80,6 @@ public class Highlighter {
 
 			groups.put("ANNOTATION", "brown");
 		}
-
-		if (programmingLanguage.equals("CSS")) {
-			var dotPattern = "\\.";
-
-			var selectorPattern = "(?<![A-Z])([a-z]\\w+|[a-z])(?=(\\s\\{))";
-
-			var colorPattern = "\\b(black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua|aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen)\\b";
-
-			var semicolonPattern = "\\;";
-
-			pattern = Pattern.compile("(?<DOT>" + dotPattern + ")|(?<SELECTOR>" + selectorPattern + ")|(?<COLOR>" + colorPattern + ")|(?<SEMICOLON>" + semicolonPattern + ")");
-
-			groups.put("DOT", "gray");
-
-			groups.put("SELECTOR", "purple");
-
-			groups.put("COLOR", "light-blue");
-
-			groups.put("SEMICOLON", "gray");
-		}
-
-		if (programmingLanguage.equals("XML")) {
-			var tagPattern = "(?<=\\<)([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])|(?<=\\<\\/)([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])";
-
-			var specialCharPattern = "<|(?<=\\<)\\/|>";
-
-			pattern = Pattern.compile("(?<TAG>" + tagPattern + ")|(?<SPECIALCHAR>" + specialCharPattern + ")");
-
-			groups.put("TAG", "yellow");
-
-			groups.put("SPECIALCHAR", "orange");
-		}
 	}
 
 	public StyleSpans<Collection<String>> highlightSyntax(String text) {

@@ -251,7 +251,7 @@ public class App extends Application {
 		for (var tab : tabs.getTabs()) {
 			var codeTab = (CodeTab) tab;
 
-			codeTab.shutdownExecutorService();
+			codeTab.stopAsyncHighlighting();
 		}
 
 		System.exit(0);

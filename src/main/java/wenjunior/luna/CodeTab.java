@@ -31,10 +31,6 @@ public class CodeTab extends Tab {
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
-			setText(this.name + " *");
-		});
-
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
@@ -51,6 +47,10 @@ public class CodeTab extends Tab {
 							return Optional.empty();
 						})
 							.subscribe(this::applyHighlighting);
+
+		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
+			setText(this.name + " *");
+		});
 	}
 
 	public CodeTab(String name, String code, String path) {
@@ -62,17 +62,16 @@ public class CodeTab extends Tab {
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-		codeArea.replaceText(code);
-
-		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
-			setText(this.name + " *");
-		});
-
-		codeArea.setStyleSpans(0, highlighter.highlightSyntax(code));
-
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
+
+		/*
+			Evite mudar a ordem das funções a seguir. Elas monitoram mudanças no código fonte, então se
+			'multiPlainChanges' estiver depois de 'replaceText', o código não sera realçado porque 'multiPlainChanges'
+			ainda não foi definido. E se 'addListener' estiver antes de 'replaceText', ele vai detectar a mudança no
+			código fonte e mudar o nome da tab sem necessidade, já que o código fonte não modificado pelo usuário.
+		*/
 
 		codeArea.multiPlainChanges()
 			.retainLatestUntilLater(executorService)
@@ -87,24 +86,18 @@ public class CodeTab extends Tab {
 						})
 							.subscribe(this::applyHighlighting);
 
+		codeArea.replaceText(code);
+
+		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
+			setText(this.name + " *");
+		});
+
 		this.path = path;
 	}
 
 	private void updateHighlighter() {
 		if (this.name.endsWith(".java")) {
 			highlighter.setSyntax("Java");
-
-			return;
-		}
-
-		if (this.name.endsWith(".css")) {
-			highlighter.setSyntax("CSS");
-
-			return;
-		}
-
-		if (this.name.endsWith(".xml")) {
-			highlighter.setSyntax("XML");
 
 			return;
 		}
@@ -309,7 +302,7 @@ public class CodeTab extends Tab {
 		});
 	}
 
-	public void shutdownExecutorService() {
+	public void stopAsyncHighlighting() {
 		executorService.shutdown();
 	}
 }

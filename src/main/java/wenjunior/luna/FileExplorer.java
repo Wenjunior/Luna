@@ -11,9 +11,13 @@ public class FileExplorer extends TreeView<String> {
 	public FileExplorer(TabPane tabs) {
 		this.tabs = tabs;
 
-		var home = System.getProperty("user.home");
+		var lunaProjects = System.getProperty("user.home") + "/LunaProjects";
 
-		var folder = new File(home);
+		var folder = new File(lunaProjects);
+
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
 
 		var root = new TreeItem<String>(folder.getName());
 
@@ -24,7 +28,7 @@ public class FileExplorer extends TreeView<String> {
 		var thread = new Thread(new Runnable() {
 			public void run() {
 				while (true) {
-					update(root, home);
+					update(root, lunaProjects);
 
 					try {
 						Thread.sleep(1000);
@@ -38,7 +42,7 @@ public class FileExplorer extends TreeView<String> {
 		thread.start();
 
 		getSelectionModel().selectedItemProperty().addListener(action -> {
-			getPath(home);
+			getPath(lunaProjects);
 		});
 	}
 
