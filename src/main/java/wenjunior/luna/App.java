@@ -138,9 +138,9 @@ public class App extends Application {
 
 		var scene = new Scene(borderPane, 1280, 720);
 
-		scene.getStylesheets().add(getClass().getResource("/css/dark-theme.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
-		scene.getStylesheets().add(getClass().getResource("/css/colors.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/css/dracula-theme.css").toExternalForm());
 
 		stage.setScene(scene);
 

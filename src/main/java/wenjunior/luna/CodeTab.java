@@ -29,6 +29,8 @@ public class CodeTab extends Tab {
 	public CodeTab() {
 		setText(this.name);
 
+		codeArea.setWrapText(true);
+
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
 		var scrollPane = new VirtualizedScrollPane<>(codeArea);
@@ -59,6 +61,8 @@ public class CodeTab extends Tab {
 		setText(this.name);
 
 		updateHighlighter();
+
+		codeArea.setWrapText(true);
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
@@ -213,7 +217,7 @@ public class CodeTab extends Tab {
 
 		var dialogPane = dialog.getDialogPane();
 
-		dialogPane.getStylesheets().add(getClass().getResource("/css/dark-theme.css").toExternalForm());
+		dialogPane.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		dialogPane.getStyleClass().add("text-input-dialog");
 
@@ -279,7 +283,7 @@ public class CodeTab extends Tab {
 
 		dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-		dialogPane.getStylesheets().add(getClass().getResource("/css/dark-theme.css").toExternalForm());
+		dialogPane.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		dialogPane.getStyleClass().add("text-input-dialog");
 

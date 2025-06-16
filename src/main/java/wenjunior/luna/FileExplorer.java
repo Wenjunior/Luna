@@ -53,8 +53,22 @@ public class FileExplorer extends TreeView<String> {
 			return;
 		}
 
-		for (var file : folder.listFiles()) {
-			if (!file.isHidden()) {
+		var files = folder.listFiles();
+
+		Arrays.sort(files, (file1, file2) -> {
+			if (file1.isDirectory() && !file2.isDirectory()) {
+				return -1;
+			}
+
+			if (!file1.isDirectory() && file2.isDirectory()) {
+				return 1;
+			}
+
+			return file1.getName().compareTo(file2.getName());
+		});
+
+		for (var file : files) {
+			if (!file.isDirectory() | !file.getName().equals(".git")) {
 				var iterator = mother.getChildren().iterator();
 
 				var filename = file.getName();

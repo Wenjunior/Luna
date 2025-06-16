@@ -62,7 +62,7 @@
 }
 
 .code-area .text {
-	-fx-fill: white;
+	-fx-fill: #F8F8F2;
 }
 
 .code-area .caret {
@@ -75,7 +75,7 @@
 }
 
 .lineno { /* LineNumberFactory */
-	-fx-background-color: #3B4550;
+	-fx-background-color: #303841;
 }
 
 .scroll-bar {

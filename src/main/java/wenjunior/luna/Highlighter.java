@@ -17,7 +17,7 @@ public class Highlighter {
 		}
 
 		if (programmingLanguage.equals("Java")) {
-			var keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|void|volatile|while|var|module|requires|exports)\\b";
+			var keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
 
 			var semicolonPattern = "\\;";
 
@@ -27,11 +27,11 @@ public class Highlighter {
 
 			var numberPattern = "[0-9]";
 
-			var classPattern = "(?<=\\.)[A-Z]\\w+(?=\\;)|[A-Z]\\w+(?=\\[)|[A-Z]\\w+(?=\\<)|(?<=class\\s)[A-Z]\\w+|(?<=new\\s)[A-Z]\\w+|(?<=extends\\s)[A-Z]\\w+|(?<=implements\\s)[A-Z]\\w+|(?<![a-z]\\w+)[A-Z]\\w+(?=\\.)|[A-Z]\\w+(?=\\s[a-z])";
+			var classPattern = "(?<![a-z])[A-Z]([a-z]\\w+|[a-z])";
 
 			var specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
 
-			var booleanPattern = "true|false";
+			var primitiveTypesAndNullAndBooleanPattern = "\\b(short|int|long|float|double|char|null|bool|true|false)\\b";
 
 			var singleQuoteStringPattern = "'(.*?)'";
 
@@ -49,7 +49,7 @@ public class Highlighter {
 				+ "|(?<NUMBER>" + numberPattern + ")"
 				+ "|(?<CLASS>" + classPattern + ")"
 				+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
-				+ "|(?<BOOLEAN>" + booleanPattern + ")"
+				+ "|(?<PRIMITIVETYPESANDNULLANDBOOLEAN>" + primitiveTypesAndNullAndBooleanPattern + ")"
 				+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
 				+ "|(?<FUNCTION>" + functionPattern + ")"
 				+ "|(?<CONSTANT>" + constantPattern + ")"
@@ -58,27 +58,27 @@ public class Highlighter {
 
 			groups.put("KEYWORD", "red");
 
-			groups.put("SEMICOLON", "grey");
+			groups.put("SEMICOLON", "comment");
 
-			groups.put("STRING", "green");
+			groups.put("STRING", "yellow");
 
-			groups.put("COMMENT", "light-grey");
+			groups.put("COMMENT", "comment");
 
-			groups.put("NUMBER", "dark-blue");
+			groups.put("NUMBER", "pink");
 
 			groups.put("CLASS", "purple");
 
 			groups.put("SPECIALCHAR", "orange");
 
-			groups.put("BOOLEAN", "light-blue");
+			groups.put("PRIMITIVETYPESANDNULLANDBOOLEAN", "cyan");
 
-			groups.put("SINGLEQUOTESTRING", "green");
+			groups.put("SINGLEQUOTESTRING", "yellow");
 
-			groups.put("FUNCTION", "pink");
+			groups.put("FUNCTION", "green");
 
-			groups.put("CONSTANT", "yellow");
+			groups.put("CONSTANT", "orange");
 
-			groups.put("ANNOTATION", "brown");
+			groups.put("ANNOTATION", "pink");
 		}
 	}
 
