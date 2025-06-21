@@ -124,7 +124,7 @@ public class FileExplorer extends TreeView<String> {
 		try {
 			scanner = new Scanner(file);
 		} catch (FileNotFoundException e) {
-			MsgBox.show("Open File...", "The selected file was not found.");
+			MsgBox.show("Warning", "The selected file was not found.");
 
 			return;
 		}
