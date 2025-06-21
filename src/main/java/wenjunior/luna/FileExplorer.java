@@ -101,6 +101,15 @@ public class FileExplorer extends TreeView<String> {
 						var selectedFile = (FileItem) selectedItem;
 
 						openFile(selectedFile.getPath());
+
+						/*
+							A linha de código a seguir evita que logo após selecionar um arquivo e abrir uma tab,
+							uma nova tab seja desnecessariamente aberta quando o usuário não clicar no arquivo.
+							Isso acontece porque a função setOnMouseClicked não consegue detectar cliques somente
+							quando um arquivo for selecionado.
+						*/
+
+						getSelectionModel().clearSelection();
 					}
 				}
 			}
