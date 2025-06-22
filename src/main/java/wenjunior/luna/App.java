@@ -19,6 +19,18 @@ import javafx.scene.input.KeyCodeCombination;
 public class App extends Application {
 	private TabPane tabs = new TabPane();
 
+	private enum Events {
+		SAVE,
+		SAVE_AS,
+		CUT,
+		COPY,
+		PASTE,
+		UNDO,
+		REDO,
+		FIND,
+		REPLACE
+	};
+
 	@Override
 	public void start(Stage stage) {
 		stage.setTitle("Luna");
@@ -29,7 +41,7 @@ public class App extends Application {
 
 		newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN));
 
-		newFile.setOnAction(action -> {
+		newFile.setOnAction(event -> {
 			newFile();
 		});
 
@@ -37,7 +49,7 @@ public class App extends Application {
 
 		openFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN));
 
-		openFile.setOnAction(action -> {
+		openFile.setOnAction(event -> {
 			openFile();
 		});
 
@@ -45,23 +57,23 @@ public class App extends Application {
 
 		save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN));
 
-		save.setOnAction(action -> {
-			actionPerformed("Save");
+		save.setOnAction(event -> {
+			eventPerformed(Events.SAVE);
 		});
 
 		MenuItem saveAs = new MenuItem("Save As...");
 
 		saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN));
 
-		saveAs.setOnAction(action -> {
-			actionPerformed("Save As...");
+		saveAs.setOnAction(event -> {
+			eventPerformed(Events.SAVE_AS);
 		});
 
 		MenuItem exit = new MenuItem("Exit");
 
 		exit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCodeCombination.CONTROL_DOWN));
 
-		exit.setOnAction(action -> {
+		exit.setOnAction(event -> {
 			stop();
 		});
 
@@ -73,56 +85,56 @@ public class App extends Application {
 
 		cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCodeCombination.CONTROL_DOWN));
 
-		cut.setOnAction(action -> {
-			actionPerformed("Cut");
+		cut.setOnAction(event -> {
+			eventPerformed(Events.CUT);
 		});
 
 		MenuItem copy = new MenuItem("Copy");
 
 		copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN));
 
-		copy.setOnAction(action -> {
-			actionPerformed("Cut");
+		copy.setOnAction(event -> {
+			eventPerformed(Events.COPY);
 		});
 
 		MenuItem paste = new MenuItem("Paste");
 
 		paste.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCodeCombination.CONTROL_DOWN));
 
-		paste.setOnAction(action -> {
-			actionPerformed("Paste");
+		paste.setOnAction(event -> {
+			eventPerformed(Events.PASTE);
 		});
 
 		MenuItem undo = new MenuItem("Undo");
 
 		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.CONTROL_DOWN));
 
-		undo.setOnAction(action -> {
-			actionPerformed("Undo");
+		undo.setOnAction(event -> {
+			eventPerformed(Events.UNDO);
 		});
 
 		MenuItem redo = new MenuItem("Redo");
 
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN));
 
-		redo.setOnAction(action -> {
-			actionPerformed("Redo");
+		redo.setOnAction(event -> {
+			eventPerformed(Events.REDO);
 		});
 
 		MenuItem find = new MenuItem("Find...");
 
 		find.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN));
 
-		find.setOnAction(action -> {
-			actionPerformed("Find...");
+		find.setOnAction(event -> {
+			eventPerformed(Events.FIND);
 		});
 
 		MenuItem replace = new MenuItem("Replace...");
 
 		replace.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCodeCombination.CONTROL_DOWN));
 
-		replace.setOnAction(action -> {
-			actionPerformed("Replace...");
+		replace.setOnAction(event -> {
+			eventPerformed(Events.REPLACE);
 		});
 
 		Menu edit = new Menu("Edit");
@@ -204,7 +216,7 @@ public class App extends Application {
 		tabs.getSelectionModel().selectLast();
 	}
 
-	private void actionPerformed(String action) {
+	private void eventPerformed(Events event) {
 		int selectedIndex = tabs.getSelectionModel().getSelectedIndex();
 
 		if (selectedIndex == -1) {
@@ -213,40 +225,40 @@ public class App extends Application {
 
 		CodeTab codeTab = (CodeTab) tabs.getTabs().get(selectedIndex);
 
-		switch (action) {
-		case "Save":
+		switch (event) {
+		case SAVE:
 			codeTab.save();
 
 			break;
-		case "Save As...":
+		case SAVE_AS:
 			codeTab.saveAs();
 
 			break;
-		case "Cut":
+		case CUT:
 			codeTab.cut();
 
 			break;
-		case "Copy":
+		case COPY:
 			codeTab.copy();
 
 			break;
-		case "Paste":
+		case PASTE:
 			codeTab.paste();
 
 			break;
-		case "Undo":
+		case UNDO:
 			codeTab.undo();
 
 			break;
-		case "Redo":
+		case REDO:
 			codeTab.redo();
 
 			break;
-		case "Find...":
+		case FIND:
 			codeTab.find();
 
 			break;
-		case "Replace...":
+		case REPLACE:
 			codeTab.replace();
 
 			break;

@@ -3,9 +3,15 @@ package wenjunior.luna;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchKey;
 import javafx.concurrent.Task;
+import java.nio.file.WatchEvent;
 import javafx.scene.image.Image;
+import java.nio.file.FileSystems;
 import javafx.event.EventHandler;
+import java.nio.file.WatchService;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import java.io.FileNotFoundException;
@@ -13,6 +19,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
+import java.nio.file.StandardWatchEventKinds;
 
 class FileItem extends TreeItem<String> {
 	private String path;
@@ -31,15 +38,19 @@ class FileItem extends TreeItem<String> {
 }
 
 class DirItem extends TreeItem<String> {
-	public DirItem(File folder) {
+	String path;
+
+	public DirItem(File dir) {
+		this.path = dir.getPath();
+
 		Task<Void> task = new Task<>() {
 			@Override
 			public Void call() {
-				setValue(folder.getName());
+				setValue(dir.getName());
 
 				setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
 
-				File[] files = folder.listFiles();
+				File[] files = dir.listFiles();
 
 				Arrays.sort(files, (file1, file2) -> {
 					if (!file1.isDirectory() && file2.isDirectory()) {
@@ -56,9 +67,9 @@ class DirItem extends TreeItem<String> {
 				for (File file : files) {
 					if (!file.isDirectory() | !file.getName().equals(".git")) {
 						if (file.isDirectory()) {
-							DirItem folderItem = new DirItem(file);
+							DirItem dirItem = new DirItem(file);
 
-							getChildren().add(folderItem);
+							getChildren().add(dirItem);
 						} else {
 							FileItem fileItem = new FileItem(file);
 
@@ -66,6 +77,23 @@ class DirItem extends TreeItem<String> {
 						}
 					}
 				}
+
+				try {
+					WatchService watchService = FileSystems.getDefault().newWatchService();
+
+					Paths.get(path).register(
+						watchService,
+						StandardWatchEventKinds.ENTRY_CREATE
+					);
+
+					while (true) {
+						WatchKey key = watchService.take();
+
+						for (WatchEvent<?> event : key.pollEvents()) {
+							update(event);
+						}
+					}
+				} catch (Exception e) {}
 
 				return null;
 			}
@@ -76,6 +104,22 @@ class DirItem extends TreeItem<String> {
 		thread.setDaemon(true);
 
 		thread.start();
+	}
+
+	private void update(WatchEvent<?> event) {
+		File dof = new File(this.path + "/" + event.context());
+
+		if (dof.isDirectory()) {
+			DirItem dirItem = new DirItem(dof);
+
+			getChildren().add(dirItem);
+
+			return;
+		}
+
+		FileItem fileItem = new FileItem(dof);
+
+		getChildren().add(fileItem);
 	}
 }
 
