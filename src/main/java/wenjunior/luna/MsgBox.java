@@ -5,7 +5,7 @@ import javafx.scene.control.Alert.AlertType;
 
 public class MsgBox {
 	public static void show(String title, String msg) {
-		var msgBox = new Alert(AlertType.WARNING);
+		Alert msgBox = new Alert(AlertType.WARNING);
 
 		msgBox.setTitle(title);
 

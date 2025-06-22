@@ -1,19 +1,33 @@
 package wenjunior.luna;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
 import javafx.util.Pair;
+import java.io.FileWriter;
 import java.time.Duration;
-import org.fxmisc.richtext.*;
-import java.util.concurrent.*;
+import java.util.Optional;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
-import org.fxmisc.richtext.model.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.GridPane;
+import org.fxmisc.richtext.CodeArea;
+import java.util.concurrent.Executors;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import java.util.concurrent.ExecutorService;
+import javafx.scene.control.TextInputDialog;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class CodeTab extends Tab {
 	private String name = "Untitled";
@@ -33,7 +47,7 @@ public class CodeTab extends Tab {
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-		var scrollPane = new VirtualizedScrollPane<>(codeArea);
+		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
 
@@ -66,7 +80,7 @@ public class CodeTab extends Tab {
 
 		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
-		var scrollPane = new VirtualizedScrollPane<>(codeArea);
+		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codeArea);
 
 		setContent(scrollPane);
 
@@ -110,9 +124,9 @@ public class CodeTab extends Tab {
 	}
 
 	private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
-		var code = codeArea.getText();
+		String code = codeArea.getText();
 
-		var task = new Task<StyleSpans<Collection<String>>>() {
+		Task<StyleSpans<Collection<String>>> task = new Task<>() {
 			@Override
 			protected StyleSpans<Collection<String>> call() throws Exception {
 				return highlighter.highlightSyntax(code);
@@ -135,7 +149,7 @@ public class CodeTab extends Tab {
 			return;
 		}
 
-		try (var writer = new FileWriter(path)) {
+		try (FileWriter writer = new FileWriter(path)) {
 			writer.write(codeArea.getText());
 		} catch (IOException e) {
 			MsgBox.show("Save", "An error occurred while saving the file.");
@@ -147,15 +161,15 @@ public class CodeTab extends Tab {
 	}
 
 	public void saveAs() {
-		var fileChooser = new FileChooser();
+		FileChooser fileChooser = new FileChooser();
 
-		var selectedFile = fileChooser.showSaveDialog(null);
+		File selectedFile = fileChooser.showSaveDialog(null);
 
 		if (selectedFile == null) {
 			return;
 		}
 
-		try (var writer = new FileWriter(selectedFile)) {
+		try (FileWriter writer = new FileWriter(selectedFile)) {
 			writer.write(codeArea.getText());
 		} catch (IOException e) {
 			MsgBox.show("Save As...", "An error occurred while saving the file.");
@@ -205,7 +219,7 @@ public class CodeTab extends Tab {
 	}
 
 	public void find() {
-		var dialog = new TextInputDialog();
+		TextInputDialog dialog = new TextInputDialog();
 
 		dialog.setTitle("Find...");
 
@@ -215,24 +229,24 @@ public class CodeTab extends Tab {
 
 		dialog.setContentText("Find:");
 
-		var dialogPane = dialog.getDialogPane();
+		DialogPane dialogPane = dialog.getDialogPane();
 
 		dialogPane.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		dialogPane.getStyleClass().add("text-input-dialog");
 
-		var result = dialog.showAndWait();
+		Optional<String> result = dialog.showAndWait();
 
 		if (result.isPresent()) {
-			var code = codeArea.getText();
+			String code = codeArea.getText();
 
-			var pattern = Pattern.compile(result.get());
+			Pattern pattern = Pattern.compile(result.get());
 
-			var matcher = pattern.matcher(code);
+			Matcher matcher = pattern.matcher(code);
 
-			var lastKeywordEnd = 0;
+			int lastKeywordEnd = 0;
 
-			var styleSpansBuilder = new StyleSpansBuilder<Collection<String>>();
+			StyleSpansBuilder<Collection<String>> styleSpansBuilder = new StyleSpansBuilder<>();
 
 			while (matcher.find()) {
 				styleSpansBuilder.add(Collections.emptyList(), matcher.start() - lastKeywordEnd);
@@ -249,7 +263,7 @@ public class CodeTab extends Tab {
 	}
 
 	public void replace() {
-		var dialog = new Dialog<Pair<String, String>>();
+		Dialog<Pair<String, String>> dialog = new Dialog<>();
 
 		dialog.setTitle("Replace...");
 
@@ -257,7 +271,7 @@ public class CodeTab extends Tab {
 
 		dialog.setGraphic(null);
 
-		var grid = new GridPane();
+		GridPane grid = new GridPane();
 
 		grid.setHgap(10);
 
@@ -265,19 +279,19 @@ public class CodeTab extends Tab {
 
 		grid.setPadding(new Insets(20, 150, 10, 10));
 
-		var find = new TextField();
+		TextField find = new TextField();
 
 		grid.add(new Label("Find:"), 0, 0);
 
 		grid.add(find, 1, 0);
 
-		var replace = new TextField();
+		TextField replace = new TextField();
 
 		grid.add(new Label("Replace:"), 0, 1);
 
 		grid.add(replace, 1, 1);
 
-		var dialogPane = dialog.getDialogPane();
+		DialogPane dialogPane = dialog.getDialogPane();
 
 		dialogPane.setContent(grid);
 
@@ -295,10 +309,10 @@ public class CodeTab extends Tab {
 			return null;
 		});
 
-		var result = dialog.showAndWait();
+		Optional<Pair<String, String>> result = dialog.showAndWait();
 
 		result.ifPresent(findReplace -> {
-			var code = codeArea.getText();
+			String code = codeArea.getText();
 
 			code = code.replaceAll(findReplace.getKey(), findReplace.getValue());
 

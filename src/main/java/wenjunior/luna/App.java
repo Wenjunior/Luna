@@ -1,13 +1,20 @@
 package wenjunior.luna;
 
-import javafx.stage.*;
+import java.io.File;
 import java.util.Scanner;
 import javafx.scene.Scene;
-import javafx.scene.input.*;
-import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.scene.control.Tab;
+import javafx.stage.FileChooser;
+import javafx.scene.control.Menu;
+import javafx.scene.input.KeyCode;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.TabPane;
 import java.io.FileNotFoundException;
+import javafx.scene.control.MenuItem;
 import javafx.application.Application;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.input.KeyCodeCombination;
 
 public class App extends Application {
 	private TabPane tabs = new TabPane();
@@ -18,7 +25,7 @@ public class App extends Application {
 
 		stage.setMaximized(true);
 
-		var newFile = new MenuItem("New File");
+		MenuItem newFile = new MenuItem("New File");
 
 		newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN));
 
@@ -26,7 +33,7 @@ public class App extends Application {
 			newFile();
 		});
 
-		var openFile = new MenuItem("Open File...");
+		MenuItem openFile = new MenuItem("Open File...");
 
 		openFile.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCodeCombination.CONTROL_DOWN));
 
@@ -34,7 +41,7 @@ public class App extends Application {
 			openFile();
 		});
 
-		var save = new MenuItem("Save");
+		MenuItem save = new MenuItem("Save");
 
 		save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN));
 
@@ -42,7 +49,7 @@ public class App extends Application {
 			actionPerformed("Save");
 		});
 
-		var saveAs = new MenuItem("Save As...");
+		MenuItem saveAs = new MenuItem("Save As...");
 
 		saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN));
 
@@ -50,7 +57,7 @@ public class App extends Application {
 			actionPerformed("Save As...");
 		});
 
-		var exit = new MenuItem("Exit");
+		MenuItem exit = new MenuItem("Exit");
 
 		exit.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCodeCombination.CONTROL_DOWN));
 
@@ -58,11 +65,11 @@ public class App extends Application {
 			stop();
 		});
 
-		var file = new Menu("File");
+		Menu file = new Menu("File");
 
 		file.getItems().addAll(newFile, openFile, save, saveAs, exit);
 
-		var cut = new MenuItem("Cut");
+		MenuItem cut = new MenuItem("Cut");
 
 		cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCodeCombination.CONTROL_DOWN));
 
@@ -70,7 +77,7 @@ public class App extends Application {
 			actionPerformed("Cut");
 		});
 
-		var copy = new MenuItem("Copy");
+		MenuItem copy = new MenuItem("Copy");
 
 		copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN));
 
@@ -78,7 +85,7 @@ public class App extends Application {
 			actionPerformed("Cut");
 		});
 
-		var paste = new MenuItem("Paste");
+		MenuItem paste = new MenuItem("Paste");
 
 		paste.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCodeCombination.CONTROL_DOWN));
 
@@ -86,7 +93,7 @@ public class App extends Application {
 			actionPerformed("Paste");
 		});
 
-		var undo = new MenuItem("Undo");
+		MenuItem undo = new MenuItem("Undo");
 
 		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.CONTROL_DOWN));
 
@@ -94,7 +101,7 @@ public class App extends Application {
 			actionPerformed("Undo");
 		});
 
-		var redo = new MenuItem("Redo");
+		MenuItem redo = new MenuItem("Redo");
 
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN));
 
@@ -102,7 +109,7 @@ public class App extends Application {
 			actionPerformed("Redo");
 		});
 
-		var find = new MenuItem("Find...");
+		MenuItem find = new MenuItem("Find...");
 
 		find.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN));
 
@@ -110,7 +117,7 @@ public class App extends Application {
 			actionPerformed("Find...");
 		});
 
-		var replace = new MenuItem("Replace...");
+		MenuItem replace = new MenuItem("Replace...");
 
 		replace.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCodeCombination.CONTROL_DOWN));
 
@@ -118,25 +125,25 @@ public class App extends Application {
 			actionPerformed("Replace...");
 		});
 
-		var edit = new Menu("Edit");
+		Menu edit = new Menu("Edit");
 
 		edit.getItems().addAll(cut, copy, paste, undo, redo, find, replace);
 
-		var menuBar = new MenuBar();
+		MenuBar menuBar = new MenuBar();
 
 		menuBar.getMenus().addAll(file, edit);
 
-		var borderPane = new BorderPane();
+		BorderPane borderPane = new BorderPane();
 
 		borderPane.setTop(menuBar);
 
-		var fileExplorer = new FileExplorer(tabs);
+		FileExplorer fileExplorer = new FileExplorer(tabs);
 
 		borderPane.setLeft(fileExplorer);
 
 		borderPane.setCenter(tabs);
 
-		var scene = new Scene(borderPane, 1280, 720);
+		Scene scene = new Scene(borderPane, 1280, 720);
 
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
@@ -148,7 +155,7 @@ public class App extends Application {
 	}
 
 	private void newFile() {
-		var codeTab = new CodeTab();
+		CodeTab codeTab = new CodeTab();
 
 		tabs.getTabs().add(codeTab);
 
@@ -156,18 +163,18 @@ public class App extends Application {
 	}
 
 	private void openFile() {
-		var fileChooser = new FileChooser();
+		FileChooser fileChooser = new FileChooser();
 
-		var selectedFile = fileChooser.showOpenDialog(null);
+		File selectedFile = fileChooser.showOpenDialog(null);
 
 		if (selectedFile == null) {
 			return;
 		}
 
-		Scanner scanner;
+		Scanner reader;
 
 		try {
-			scanner = new Scanner(selectedFile);
+			reader = new Scanner(selectedFile);
 		} catch (FileNotFoundException e) {
 			MsgBox.show("Open File...", "The selected file was not found.");
 
@@ -176,21 +183,21 @@ public class App extends Application {
 
 		String line;
 
-		var stringBuilder = new StringBuilder();
+		StringBuilder lines = new StringBuilder();
 
-		while (scanner.hasNextLine()) {
-			line = scanner.nextLine();
+		while (reader.hasNextLine()) {
+			line = reader.nextLine();
 
-			stringBuilder.append(line);
+			lines.append(line);
 
-			if (scanner.hasNextLine()) {
-				stringBuilder.append("\n");
+			if (reader.hasNextLine()) {
+				lines.append("\n");
 			}
 		}
 
-		scanner.close();
+		reader.close();
 
-		var codeTab = new CodeTab(selectedFile.getName(), stringBuilder.toString(), selectedFile.getPath());
+		CodeTab codeTab = new CodeTab(selectedFile.getName(), lines.toString(), selectedFile.getPath());
 
 		tabs.getTabs().add(codeTab);
 
@@ -198,13 +205,13 @@ public class App extends Application {
 	}
 
 	private void actionPerformed(String action) {
-		var selectedIndex = tabs.getSelectionModel().getSelectedIndex();
+		int selectedIndex = tabs.getSelectionModel().getSelectedIndex();
 
 		if (selectedIndex == -1) {
 			return;
 		}
 
-		var codeTab = (CodeTab) tabs.getTabs().get(selectedIndex);
+		CodeTab codeTab = (CodeTab) tabs.getTabs().get(selectedIndex);
 
 		switch (action) {
 		case "Save":
@@ -248,8 +255,8 @@ public class App extends Application {
 
 	@Override
 	public void stop() {
-		for (var tab : tabs.getTabs()) {
-			var codeTab = (CodeTab) tab;
+		for (Tab tab : tabs.getTabs()) {
+			CodeTab codeTab = (CodeTab) tab;
 
 			codeTab.stopAsyncHighlighting();
 		}

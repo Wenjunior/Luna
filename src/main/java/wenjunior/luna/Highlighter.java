@@ -1,8 +1,12 @@
 package wenjunior.luna;
 
-import java.util.*;
-import java.util.regex.*;
-import org.fxmisc.richtext.model.*;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 public class Highlighter {
 	private Pattern pattern = Pattern.compile("");
@@ -17,29 +21,29 @@ public class Highlighter {
 		}
 
 		if (programmingLanguage.equals("Java")) {
-			var keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
+			String keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
 
-			var semicolonPattern = "\\;";
+			String semicolonPattern = "\\;";
 
-			var stringPattern = "\"([^\"\\\\]|\\\\.)*\"";
+			String stringPattern = "\"([^\"\\\\]|\\\\.)*\"";
 
-			var commentPattern = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
+			String commentPattern = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
 
-			var numberPattern = "[0-9]";
+			String numberPattern = "[0-9]";
 
-			var classPattern = "(?<![a-z])[A-Z]([a-z]\\w+|[a-z])";
+			String classPattern = "(?<![a-z])[A-Z]([a-z]\\w+|[a-z])";
 
-			var specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
+			String specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
 
-			var primitiveTypesAndNullAndBooleanPattern = "\\b(short|int|long|float|double|char|null|bool|true|false)\\b";
+			String primitiveTypesAndNullAndBooleanPattern = "\\b(short|int|long|float|double|char|null|bool|true|false)\\b";
 
-			var singleQuoteStringPattern = "'(.*?)'";
+			String singleQuoteStringPattern = "'(.*?)'";
 
-			var functionPattern = "[a-z]\\w+(?=\\()";
+			String functionPattern = "[a-z]\\w+(?=\\()";
 
-			var constantPattern = "(?-i)[A-Z]+(?![a-z])";
+			String constantPattern = "(?-i)[A-Z]+(?![a-z])";
 
-			var annotationPattern = "@([A-Z]\\w+|[A-Z])";
+			String annotationPattern = "@([A-Z]\\w+|[A-Z])";
 
 			pattern = Pattern.compile(
 				"(?<KEYWORD>" + keywordPattern + ")"
@@ -83,16 +87,16 @@ public class Highlighter {
 	}
 
 	public StyleSpans<Collection<String>> highlightSyntax(String text) {
-		var matcher = pattern.matcher(text);
+		Matcher matcher = pattern.matcher(text);
 
-		var lastKeywordEnd = 0;
+		int lastKeywordEnd = 0;
 
-		var styleSpansBuilder = new StyleSpansBuilder<Collection<String>>();
+		StyleSpansBuilder<Collection<String>> styleSpansBuilder = new StyleSpansBuilder<>();
 
 		String styleClass = null;
 
 		while (matcher.find()) {
-			for (var group : groups.keySet()) {
+			for (String group : groups.keySet()) {
 				if (matcher.group(group) != null) {
 					styleClass = groups.get(group);
 				}

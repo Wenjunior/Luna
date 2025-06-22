@@ -1,12 +1,18 @@
 package wenjunior.luna;
 
-import java.io.*;
-import java.util.*;
-import javafx.scene.image.*;
-import javafx.scene.input.*;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Scanner;
 import javafx.concurrent.Task;
-import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.event.EventHandler;
+import javafx.scene.control.TabPane;
+import javafx.scene.image.ImageView;
+import java.io.FileNotFoundException;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 
 class FileItem extends TreeItem<String> {
 	private String path;
@@ -24,16 +30,16 @@ class FileItem extends TreeItem<String> {
 	}
 }
 
-class FolderItem extends TreeItem<String> {
-	public FolderItem(File folder) {
-		setValue(folder.getName());
-
-		setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
-
-		var task = new Task<Void>() {
+class DirItem extends TreeItem<String> {
+	public DirItem(File folder) {
+		Task<Void> task = new Task<>() {
 			@Override
 			public Void call() {
-				var files = folder.listFiles();
+				setValue(folder.getName());
+
+				setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/icons/folder.png"))));
+
+				File[] files = folder.listFiles();
 
 				Arrays.sort(files, (file1, file2) -> {
 					if (!file1.isDirectory() && file2.isDirectory()) {
@@ -47,17 +53,17 @@ class FolderItem extends TreeItem<String> {
 					return file1.getName().compareTo(file2.getName());
 				});
 
-				for (var file : files) {
+				for (File file : files) {
 					if (!file.isDirectory() | !file.getName().equals(".git")) {
-						TreeItem<String> item;
-
 						if (file.isDirectory()) {
-							item = new FolderItem(file);
-						} else {
-							item = new FileItem(file);
-						}
+							DirItem folderItem = new DirItem(file);
 
-						getChildren().add(item);
+							getChildren().add(folderItem);
+						} else {
+							FileItem fileItem = new FileItem(file);
+
+							getChildren().add(fileItem);
+						}
 					}
 				}
 
@@ -65,7 +71,7 @@ class FolderItem extends TreeItem<String> {
 			}
 		};
 
-		var thread = new Thread(task);
+		Thread thread = new Thread(task);
 
 		thread.setDaemon(true);
 
@@ -79,13 +85,13 @@ public class FileExplorer extends TreeView<String> {
 	public FileExplorer(TabPane tabs) {
 		this.tabs = tabs;
 
-		var rootFolder = new File(System.getProperty("user.home") + "/LunaProjects");
+		File rootDir = new File(System.getProperty("user.home") + "/LunaProjects");
 
-		if (!rootFolder.exists() || !rootFolder.isDirectory()) {
-			rootFolder.mkdir();
+		if (!rootDir.exists() || !rootDir.isDirectory()) {
+			rootDir.mkdir();
 		}
 
-		var root = new FolderItem(rootFolder);
+		DirItem root = new DirItem(rootDir);
 
 		root.setExpanded(true);
 
@@ -95,19 +101,12 @@ public class FileExplorer extends TreeView<String> {
 			@Override
 			public void handle(MouseEvent event) {
 				if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-					var selectedItem = getSelectionModel().getSelectedItem();
+					TreeItem<String> selectedItem = getSelectionModel().getSelectedItem();
 
 					if (selectedItem instanceof FileItem) {
-						var selectedFile = (FileItem) selectedItem;
+						FileItem selectedFile = (FileItem) selectedItem;
 
 						openFile(selectedFile.getPath());
-
-						/*
-							A linha de código a seguir evita que logo após selecionar um arquivo e abrir uma tab,
-							uma nova tab seja desnecessariamente aberta quando o usuário não clicar no arquivo.
-							Isso acontece porque a função setOnMouseClicked não consegue detectar cliques somente
-							quando um arquivo for selecionado.
-						*/
 
 						getSelectionModel().clearSelection();
 					}
@@ -117,12 +116,12 @@ public class FileExplorer extends TreeView<String> {
 	}
 
 	private void openFile(String path) {
-		var file = new File(path);
+		File file = new File(path);
 
-		Scanner scanner;
+		Scanner reader;
 
 		try {
-			scanner = new Scanner(file);
+			reader = new Scanner(file);
 		} catch (FileNotFoundException e) {
 			MsgBox.show("Warning", "The selected file was not found.");
 
@@ -131,21 +130,21 @@ public class FileExplorer extends TreeView<String> {
 
 		String line;
 
-		var stringBuilder = new StringBuilder();
+		StringBuilder lines = new StringBuilder();
 
-		while (scanner.hasNextLine()) {
-			line = scanner.nextLine();
+		while (reader.hasNextLine()) {
+			line = reader.nextLine();
 
-			stringBuilder.append(line);
+			lines.append(line);
 
-			if (scanner.hasNextLine()) {
-				stringBuilder.append("\n");
+			if (reader.hasNextLine()) {
+				lines.append("\n");
 			}
 		}
 
-		scanner.close();
+		reader.close();
 
-		var codeTab = new CodeTab(file.getName(), stringBuilder.toString(), file.getPath());
+		CodeTab codeTab = new CodeTab(file.getName(), lines.toString(), file.getPath());
 
 		this.tabs.getTabs().add(codeTab);
 
