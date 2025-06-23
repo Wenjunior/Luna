@@ -29,7 +29,9 @@ public class Highlighter {
 
 			String commentPattern = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
 
-			String numberPattern = "[0-9]";
+			String numberPattern = "\\b[0-9]\\b";
+
+			String constantPattern = "(?-i)[A-Z]+(?![a-z])";
 
 			String classPattern = "(?<![a-z])[A-Z]([a-z]\\w+|[a-z])";
 
@@ -41,8 +43,6 @@ public class Highlighter {
 
 			String functionPattern = "[a-z]\\w+(?=\\()";
 
-			String constantPattern = "(?-i)[A-Z]+(?![a-z])";
-
 			String annotationPattern = "@([A-Z]\\w+|[A-Z])";
 
 			pattern = Pattern.compile(
@@ -51,12 +51,12 @@ public class Highlighter {
 				+ "|(?<STRING>" + stringPattern + ")"
 				+ "|(?<COMMENT>" + commentPattern + ")"
 				+ "|(?<NUMBER>" + numberPattern + ")"
+				+ "|(?<CONSTANT>" + constantPattern + ")"
 				+ "|(?<CLASS>" + classPattern + ")"
 				+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
 				+ "|(?<PRIMITIVETYPESANDNULLANDBOOLEAN>" + primitiveTypesAndNullAndBooleanPattern + ")"
 				+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
 				+ "|(?<FUNCTION>" + functionPattern + ")"
-				+ "|(?<CONSTANT>" + constantPattern + ")"
 				+ "|(?<ANNOTATION>" + annotationPattern + ")"
 			);
 
@@ -70,6 +70,8 @@ public class Highlighter {
 
 			groups.put("NUMBER", "pink");
 
+			groups.put("CONSTANT", "orange");
+
 			groups.put("CLASS", "purple");
 
 			groups.put("SPECIALCHAR", "orange");
@@ -79,8 +81,6 @@ public class Highlighter {
 			groups.put("SINGLEQUOTESTRING", "yellow");
 
 			groups.put("FUNCTION", "green");
-
-			groups.put("CONSTANT", "orange");
 
 			groups.put("ANNOTATION", "pink");
 		}

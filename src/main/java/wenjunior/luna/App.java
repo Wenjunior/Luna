@@ -19,17 +19,7 @@ import javafx.scene.input.KeyCodeCombination;
 public class App extends Application {
 	private TabPane tabs = new TabPane();
 
-	private enum Events {
-		SAVE,
-		SAVE_AS,
-		CUT,
-		COPY,
-		PASTE,
-		UNDO,
-		REDO,
-		FIND,
-		REPLACE
-	};
+	private enum Events {SAVE, SAVE_AS, CUT, COPY, PASTE, UNDO, REDO, FIND, REPLACE};
 
 	@Override
 	public void start(Stage stage) {

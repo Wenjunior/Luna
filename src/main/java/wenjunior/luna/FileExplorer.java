@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.nio.file.Path;
+import java.util.Iterator;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.WatchKey;
 import javafx.concurrent.Task;
@@ -19,6 +21,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
+import javafx.collections.ObservableList;
 import java.nio.file.StandardWatchEventKinds;
 
 class FileItem extends TreeItem<String> {
@@ -38,7 +41,7 @@ class FileItem extends TreeItem<String> {
 }
 
 class DirItem extends TreeItem<String> {
-	String path;
+	private String path;
 
 	public DirItem(File dir) {
 		this.path = dir.getPath();
@@ -83,7 +86,8 @@ class DirItem extends TreeItem<String> {
 
 					Paths.get(path).register(
 						watchService,
-						StandardWatchEventKinds.ENTRY_CREATE
+						StandardWatchEventKinds.ENTRY_CREATE,
+						StandardWatchEventKinds.ENTRY_DELETE
 					);
 
 					while (true) {
@@ -92,6 +96,8 @@ class DirItem extends TreeItem<String> {
 						for (WatchEvent<?> event : key.pollEvents()) {
 							update(event);
 						}
+
+						key.reset();
 					}
 				} catch (Exception e) {}
 
@@ -106,20 +112,62 @@ class DirItem extends TreeItem<String> {
 		thread.start();
 	}
 
+	public String getPath() {
+		return this.path;
+	}
+
 	private void update(WatchEvent<?> event) {
-		File dof = new File(this.path + "/" + event.context());
+		ObservableList<TreeItem<String>> items = getChildren();
 
-		if (dof.isDirectory()) {
-			DirItem dirItem = new DirItem(dof);
+		if (event.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
+			File file = new File(this.path + "/" + event.context());
 
-			getChildren().add(dirItem);
+			if (file.isDirectory()) {
+				DirItem dirItem = new DirItem(file);
 
-			return;
+				items.add(dirItem);
+
+				return;
+			}
+
+			FileItem fileItem = new FileItem(file);
+
+			items.add(fileItem);
 		}
 
-		FileItem fileItem = new FileItem(dof);
+		Iterator<TreeItem<String>> iterator = items.iterator();
 
-		getChildren().add(fileItem);
+		TreeItem<String> removeThisItem = null;
+
+		while (iterator.hasNext()) {
+			TreeItem<String> item = iterator.next();
+
+			if (item instanceof DirItem) {
+				DirItem dirItem = (DirItem) item;
+
+				Path path = Paths.get(dirItem.getPath());
+
+				if (!Files.exists(path)) {
+					removeThisItem = dirItem;
+
+					break;
+				}
+			} else {
+				FileItem fileItem = (FileItem) item;
+
+				Path path = Paths.get(fileItem.getPath());
+
+				if (!Files.exists(path)) {
+					removeThisItem = fileItem;
+
+					break;
+				}
+			}
+		}
+
+		if (removeThisItem != null) {
+			items.remove(removeThisItem);
+		}
 	}
 }
 
