@@ -2,6 +2,10 @@
 	-fx-fill: #6272A4;
 }
 
+.code-area .grey {
+	-fx-fill: grey;
+}
+
 .code-area .cyan {
 	-fx-fill: #8BE9FD;
 }

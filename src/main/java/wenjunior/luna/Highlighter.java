@@ -37,7 +37,11 @@ public class Highlighter {
 
 			String specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
 
-			String primitiveTypesAndNullAndBooleanPattern = "\\b(short|int|long|float|double|char|null|bool|true|false)\\b";
+			String primitiveTypesPattern = "\\b(short|int|long|float|double|char|bool)\\b";
+
+			String nullPattern = "\\bnull\\b";
+
+			String booleanPattern = "\\b(true|false)\\b";
 
 			String singleQuoteStringPattern = "'(.*?)'";
 
@@ -47,22 +51,24 @@ public class Highlighter {
 
 			pattern = Pattern.compile(
 				"(?<KEYWORD>" + keywordPattern + ")"
-				+ "|(?<SEMICOLON>" + semicolonPattern + ")"
-				+ "|(?<STRING>" + stringPattern + ")"
-				+ "|(?<COMMENT>" + commentPattern + ")"
-				+ "|(?<NUMBER>" + numberPattern + ")"
-				+ "|(?<CONSTANT>" + constantPattern + ")"
-				+ "|(?<CLASS>" + classPattern + ")"
-				+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
-				+ "|(?<PRIMITIVETYPESANDNULLANDBOOLEAN>" + primitiveTypesAndNullAndBooleanPattern + ")"
-				+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
-				+ "|(?<FUNCTION>" + functionPattern + ")"
-				+ "|(?<ANNOTATION>" + annotationPattern + ")"
+					+ "|(?<SEMICOLON>" + semicolonPattern + ")"
+						+ "|(?<STRING>" + stringPattern + ")"
+							+ "|(?<COMMENT>" + commentPattern + ")"
+								+ "|(?<NUMBER>" + numberPattern + ")"
+									+ "|(?<CONSTANT>" + constantPattern + ")"
+										+ "|(?<CLASS>" + classPattern + ")"
+											+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
+												+ "|(?<PRIMITIVETYPES>" + primitiveTypesPattern + ")"
+													+ "|(?<NULL>" + nullPattern + ")"
+														+ "|(?<BOOLEAN>" + booleanPattern + ")"
+															+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
+																+ "|(?<FUNCTION>" + functionPattern + ")"
+																	+ "|(?<ANNOTATION>" + annotationPattern + ")"
 			);
 
 			groups.put("KEYWORD", "red");
 
-			groups.put("SEMICOLON", "comment");
+			groups.put("SEMICOLON", "grey");
 
 			groups.put("STRING", "yellow");
 
@@ -76,7 +82,11 @@ public class Highlighter {
 
 			groups.put("SPECIALCHAR", "orange");
 
-			groups.put("PRIMITIVETYPESANDNULLANDBOOLEAN", "cyan");
+			groups.put("PRIMITIVETYPES", "cyan");
+
+			groups.put("NULL", "cyan");
+
+			groups.put("BOOLEAN", "cyan");
 
 			groups.put("SINGLEQUOTESTRING", "yellow");
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.WatchKey;
@@ -99,7 +100,7 @@ class DirItem extends TreeItem<String> {
 
 						key.reset();
 					}
-				} catch (Exception e) {}
+				} catch (IOException | InterruptedException e) {}
 
 				return null;
 			}
@@ -137,36 +138,30 @@ class DirItem extends TreeItem<String> {
 
 		Iterator<TreeItem<String>> iterator = items.iterator();
 
-		TreeItem<String> removeThisItem = null;
+		int index = -1;
 
 		while (iterator.hasNext()) {
 			TreeItem<String> item = iterator.next();
 
-			if (item instanceof DirItem) {
-				DirItem dirItem = (DirItem) item;
+			/*
+				Não é necessário identificar e converter o item para o tipo correto. A única função usada é getPath,
+				e tanto DirItem como FileItem possuem essa função. Então se o item for convertido para o tipo errado
+				ele continuará funcionando corretamente.
+			*/
 
-				Path path = Paths.get(dirItem.getPath());
+			FileItem fileItem = (FileItem) item;
 
-				if (!Files.exists(path)) {
-					removeThisItem = dirItem;
+			Path path = Paths.get(fileItem.getPath());
 
-					break;
-				}
-			} else {
-				FileItem fileItem = (FileItem) item;
+			if (!Files.exists(path)) {
+				index = items.indexOf(fileItem);
 
-				Path path = Paths.get(fileItem.getPath());
-
-				if (!Files.exists(path)) {
-					removeThisItem = fileItem;
-
-					break;
-				}
+				break;
 			}
 		}
 
-		if (removeThisItem != null) {
-			items.remove(removeThisItem);
+		if (index > -1) {
+			items.remove(index);
 		}
 	}
 }
