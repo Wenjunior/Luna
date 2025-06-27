@@ -115,12 +115,18 @@ public class CodeTab extends Tab {
 
 	private void updateHighlighter() {
 		if (this.name.endsWith(".java")) {
-			highlighter.setSyntax("Java");
+			highlighter.setSyntax(SupportedLanguages.JAVA);
 
 			return;
 		}
 
-		highlighter.setSyntax("Plain Text");
+		if (this.name.endsWith(".xml")) {
+			highlighter.setSyntax(SupportedLanguages.XML);
+
+			return;
+		}
+
+		highlighter.setSyntax(SupportedLanguages.PLAIN_TEXT);
 	}
 
 	private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {

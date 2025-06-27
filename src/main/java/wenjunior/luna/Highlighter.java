@@ -13,57 +13,60 @@ public class Highlighter {
 
 	private HashMap<String, String> groups = new HashMap<>();
 
-	public void setSyntax(String programmingLanguage) {
+	public void setSyntax(SupportedLanguages language) {
 		groups.clear();
 
-		if (programmingLanguage.equals("Plain Text")) {
+		if (language.equals(SupportedLanguages.PLAIN_TEXT)) {
 			pattern = Pattern.compile("");
 		}
 
-		if (programmingLanguage.equals("Java")) {
-			String keywordPattern = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
+		if (language.equals(SupportedLanguages.JAVA)) {
+			final String KEYWORD_PATTERN = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
 
-			String semicolonPattern = "\\;";
+			final String SEMICOLON_PATTERN = ";";
 
-			String stringPattern = "\"([^\"\\\\]|\\\\.)*\"";
+			final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 
-			String commentPattern = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
+			final String COMMENT_PATTERN = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
 
-			String numberPattern = "\\b[0-9]\\b";
+			final String NUMBER_PATTERN = "(?<![a-z]|[A-Z])[0-9](?!=([a-z]|[A-Z]))";
 
-			String constantPattern = "(?-i)[A-Z]+(?![a-z])";
+			final String CONSTANT_PATTERN = "(?-i)[A-Z]+(?![a-z])";
 
-			String classPattern = "(?<![a-z])[A-Z]([a-z]\\w+|[a-z])";
+			final String CLASS_PATTERN = "(?<![a-z])([A-Z]\\w+|[A-Z])";
 
-			String specialCharPattern = "=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?";
+			final String SPECIAL_CHAR_PATTERN = "\\b(=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?)\\b";
 
-			String primitiveTypesPattern = "\\b(short|int|long|float|double|char|bool)\\b";
+			final String PRIMITIVE_TYPE_PATTERN = "\\b(short|int|long|float|double|char|bool)\\b";
 
-			String nullPattern = "\\bnull\\b";
+			final String NULL_PATTERN = "\\bnull\\b";
 
-			String booleanPattern = "\\b(true|false)\\b";
+			final String BOOLEAN_PATTERN = "\\b(true|false)\\b";
 
-			String singleQuoteStringPattern = "'(.*?)'";
+			final String SINGLE_QUOTE_STRING_PATTERN = "'(.*?)'";
 
-			String functionPattern = "[a-z]\\w+(?=\\()";
+			final String FUNCTION_PATTERN = "[a-z]\\w+(?=\\()";
 
-			String annotationPattern = "@([A-Z]\\w+|[A-Z])";
+			final String ANNOTATION_PATTERN = "@([A-Z]\\w+|[A-Z])";
+
+			final String PACKAGE_NAME_PATTERN = "(?<=\\.)([a-z]\\w+|[a-z])(?=;)";
 
 			pattern = Pattern.compile(
-				"(?<KEYWORD>" + keywordPattern + ")"
-					+ "|(?<SEMICOLON>" + semicolonPattern + ")"
-						+ "|(?<STRING>" + stringPattern + ")"
-							+ "|(?<COMMENT>" + commentPattern + ")"
-								+ "|(?<NUMBER>" + numberPattern + ")"
-									+ "|(?<CONSTANT>" + constantPattern + ")"
-										+ "|(?<CLASS>" + classPattern + ")"
-											+ "|(?<SPECIALCHAR>" + specialCharPattern + ")"
-												+ "|(?<PRIMITIVETYPES>" + primitiveTypesPattern + ")"
-													+ "|(?<NULL>" + nullPattern + ")"
-														+ "|(?<BOOLEAN>" + booleanPattern + ")"
-															+ "|(?<SINGLEQUOTESTRING>" + singleQuoteStringPattern + ")"
-																+ "|(?<FUNCTION>" + functionPattern + ")"
-																	+ "|(?<ANNOTATION>" + annotationPattern + ")"
+				"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+					+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+						+ "|(?<STRING>" + STRING_PATTERN + ")"
+							+ "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+								+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+									+ "|(?<CONSTANT>" + CONSTANT_PATTERN + ")"
+										+ "|(?<CLASS>" + CLASS_PATTERN + ")"
+											+ "|(?<SPECIALCHAR>" + SPECIAL_CHAR_PATTERN + ")"
+												+ "|(?<PRIMITIVETYPE>" + PRIMITIVE_TYPE_PATTERN + ")"
+													+ "|(?<NULL>" + NULL_PATTERN + ")"
+														+ "|(?<BOOLEAN>" + BOOLEAN_PATTERN + ")"
+															+ "|(?<SINGLEQUOTESTRING>" + SINGLE_QUOTE_STRING_PATTERN + ")"
+																+ "|(?<FUNCTION>" + FUNCTION_PATTERN + ")"
+																	+ "|(?<ANNOTATION>" + ANNOTATION_PATTERN + ")"
+																		+ "|(?<PACKAGENAME>" + PACKAGE_NAME_PATTERN + ")"
 			);
 
 			groups.put("KEYWORD", "red");
@@ -82,7 +85,7 @@ public class Highlighter {
 
 			groups.put("SPECIALCHAR", "orange");
 
-			groups.put("PRIMITIVETYPES", "cyan");
+			groups.put("PRIMITIVETYPE", "cyan");
 
 			groups.put("NULL", "cyan");
 
@@ -93,6 +96,28 @@ public class Highlighter {
 			groups.put("FUNCTION", "green");
 
 			groups.put("ANNOTATION", "pink");
+
+			groups.put("PACKAGENAME", "orange");
+		}
+
+		if (language.equals(SupportedLanguages.XML)) {
+			final String TAG_PATTERN = "(?<=(<|<\\/))([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])";
+
+			final String OPTION_PATTERN = "([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])(?==)";
+
+			final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+
+			pattern = Pattern.compile(
+				"(?<TAG>" + TAG_PATTERN + ")"
+					+ "|(?<OPTION>" + OPTION_PATTERN + ")"
+						+ "|(?<STRING>" + STRING_PATTERN + ")"
+			);
+
+			groups.put("TAG", "pink");
+
+			groups.put("OPTION", "green");
+
+			groups.put("STRING", "yellow");
 		}
 	}
 

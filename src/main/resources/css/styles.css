@@ -66,7 +66,7 @@
 }
 
 .code-area .caret {
-	-fx-stroke: white;
+	-fx-stroke: #F9AE58;
 }
 
 .code-area .selection {
