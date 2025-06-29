@@ -21,7 +21,7 @@ public class Highlighter {
 		}
 
 		if (language.equals(SupportedLanguages.JAVA)) {
-			final String KEYWORD_PATTERN = "\\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|package|private|protected|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
+			final String KEYWORD_PATTERN = "\\b(abstract|assert|break|case|catch|class|const|continue|default|do|else|enum|exports|extends|final|finally|for|goto|if|implements|import|instanceof|interface|module|native|new|package|private|protected|public|requires|return|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|while)\\b";
 
 			final String SEMICOLON_PATTERN = ";";
 
@@ -29,27 +29,27 @@ public class Highlighter {
 
 			final String COMMENT_PATTERN = "//[^\n]*|/\\*(.|\\R)*?\\*/|/\\*[^\\v]*|^\\h*\\*([^\\v]*|/)";
 
-			final String NUMBER_PATTERN = "(?<![a-z]|[A-Z])[0-9](?!=([a-z]|[A-Z]))";
+			final String NUMBER_PATTERN = "(?<![a-zA-Z]+)[0-9](?!=[a-zA-Z]+)";
 
 			final String CONSTANT_PATTERN = "(?-i)[A-Z]+(?![a-z])";
 
-			final String CLASS_PATTERN = "(?<![a-z])([A-Z]\\w+|[A-Z])";
+			final String CLASS_PATTERN = "(?<![a-z])[A-Z]+[a-z]\\w+";
 
-			final String SPECIAL_CHAR_PATTERN = "\\b(=|\\+|-|\\*|\\/|!|&|\\|:|\\>|\\<|\\?)\\b";
+			final String SPECIAL_CHAR_PATTERN = "=|\\+|-|\\*|/|!|&|\\||:|>|<|\\?";
 
-			final String PRIMITIVE_TYPE_PATTERN = "\\b(short|int|long|float|double|char|bool)\\b";
+			final String PRIMITIVE_TYPE_PATTERN = "\\b(byte|short|int|long|float|double|char|boolean)\\b";
 
 			final String NULL_PATTERN = "\\bnull\\b";
 
 			final String BOOLEAN_PATTERN = "\\b(true|false)\\b";
 
-			final String SINGLE_QUOTE_STRING_PATTERN = "'(.*?)'";
+			final String SINGLE_QUOTE_STRING_PATTERN = "'([0-9a-zA-Z]|\r|\n|\t|\f|\\v)'";
 
 			final String FUNCTION_PATTERN = "[a-z]\\w+(?=\\()";
 
-			final String ANNOTATION_PATTERN = "@([A-Z]\\w+|[A-Z])";
+			final String ANNOTATION_PATTERN = "@[A-z]+";
 
-			final String PACKAGE_NAME_PATTERN = "(?<=\\.)([a-z]\\w+|[a-z])(?=;)";
+			final String PACKAGE_NAME_PATTERN = "(?<!this\\.)(?<=(\\.|package |requires |exports ))[a-zA-Z]+(?=(;| \\{))";
 
 			pattern = Pattern.compile(
 				"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
@@ -57,8 +57,8 @@ public class Highlighter {
 						+ "|(?<STRING>" + STRING_PATTERN + ")"
 							+ "|(?<COMMENT>" + COMMENT_PATTERN + ")"
 								+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
-									+ "|(?<CONSTANT>" + CONSTANT_PATTERN + ")"
-										+ "|(?<CLASS>" + CLASS_PATTERN + ")"
+									+ "|(?<CLASS>" + CLASS_PATTERN + ")"
+										+ "|(?<CONSTANT>" + CONSTANT_PATTERN + ")"
 											+ "|(?<SPECIALCHAR>" + SPECIAL_CHAR_PATTERN + ")"
 												+ "|(?<PRIMITIVETYPE>" + PRIMITIVE_TYPE_PATTERN + ")"
 													+ "|(?<NULL>" + NULL_PATTERN + ")"
@@ -79,9 +79,9 @@ public class Highlighter {
 
 			groups.put("NUMBER", "pink");
 
-			groups.put("CONSTANT", "orange");
-
 			groups.put("CLASS", "purple");
+
+			groups.put("CONSTANT", "orange");
 
 			groups.put("SPECIALCHAR", "orange");
 
@@ -101,17 +101,22 @@ public class Highlighter {
 		}
 
 		if (language.equals(SupportedLanguages.XML)) {
-			final String TAG_PATTERN = "(?<=(<|<\\/))([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])";
+			final String SPECIAL_CHAR_PATTERN = "<|>|\\?|/";
 
-			final String OPTION_PATTERN = "([a-z]\\w+|[a-z]|[A-Z]\\w+|[A-Z])(?==)";
+			final String TAG_PATTERN = "(?<=(<|<\\/|<\\?))[a-zA-Z.]+(?=(>|\\?>))|(?<=(<|<\\?))[a-zA-Z]+ ";
+
+			final String OPTION_PATTERN = "[a-zA-Z:]+(?==)";
 
 			final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 
 			pattern = Pattern.compile(
-				"(?<TAG>" + TAG_PATTERN + ")"
-					+ "|(?<OPTION>" + OPTION_PATTERN + ")"
-						+ "|(?<STRING>" + STRING_PATTERN + ")"
+				"(?<SPECIALCHAR>" + SPECIAL_CHAR_PATTERN + ")"
+					+ "|(?<TAG>" + TAG_PATTERN + ")"
+						+ "|(?<OPTION>" + OPTION_PATTERN + ")"
+							+ "|(?<STRING>" + STRING_PATTERN + ")"
 			);
+
+			groups.put("SPECIALCHAR", "purple");
 
 			groups.put("TAG", "pink");
 
