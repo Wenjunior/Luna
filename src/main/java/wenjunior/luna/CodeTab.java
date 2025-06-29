@@ -126,6 +126,12 @@ public class CodeTab extends Tab {
 			return;
 		}
 
+		if (this.name.endsWith(".css")) {
+			this.highlighter.setSyntax(SupportedLanguages.CSS);
+
+			return;
+		}
+
 		this.highlighter.setSyntax(SupportedLanguages.PLAIN_TEXT);
 	}
 

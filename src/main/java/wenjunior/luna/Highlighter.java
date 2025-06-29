@@ -124,6 +124,31 @@ public class Highlighter {
 
 			this.groups.put("STRING", "yellow");
 		}
+
+		if (language.equals(SupportedLanguages.CSS)) {
+			final String SELECTOR_PATTERN = "[a-z-]+(?= \\{)";
+
+			final String PROPERTY_PATTERN = "[a-z-]+(?=:)";
+
+			final String COLOR_PATTERN = "\\b(aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen)\\b";
+
+			final String SEMICOLON_PATTERN = ";";
+
+			this.pattern = Pattern.compile(
+				"(?<SELECTOR>" + SELECTOR_PATTERN + ")"
+					+ "|(?<PROPERTY>" + PROPERTY_PATTERN + ")"
+						+ "|(?<COLOR>" + COLOR_PATTERN + ")"
+							+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
+			);
+
+			this.groups.put("SELECTOR", "purple");
+
+			this.groups.put("PROPERTY", "purple");
+
+			this.groups.put("COLOR", "cyan");
+
+			this.groups.put("SEMICOLON", "grey");
+		}
 	}
 
 	public StyleSpans<Collection<String>> highlightSyntax(String text) {
