@@ -43,18 +43,18 @@ public class CodeTab extends Tab {
 	public CodeTab() {
 		setText(this.name);
 
-		codeArea.setWrapText(true);
+		this.codeArea.setWrapText(true);
 
-		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+		this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
 
-		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codeArea);
+		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(this.codeArea);
 
 		setContent(scrollPane);
 
-		codeArea.multiPlainChanges()
-			.retainLatestUntilLater(executorService)
+		this.codeArea.multiPlainChanges()
+			.retainLatestUntilLater(this.executorService)
 				.supplyTask(this::computeHighlightingAsync)
-					.awaitLatest(codeArea.multiPlainChanges())
+					.awaitLatest(this.codeArea.multiPlainChanges())
 						.filterMap(task -> {
 							if (task.isSuccess()) {
 								return Optional.of(task.get());
@@ -64,7 +64,7 @@ public class CodeTab extends Tab {
 						})
 							.subscribe(this::applyHighlighting);
 
-		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
+		this.codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
 			setText(this.name + " *");
 		});
 	}
@@ -76,11 +76,11 @@ public class CodeTab extends Tab {
 
 		updateHighlighter();
 
-		codeArea.setWrapText(true);
+		this.codeArea.setWrapText(true);
 
-		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+		this.codeArea.setParagraphGraphicFactory(LineNumberFactory.get(this.codeArea));
 
-		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(codeArea);
+		VirtualizedScrollPane scrollPane = new VirtualizedScrollPane<>(this.codeArea);
 
 		setContent(scrollPane);
 
@@ -91,10 +91,10 @@ public class CodeTab extends Tab {
 			código fonte e mudar o nome da tab sem necessidade, já que o código fonte não modificado pelo usuário.
 		*/
 
-		codeArea.multiPlainChanges()
-			.retainLatestUntilLater(executorService)
+		this.codeArea.multiPlainChanges()
+			.retainLatestUntilLater(this.executorService)
 				.supplyTask(this::computeHighlightingAsync)
-					.awaitLatest(codeArea.multiPlainChanges())
+					.awaitLatest(this.codeArea.multiPlainChanges())
 						.filterMap(task -> {
 							if (task.isSuccess()) {
 								return Optional.of(task.get());
@@ -104,9 +104,9 @@ public class CodeTab extends Tab {
 						})
 							.subscribe(this::applyHighlighting);
 
-		codeArea.replaceText(code);
+		this.codeArea.replaceText(code);
 
-		codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
+		this.codeArea.textProperty().addListener((obs, oldCode, newCode) -> {
 			setText(this.name + " *");
 		});
 
@@ -115,22 +115,22 @@ public class CodeTab extends Tab {
 
 	private void updateHighlighter() {
 		if (this.name.endsWith(".java")) {
-			highlighter.setSyntax(SupportedLanguages.JAVA);
+			this.highlighter.setSyntax(SupportedLanguages.JAVA);
 
 			return;
 		}
 
 		if (this.name.endsWith(".xml")) {
-			highlighter.setSyntax(SupportedLanguages.XML);
+			this.highlighter.setSyntax(SupportedLanguages.XML);
 
 			return;
 		}
 
-		highlighter.setSyntax(SupportedLanguages.PLAIN_TEXT);
+		this.highlighter.setSyntax(SupportedLanguages.PLAIN_TEXT);
 	}
 
 	private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {
-		String code = codeArea.getText();
+		String code = this.codeArea.getText();
 
 		Task<StyleSpans<Collection<String>>> task = new Task<>() {
 			@Override
@@ -139,24 +139,24 @@ public class CodeTab extends Tab {
 			}
 		};
 
-		executorService.execute(task);
+		this.executorService.execute(task);
 
 		return task;
 	}
 
 	private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
-		codeArea.setStyleSpans(0, highlighting);
+		this.codeArea.setStyleSpans(0, highlighting);
 	}
 
 	public void save() {
-		if (path == null) {
+		if (this.path == null) {
 			saveAs();
 
 			return;
 		}
 
-		try (FileWriter writer = new FileWriter(path)) {
-			writer.write(codeArea.getText());
+		try (FileWriter writer = new FileWriter(this.path)) {
+			writer.write(this.codeArea.getText());
 		} catch (IOException e) {
 			MsgBox.show("Save", "An error occurred while saving the file.");
 
@@ -176,7 +176,7 @@ public class CodeTab extends Tab {
 		}
 
 		try (FileWriter writer = new FileWriter(selectedFile)) {
-			writer.write(codeArea.getText());
+			writer.write(this.codeArea.getText());
 		} catch (IOException e) {
 			MsgBox.show("Save As...", "An error occurred while saving the file.");
 
@@ -193,32 +193,32 @@ public class CodeTab extends Tab {
 	}
 
 	public void cut() {
-		codeArea.cut();
+		this.codeArea.cut();
 
 		setText(this.name + " *");
 	}
 
 	public void copy() {
-		codeArea.copy();
+		this.codeArea.copy();
 	}
 
 	public void paste() {
-		codeArea.paste();
+		this.codeArea.paste();
 
 		setText(this.name + " *");
 	}
 
 	public void undo() {
-		if (codeArea.isUndoAvailable()) {
-			codeArea.undo();
+		if (this.codeArea.isUndoAvailable()) {
+			this.codeArea.undo();
 
 			setText(this.name + " *");
 		}
 	}
 
 	public void redo() {
-		if (codeArea.isRedoAvailable()) {
-			codeArea.redo();
+		if (this.codeArea.isRedoAvailable()) {
+			this.codeArea.redo();
 
 			setText(this.name + " *");
 		}
@@ -244,7 +244,7 @@ public class CodeTab extends Tab {
 		Optional<String> result = dialog.showAndWait();
 
 		if (result.isPresent()) {
-			String code = codeArea.getText();
+			String code = this.codeArea.getText();
 
 			Pattern pattern = Pattern.compile(result.get());
 
@@ -264,7 +264,7 @@ public class CodeTab extends Tab {
 
 			styleSpansBuilder.add(Collections.emptyList(), code.length() - lastKeywordEnd);
 
-			codeArea.setStyleSpans(0, styleSpansBuilder.create());
+			this.codeArea.setStyleSpans(0, styleSpansBuilder.create());
 		}
 	}
 
@@ -318,15 +318,17 @@ public class CodeTab extends Tab {
 		Optional<Pair<String, String>> result = dialog.showAndWait();
 
 		result.ifPresent(findReplace -> {
-			String code = codeArea.getText();
+			String code = this.codeArea.getText();
 
 			code = code.replaceAll(findReplace.getKey(), findReplace.getValue());
 
-			codeArea.replaceText(code);
+			this.codeArea.replaceText(code);
+
+			setText(this.name + " *");
 		});
 	}
 
 	public void stopAsyncHighlighting() {
-		executorService.shutdown();
+		this.executorService.shutdown();
 	}
 }

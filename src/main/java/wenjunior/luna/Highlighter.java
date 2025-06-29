@@ -14,10 +14,10 @@ public class Highlighter {
 	private HashMap<String, String> groups = new HashMap<>();
 
 	public void setSyntax(SupportedLanguages language) {
-		groups.clear();
+		this.groups.clear();
 
 		if (language.equals(SupportedLanguages.PLAIN_TEXT)) {
-			pattern = Pattern.compile("");
+			this.pattern = Pattern.compile("");
 		}
 
 		if (language.equals(SupportedLanguages.JAVA)) {
@@ -51,7 +51,7 @@ public class Highlighter {
 
 			final String PACKAGE_NAME_PATTERN = "(?<!this\\.)(?<=(\\.|package |requires |exports ))[a-zA-Z]+(?=(;| \\{))";
 
-			pattern = Pattern.compile(
+			this.pattern = Pattern.compile(
 				"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
 					+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
 						+ "|(?<STRING>" + STRING_PATTERN + ")"
@@ -69,35 +69,35 @@ public class Highlighter {
 																		+ "|(?<PACKAGENAME>" + PACKAGE_NAME_PATTERN + ")"
 			);
 
-			groups.put("KEYWORD", "red");
+			this.groups.put("KEYWORD", "red");
 
-			groups.put("SEMICOLON", "grey");
+			this.groups.put("SEMICOLON", "grey");
 
-			groups.put("STRING", "yellow");
+			this.groups.put("STRING", "yellow");
 
-			groups.put("COMMENT", "comment");
+			this.groups.put("COMMENT", "comment");
 
-			groups.put("NUMBER", "pink");
+			this.groups.put("NUMBER", "pink");
 
-			groups.put("CLASS", "purple");
+			this.groups.put("CLASS", "purple");
 
-			groups.put("CONSTANT", "orange");
+			this.groups.put("CONSTANT", "orange");
 
-			groups.put("SPECIALCHAR", "orange");
+			this.groups.put("SPECIALCHAR", "orange");
 
-			groups.put("PRIMITIVETYPE", "cyan");
+			this.groups.put("PRIMITIVETYPE", "cyan");
 
-			groups.put("NULL", "cyan");
+			this.groups.put("NULL", "cyan");
 
-			groups.put("BOOLEAN", "cyan");
+			this.groups.put("BOOLEAN", "cyan");
 
-			groups.put("SINGLEQUOTESTRING", "yellow");
+			this.groups.put("SINGLEQUOTESTRING", "yellow");
 
-			groups.put("FUNCTION", "green");
+			this.groups.put("FUNCTION", "green");
 
-			groups.put("ANNOTATION", "pink");
+			this.groups.put("ANNOTATION", "pink");
 
-			groups.put("PACKAGENAME", "orange");
+			this.groups.put("PACKAGENAME", "orange");
 		}
 
 		if (language.equals(SupportedLanguages.XML)) {
@@ -109,25 +109,25 @@ public class Highlighter {
 
 			final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 
-			pattern = Pattern.compile(
+			this.pattern = Pattern.compile(
 				"(?<SPECIALCHAR>" + SPECIAL_CHAR_PATTERN + ")"
 					+ "|(?<TAG>" + TAG_PATTERN + ")"
 						+ "|(?<OPTION>" + OPTION_PATTERN + ")"
 							+ "|(?<STRING>" + STRING_PATTERN + ")"
 			);
 
-			groups.put("SPECIALCHAR", "purple");
+			this.groups.put("SPECIALCHAR", "purple");
 
-			groups.put("TAG", "pink");
+			this.groups.put("TAG", "pink");
 
-			groups.put("OPTION", "green");
+			this.groups.put("OPTION", "green");
 
-			groups.put("STRING", "yellow");
+			this.groups.put("STRING", "yellow");
 		}
 	}
 
 	public StyleSpans<Collection<String>> highlightSyntax(String text) {
-		Matcher matcher = pattern.matcher(text);
+		Matcher matcher = this.pattern.matcher(text);
 
 		int lastKeywordEnd = 0;
 
@@ -136,9 +136,9 @@ public class Highlighter {
 		String styleClass = null;
 
 		while (matcher.find()) {
-			for (String group : groups.keySet()) {
+			for (String group : this.groups.keySet()) {
 				if (matcher.group(group) != null) {
-					styleClass = groups.get(group);
+					styleClass = this.groups.get(group);
 				}
 			}
 

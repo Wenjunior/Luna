@@ -151,9 +151,7 @@ class DirItem extends TreeItem<String> {
 
 			FileItem fileItem = (FileItem) item;
 
-			Path path = Paths.get(fileItem.getPath());
-
-			if (!Files.exists(path)) {
+			if (!Files.exists(Paths.get(fileItem.getPath()))) {
 				index = items.indexOf(fileItem);
 
 				break;

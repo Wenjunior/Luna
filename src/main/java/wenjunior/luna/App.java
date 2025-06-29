@@ -139,11 +139,11 @@ public class App extends Application {
 
 		borderPane.setTop(menuBar);
 
-		FileExplorer fileExplorer = new FileExplorer(tabs);
+		FileExplorer fileExplorer = new FileExplorer(this.tabs);
 
 		borderPane.setLeft(fileExplorer);
 
-		borderPane.setCenter(tabs);
+		borderPane.setCenter(this.tabs);
 
 		Scene scene = new Scene(borderPane, 1280, 720);
 
@@ -159,9 +159,9 @@ public class App extends Application {
 	private void newFile() {
 		CodeTab codeTab = new CodeTab();
 
-		tabs.getTabs().add(codeTab);
+		this.tabs.getTabs().add(codeTab);
 
-		tabs.getSelectionModel().selectLast();
+		this.tabs.getSelectionModel().selectLast();
 	}
 
 	private void openFile() {
@@ -201,19 +201,19 @@ public class App extends Application {
 
 		CodeTab codeTab = new CodeTab(selectedFile.getName(), lines.toString(), selectedFile.getPath());
 
-		tabs.getTabs().add(codeTab);
+		this.tabs.getTabs().add(codeTab);
 
-		tabs.getSelectionModel().selectLast();
+		this.tabs.getSelectionModel().selectLast();
 	}
 
 	private void eventPerformed(Events event) {
-		int selectedIndex = tabs.getSelectionModel().getSelectedIndex();
+		int selectedIndex = this.tabs.getSelectionModel().getSelectedIndex();
 
 		if (selectedIndex == -1) {
 			return;
 		}
 
-		CodeTab codeTab = (CodeTab) tabs.getTabs().get(selectedIndex);
+		CodeTab codeTab = (CodeTab) this.tabs.getTabs().get(selectedIndex);
 
 		switch (event) {
 		case SAVE:
@@ -257,7 +257,7 @@ public class App extends Application {
 
 	@Override
 	public void stop() {
-		for (Tab tab : tabs.getTabs()) {
+		for (Tab tab : this.tabs.getTabs()) {
 			CodeTab codeTab = (CodeTab) tab;
 
 			codeTab.stopAsyncHighlighting();
