@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.WatchKey;
 import javafx.concurrent.Task;
 import java.nio.file.WatchEvent;
+import javafx.scene.control.Tab;
 import javafx.scene.image.Image;
 import java.nio.file.FileSystems;
 import javafx.event.EventHandler;
@@ -201,6 +202,18 @@ public class FileExplorer extends TreeView<String> {
 	}
 
 	private void openFile(String path) {
+		for (Tab tab : this.tabs.getTabs()) {
+			CodeTab codeTab = (CodeTab) tab;
+
+			if (path.equals(codeTab.getPath())) {
+				int index = this.tabs.getTabs().indexOf(codeTab);
+
+				this.tabs.getSelectionModel().select(index);
+
+				return;
+			}
+		}
+
 		File file = new File(path);
 
 		Scanner reader;

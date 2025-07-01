@@ -48,7 +48,7 @@ public class App extends Application {
 		save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN));
 
 		save.setOnAction(event -> {
-			eventPerformed(Events.SAVE);
+			actionPerformed(Events.SAVE);
 		});
 
 		MenuItem saveAs = new MenuItem("Save As...");
@@ -56,7 +56,7 @@ public class App extends Application {
 		saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.CONTROL_DOWN, KeyCodeCombination.SHIFT_DOWN));
 
 		saveAs.setOnAction(event -> {
-			eventPerformed(Events.SAVE_AS);
+			actionPerformed(Events.SAVE_AS);
 		});
 
 		MenuItem exit = new MenuItem("Exit");
@@ -76,7 +76,7 @@ public class App extends Application {
 		cut.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCodeCombination.CONTROL_DOWN));
 
 		cut.setOnAction(event -> {
-			eventPerformed(Events.CUT);
+			actionPerformed(Events.CUT);
 		});
 
 		MenuItem copy = new MenuItem("Copy");
@@ -84,7 +84,7 @@ public class App extends Application {
 		copy.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCodeCombination.CONTROL_DOWN));
 
 		copy.setOnAction(event -> {
-			eventPerformed(Events.COPY);
+			actionPerformed(Events.COPY);
 		});
 
 		MenuItem paste = new MenuItem("Paste");
@@ -92,7 +92,7 @@ public class App extends Application {
 		paste.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCodeCombination.CONTROL_DOWN));
 
 		paste.setOnAction(event -> {
-			eventPerformed(Events.PASTE);
+			actionPerformed(Events.PASTE);
 		});
 
 		MenuItem undo = new MenuItem("Undo");
@@ -100,7 +100,7 @@ public class App extends Application {
 		undo.setAccelerator(new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.CONTROL_DOWN));
 
 		undo.setOnAction(event -> {
-			eventPerformed(Events.UNDO);
+			actionPerformed(Events.UNDO);
 		});
 
 		MenuItem redo = new MenuItem("Redo");
@@ -108,7 +108,7 @@ public class App extends Application {
 		redo.setAccelerator(new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.CONTROL_DOWN));
 
 		redo.setOnAction(event -> {
-			eventPerformed(Events.REDO);
+			actionPerformed(Events.REDO);
 		});
 
 		MenuItem find = new MenuItem("Find...");
@@ -116,7 +116,7 @@ public class App extends Application {
 		find.setAccelerator(new KeyCodeCombination(KeyCode.F, KeyCodeCombination.CONTROL_DOWN));
 
 		find.setOnAction(event -> {
-			eventPerformed(Events.FIND);
+			actionPerformed(Events.FIND);
 		});
 
 		MenuItem replace = new MenuItem("Replace...");
@@ -124,7 +124,7 @@ public class App extends Application {
 		replace.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCodeCombination.CONTROL_DOWN));
 
 		replace.setOnAction(event -> {
-			eventPerformed(Events.REPLACE);
+			actionPerformed(Events.REPLACE);
 		});
 
 		Menu edit = new Menu("Edit");
@@ -173,6 +173,18 @@ public class App extends Application {
 			return;
 		}
 
+		for (Tab tab : this.tabs.getTabs()) {
+			CodeTab codeTab = (CodeTab) tab;
+
+			if (selectedFile.getPath().equals(codeTab.getPath())) {
+				int index = this.tabs.getTabs().indexOf(codeTab);
+
+				this.tabs.getSelectionModel().select(index);
+
+				return;
+			}
+		}
+
 		Scanner reader;
 
 		try {
@@ -193,7 +205,7 @@ public class App extends Application {
 			lines.append(line);
 
 			if (reader.hasNextLine()) {
-				lines.append("\n");
+				lines.append('\n');
 			}
 		}
 
@@ -206,7 +218,7 @@ public class App extends Application {
 		this.tabs.getSelectionModel().selectLast();
 	}
 
-	private void eventPerformed(Events event) {
+	private void actionPerformed(Events event) {
 		int selectedIndex = this.tabs.getSelectionModel().getSelectedIndex();
 
 		if (selectedIndex == -1) {

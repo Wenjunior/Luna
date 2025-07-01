@@ -113,6 +113,10 @@ public class CodeTab extends Tab {
 		this.path = path;
 	}
 
+	public String getPath() {
+		return this.path;
+	}
+
 	private void updateHighlighter() {
 		if (this.name.endsWith(".java")) {
 			this.highlighter.setSyntax(SupportedLanguages.JAVA);
