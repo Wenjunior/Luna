@@ -136,6 +136,12 @@ public class CodeTab extends Tab {
 			return;
 		}
 
+		if (this.name.endsWith(".md")) {
+			this.highlighter.setSyntax(SupportedLanguages.MARKDOWN);
+
+			return;
+		}
+
 		this.highlighter.setSyntax(SupportedLanguages.PLAIN_TEXT);
 	}
 

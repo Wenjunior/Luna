@@ -164,6 +164,31 @@ public class Highlighter {
 
 			this.groups.put("COMMENT", "comment");
 		}
+
+		if (language.equals(SupportedLanguages.MARKDOWN)) {
+			final String HEADING_PATTERN = "#{1,6} (.?+)+";
+
+			final String BOLD_PATTERN = "(\\*|_){2}(.?+)+(\\*|_){2}";
+
+			final String IMAGE_PATTERN = "!\\[(.?+)+\\]\\((.?+)+\\)";
+
+			final String BLOCKQUOTE_PATTERN = "> (.?+)+";
+
+			this.pattern = Pattern.compile(
+				"(?<HEADING>" + HEADING_PATTERN + ")"
+					+ "|(?<BOLD>" + BOLD_PATTERN + ")"
+						+ "|(?<IMAGE>" + IMAGE_PATTERN + ")"
+							+ "|(?<BLOCKQUOTE>" + BLOCKQUOTE_PATTERN + ")"
+			);
+
+			this.groups.put("HEADING", "cyan");
+
+			this.groups.put("BOLD", "orange");
+
+			this.groups.put("IMAGE", "purple");
+
+			this.groups.put("BLOCKQUOTE", "yellow");
+		}
 	}
 
 	public StyleSpans<Collection<String>> highlightSyntax(String text) {
