@@ -10,7 +10,7 @@ CustomTab::CustomTab(QWidget *parent, QString path, QString code) : QWidget{pare
 
 	QVBoxLayout *vbox = new QVBoxLayout();
 
-	codeEdit = new CodeEdit(code);
+    codeEdit = new CodeEdit(this, code);
 
 	vbox->addWidget(codeEdit);
 

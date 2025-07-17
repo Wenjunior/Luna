@@ -12,6 +12,7 @@ qt_add_executable(Luna
 	MainWindow.hpp
 	CustomTab.hpp CustomTab.cpp
 	CodeEdit.hpp CodeEdit.cpp
+	LineNumberArea.hpp
 )
 
 target_link_libraries(Luna
