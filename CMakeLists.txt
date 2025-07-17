@@ -7,11 +7,11 @@ qt_standard_project_setup()
 
 qt_add_executable(Luna
 	WIN32 MACOSX_BUNDLE
-	main.cpp
-	mainwindow.cpp
-	mainwindow.h
-	customtab.h customtab.cpp
-	codeedit.h codeedit.cpp
+	Main.cpp
+	MainWindow.cpp
+	MainWindow.hpp
+	CustomTab.hpp CustomTab.cpp
+	CodeEdit.hpp CodeEdit.cpp
 )
 
 target_link_libraries(Luna

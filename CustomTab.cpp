@@ -1,4 +1,4 @@
-#include "customtab.h"
+#include "CustomTab.hpp"
 
 #include <QFile>
 #include <QFileDialog>

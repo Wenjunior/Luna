@@ -1,7 +1,7 @@
 #ifndef CUSTOMTAB_H
 #define CUSTOMTAB_H
 
-#include "codeedit.h"
+#include "CodeEdit.hpp"
 
 #include <QWidget>
 

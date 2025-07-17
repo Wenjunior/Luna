@@ -1,4 +1,4 @@
-#include "codeedit.h"
+#include "CodeEdit.hpp"
 
 CodeEdit::CodeEdit(QString code) {
 	QFont font("Monospace", 10);

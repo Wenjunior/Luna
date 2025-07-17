@@ -1,5 +1,5 @@
-#include "customtab.h"
-#include "mainwindow.h"
+#include "CustomTab.hpp"
+#include "MainWindow.hpp"
 
 #include <QDir>
 #include <QMenu>
