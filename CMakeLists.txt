@@ -10,8 +10,7 @@ qt_add_executable(Luna
 	Main.cpp
 	MainWindow.cpp
 	MainWindow.hpp
-	CustomTab.hpp CustomTab.cpp
-	CodeEdit.hpp CodeEdit.cpp
+	CodeEditor.hpp CodeEditor.cpp
 	LineNumberArea.hpp
 )
 

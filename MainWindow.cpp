@@ -1,4 +1,4 @@
-#include "CustomTab.hpp"
+#include "CodeEditor.hpp"
 #include "MainWindow.hpp"
 
 #include <QDir>
@@ -11,9 +11,9 @@ void MainWindow::removeTab(int index) {
 }
 
 void MainWindow::newFile() {
-	CustomTab *customTab = new CustomTab();
+	CodeEditor *codeEditor = new CodeEditor();
 
-	this->tabs->addTab(customTab, "Untitled");
+	this->tabs->addTab(codeEditor, "Untitled");
 
 	this->tabs->setCurrentIndex(this->tabs->count() - 1);
 }
@@ -31,9 +31,9 @@ void MainWindow::openFile() {
 		for (int index = 0; index < this->tabs->count(); index++) {
 			QWidget *tab = (QWidget *) this->tabs->widget(index);
 
-			CustomTab *customTab = (CustomTab *) tab;
+			CodeEditor *codeEditor = (CodeEditor *) tab;
 
-			if (fileName.compare(customTab->getPath(), Qt::CaseSensitive) == 0) {
+			if (fileName.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
 				this->tabs->setCurrentWidget(tab);
 
 				return;
@@ -49,11 +49,11 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			CustomTab *customTab = new CustomTab(this, file.fileName(), byteArray);
+			CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
 
 			QFileInfo fileInfo(file);
 
-			this->tabs->addTab(customTab, fileInfo.fileName());
+			this->tabs->addTab(codeEditor, fileInfo.fileName());
 
 			/*
 				Colocar a linha de código a seguir aqui evita que a última tab seja selecionada caso o arquivo não seja UTF-8.
@@ -72,9 +72,9 @@ void MainWindow::saveAs() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->saveAs();
+	codeEditor->saveAs();
 }
 
 void MainWindow::save() {
@@ -84,9 +84,9 @@ void MainWindow::save() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->save();
+	codeEditor->save();
 }
 
 void MainWindow::quit() {
@@ -100,9 +100,9 @@ void MainWindow::undo() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->undo();
+	codeEditor->undo();
 }
 
 void MainWindow::redo() {
@@ -112,9 +112,9 @@ void MainWindow::redo() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->redo();
+	codeEditor->redo();
 }
 
 void MainWindow::cut() {
@@ -124,9 +124,9 @@ void MainWindow::cut() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->cut();
+	codeEditor->cut();
 }
 
 void MainWindow::copy() {
@@ -136,9 +136,9 @@ void MainWindow::copy() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->copy();
+	codeEditor->copy();
 }
 
 void MainWindow::paste() {
@@ -148,9 +148,9 @@ void MainWindow::paste() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->paste();
+	codeEditor->paste();
 }
 
 void MainWindow::selectAll() {
@@ -160,9 +160,9 @@ void MainWindow::selectAll() {
 		return;
 	}
 
-	CustomTab *customTab = (CustomTab *) currentWidget;
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	customTab->selectAll();
+	codeEditor->selectAll();
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
