@@ -1,3 +1,5 @@
+![Screenshot](./screenshots/luna.png)
+
 Para executar o projeto digite os comandos a seguir:
 
 ```

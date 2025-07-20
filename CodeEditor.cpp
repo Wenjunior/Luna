@@ -17,6 +17,8 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 
 	setFont(font);
 
+	setWordWrapMode(QTextOption::NoWrap);
+
 	if (code != nullptr) {
 		setPlainText(code);
 	}
@@ -111,9 +113,9 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
 void CodeEditor::resizeEvent(QResizeEvent *resizeEvent) {
 	QPlainTextEdit::resizeEvent(resizeEvent);
 
-	QRect cr = contentsRect();
+	QRect cRect = contentsRect();
 
-	lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+	lineNumberArea->setGeometry(QRect(cRect.left(), cRect.top(), lineNumberAreaWidth(), cRect.height()));
 }
 
 void CodeEditor::highlightCurrentLine() {

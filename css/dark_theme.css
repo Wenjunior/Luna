@@ -39,14 +39,32 @@ QPlainTextEdit {
 }
 
 QScrollBar {
+	width: 8px;
+	height: 8px;
 	background-color: #292E34;
 }
 
 QScrollBar::handle:vertical,
 QScrollBar::handle:horizontal {
+	border-radius: 3px;
 	background-color: #787B82;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+	background-color: none;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+	background-color: none;
+}
+
+QAbstractScrollArea::corner {
+	background-color: #292E34;
 }
 
 QTabWidget {
 	background-color: #343B46;
+	border: none;
 }
