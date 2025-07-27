@@ -150,7 +150,9 @@ void MainWindow::paste() {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	codeEditor->paste();
+	if (codeEditor->canPaste()) {
+		codeEditor->paste();
+	}
 }
 
 void MainWindow::selectAll() {

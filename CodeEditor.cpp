@@ -145,6 +145,8 @@ void CodeEditor::highlightCurrentLine() {
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *paintEvent) {
 	QPainter painter(lineNumberArea);
 
+	painter.setFont(font());
+
 	painter.fillRect(paintEvent->rect(), QColor(44, 50, 57));
 
 	QTextBlock block = firstVisibleBlock();

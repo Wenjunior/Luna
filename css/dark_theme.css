@@ -4,7 +4,7 @@ QMainWindow {
 
 QMenuBar {
 	color: #F8F8F2;
-	background-color: #434A57;
+	background-color: #2F2F2F;
 }
 
 QMenuBar::item::selected {
@@ -14,7 +14,7 @@ QMenuBar::item::selected {
 
 QMenu {
 	color: #F8F8F2;
-	background-color: #434A57;
+	background-color: #2F2F2F;
 }
 
 QMenu::item::selected {
@@ -22,12 +22,12 @@ QMenu::item::selected {
 	background-color: #9966CC;
 }
 
-QTabBar {
+QTabBar::tab {
 	color: #F8F8F2;
-	background-color: #343B46;
+	background-color: #353C44;
 }
 
-QTabBar::selected::item {
+QTabBar::tab:selected {
 	color: white;
 	background-color: #2C3239;
 }
@@ -36,12 +36,13 @@ QPlainTextEdit {
 	color: #F8F8F2;
 	background-color: #2C3239;
 	selection-background-color: #9966CC;
+	border: none;
 }
 
 QScrollBar {
 	width: 8px;
 	height: 8px;
-	background-color: #292E34;
+	background-color: #2C3239;
 }
 
 QScrollBar::handle:vertical,
@@ -64,7 +65,11 @@ QAbstractScrollArea::corner {
 	background-color: #292E34;
 }
 
+QTabWidget::pane {
+	border: none;
+}
+
 QTabWidget {
-	background-color: #343B46;
+	background-color: #2C3239;
 	border: none;
 }
