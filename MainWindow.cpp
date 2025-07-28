@@ -74,7 +74,13 @@ void MainWindow::saveAs() {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	codeEditor->saveAs();
+	QString fileName = codeEditor->saveAs();
+
+	if (fileName.isNull()) {
+		return;
+	}
+
+	this->tabs->setTabText(this->tabs->currentIndex(), fileName);
 }
 
 void MainWindow::save() {

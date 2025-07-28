@@ -52,7 +52,7 @@ void CodeEditor::save() {
 	file.close();
 }
 
-void CodeEditor::saveAs() {
+QString CodeEditor::saveAs() {
 	QFileDialog fileDialog;
 
 	fileDialog.setFilter(QDir::NoDotAndDotDot | QDir::Writable);
@@ -60,7 +60,7 @@ void CodeEditor::saveAs() {
 	QString fileName = fileDialog.getSaveFileName(this, "Save As...", QDir::homePath());
 
 	if (fileName.isNull()) {
-		return;
+		return nullptr;
 	}
 
 	this->path = fileName;
@@ -72,6 +72,8 @@ void CodeEditor::saveAs() {
 	}
 
 	file.close();
+
+	return QFileInfo(fileName).fileName();
 }
 
 QString CodeEditor::getPath() {
@@ -146,8 +148,6 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *paintEvent) {
 	QPainter painter(lineNumberArea);
 
 	painter.setFont(font());
-
-	painter.fillRect(paintEvent->rect(), QColor(44, 50, 57));
 
 	QTextBlock block = firstVisibleBlock();
 

@@ -25,11 +25,24 @@ QMenu::item::selected {
 QTabBar::tab {
 	color: #F8F8F2;
 	background-color: #353C44;
+	width: 150px;
+	height: 25px;
 }
 
 QTabBar::tab:selected {
 	color: white;
 	background-color: #2C3239;
+	width: 150px;
+	height: 24px;
+}
+
+QTabBar::close-button {
+	image: url(./icons/close.png);
+	subcontrol-position: right;
+}
+
+QTabBar::close-button:hover {
+	image: url(./icons/close-hover.png);
 }
 
 QPlainTextEdit {

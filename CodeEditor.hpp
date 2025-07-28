@@ -13,7 +13,7 @@ class CodeEditor : public QPlainTextEdit {
 public:
 	explicit CodeEditor(QWidget *parent = nullptr, QString path = nullptr, QString code = nullptr);
 
-	void saveAs();
+	QString saveAs();
 
 	void save();
 
