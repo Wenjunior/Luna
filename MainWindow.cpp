@@ -21,8 +21,6 @@ void MainWindow::newFile() {
 void MainWindow::openFile() {
 	QFileDialog fileDialog;
 
-	// TODO: Listar primeiro os diretórios e depois os arquivos.
-
 	fileDialog.setFilter(QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
 
 	QStringList fileNames = fileDialog.getOpenFileNames(this, "Open File...", QDir::homePath());
