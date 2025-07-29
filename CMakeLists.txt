@@ -8,10 +8,10 @@ qt_standard_project_setup()
 qt_add_executable(Luna
 	WIN32 MACOSX_BUNDLE
 	Main.cpp
-	MainWindow.cpp
-	MainWindow.hpp
+	MainWindow.hpp MainWindow.cpp
 	CodeEditor.hpp CodeEditor.cpp
 	LineNumberArea.hpp
+	Highlighter.hpp Highlighter.cpp
 )
 
 target_link_libraries(Luna

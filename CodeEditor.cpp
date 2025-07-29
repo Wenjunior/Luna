@@ -1,4 +1,5 @@
 #include "CodeEditor.hpp"
+#include "Highlighter.hpp"
 #include "LineNumberArea.hpp"
 
 #include <QFile>
@@ -34,6 +35,8 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
+
+	new Highlighter(document());
 }
 
 void CodeEditor::save() {
