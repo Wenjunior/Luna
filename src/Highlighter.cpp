@@ -81,7 +81,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	stringFormat.setForeground(yellow);
 
-	rule.pattern = QRegularExpression(QStringLiteral("\".*\""));
+	rule.pattern = QRegularExpression(QStringLiteral("\".*\"|'.*'"));
 
 	rule.format = stringFormat;
 

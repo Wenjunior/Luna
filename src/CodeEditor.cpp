@@ -12,9 +12,11 @@
 CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainTextEdit{parent} {
 	this->path = path;
 
-	QFont font("Monospace", 11);
+	QFont font;
 
-	font.setFixedPitch(true);
+	font.setFamily("Monospace");
+
+	font.setPixelSize(14);
 
 	setFont(font);
 

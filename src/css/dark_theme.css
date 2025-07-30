@@ -5,39 +5,31 @@ QMainWindow {
 QMenuBar {
 	color: #F8F8F2;
 	background-color: #2F2F2F;
-	font-size: 14px;
 }
 
 QMenuBar::item::selected {
 	color: white;
 	background-color: #9966CC;
-	font-size: 14px;
 }
 
 QMenu {
 	color: #F8F8F2;
 	background-color: #2F2F2F;
-	font-size: 14px;
 }
 
 QMenu::item::selected {
 	color: white;
 	background-color: #9966CC;
-	font-size: 14px;
 }
 
 QTabBar::tab {
 	color: #F8F8F2;
 	background-color: #353C44;
-	width: 225px;
-	font-size: 14px;
 }
 
 QTabBar::tab:selected {
 	color: white;
 	background-color: #2C3239;
-	width: 225px;
-	font-size: 14px;
 }
 
 QTabBar::close-button {
@@ -58,6 +50,7 @@ QPlainTextEdit {
 
 QScrollBar {
 	background-color: #2C3239;
+	width: 10px;
 }
 
 QScrollBar::handle:vertical,
