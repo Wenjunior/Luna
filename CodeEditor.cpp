@@ -12,13 +12,11 @@
 CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainTextEdit{parent} {
 	this->path = path;
 
-	QFont font("Monospace", 10);
+	QFont font("Monospace", 11);
 
 	font.setFixedPitch(true);
 
 	setFont(font);
-
-	setWordWrapMode(QTextOption::NoWrap);
 
 	if (code != nullptr) {
 		setPlainText(code);
@@ -164,7 +162,9 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *paintEvent) {
 		if (block.isVisible() && bottom >= paintEvent->rect().top()) {
 			QString number = QString::number(blockNumber + 1);
 
-			painter.setPen(Qt::lightGray);
+			QColor lightGray(127, 138, 149);
+
+			painter.setPen(lightGray);
 
 			painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
 		}

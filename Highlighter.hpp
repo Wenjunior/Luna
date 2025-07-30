@@ -11,7 +11,7 @@ public:
 	Highlighter(QTextDocument *parent = nullptr);
 
 protected:
-	void highlightBlock(const QString &code) override;
+	void highlightBlock(const QString &text) override;
 
 private:
 	struct HighlightingRule {
