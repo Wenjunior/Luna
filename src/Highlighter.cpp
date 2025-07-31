@@ -1,6 +1,8 @@
 #include "Highlighter.hpp"
 
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
+	// Keywords
+
 	HighlightingRule rule;
 
 	QTextCharFormat keywordFormat;
@@ -11,11 +13,25 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	keywordFormat.setFontWeight(QFont::Bold);
 
-	rule.pattern = QRegularExpression(QStringLiteral("\\bnullptr\\b|\\bfor\\b|\\balignas\\b|\\balignof\\b|\\band\\b|\\band_eq\\b|\\basm\\b|\\batomic_cancel\\b|\\batomic_commit\\b|\\batomic_noexcept\\b|\\bauto\\b|\\bbitand\\b|\\bbitor\\b|\\bbool\\b|\\bbreak\\b|\\bcase\\b|\\bcatch\\b|\\bchar\\b|\\bchar8_t\\b|\\bchar16_t\\b|\\bchar32_t\\b|\\bclass\\b|\\bcompl\\b|\\bconcept\\b|\\bconst\\b|\\bconsteval\\b|\\bconstexpr\\b|\\bconstinit\\b|\\bconst_cast\\b|\\bcontinue\\b|\\bcontract_assert\\b|\\bco_await\\b|\\bco_return\\b|\\bco_yield\\b|\\bdecltype\\b|\\bdefault\\b|\\bdelete\\b|\\bdo\\b|\\bdouble\\b|\\bdynamic_cast\\b|\\belse\\b|\\benum\\b|\\bexplicit\\b|\\bexport\\b|\\bextern\\b|\\bfalse\\b|\\bfloat\\b|\\bforv\\b|\\bfriend\\b|\\bgoto\\b|\\bif\\b|\\binline\\b|\\bint\\b|\\blong\\b|\\bmutable\\b|\\bnamespace\\b|\\bnew\\b|\\bnoexcept\\b|\\bnot\\b|\\bnot_eq\\b|\\bnullptrv\\b|\\boperator\\b|\\bor\\b|\\bor_eq\\b|\\bprivate\\b|\\bprotected\\b|\\bpublic\\b|\\breflexpr\\b|\\bregister\\b|\\breinterpret_cast\\b|\\brequires\\b|\\breturn\\b|\\bshort\\b|\\bsigned\\b|\\bsizeof\\b|\\bstatic\\b|\\bstatic_assert\\b|\\bstatic_cast\\b|\\bstruct\\b|\\bswitch\\b|\\bsynchronized\\b|\\btemplate\\b|\\bthis\\b|\\bthread_local\\b|\\bthrow\\b|\\btrue\\b|\\btry\\b|\\btypedef\\b|\\btypeid\\b|\\btypename\\b|\\bunion\\b|\\bunsigned\\b|\\busing\\b|\\bvirtual\\b|\\bvoid\\b|\\bvolatile\\b|\\bwchar_t\\b|\\bwhile\\b|\\bxor\\b|\\bxor_eq\\b"));
+	rule.pattern = QRegularExpression(QStringLiteral("\\b(for|alignas|alignof|and|and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto|bitand|bitor|break|case|catch|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|contract_assert|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|forv|friend|goto|if|inline|mutable|namespace|new|noexcept|not|not_eq|nullptrv|operator|or|or_eq|private|protected|public|reflexpr|register|reinterpret_cast|requires|return|signed|sizeof|static|static_assert|static_cast|struct|switch|synchronized|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|volatile|wchar_t|while|xor|xor_eq)\\b"));
 
 	rule.format = keywordFormat;
 
 	highlightingRules.append(rule);
+
+	// Directives
+
+	QTextCharFormat directiveFormat;
+
+	directiveFormat.setForeground(red);
+
+	rule.pattern = QRegularExpression(QStringLiteral("#(include|define|undef|elif|else|endif|ifdef|ifndef|if|error|warning|pragma|line)"));
+
+	rule.format = directiveFormat;
+
+	highlightingRules.append(rule);
+
+	// Numbers
 
 	QTextCharFormat numberFormat;
 
@@ -29,6 +45,34 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
+	// Primitive types
+
+	QTextCharFormat primitiveTypeFormat;
+
+	QColor cyan(139, 233, 253);
+
+	primitiveTypeFormat.setForeground(cyan);
+
+	rule.pattern = QRegularExpression(QStringLiteral("\\b(int|float|double|char|bool|short|long|void|char8_t|char16_t|char32_t)\\b"));
+
+	rule.format = primitiveTypeFormat;
+
+	highlightingRules.append(rule);
+
+	// Booleans
+
+	QTextCharFormat booleanFormat;
+
+	booleanFormat.setForeground(cyan);
+
+	rule.pattern = QRegularExpression(QStringLiteral("\\b(true|false)\\b"));
+
+	rule.format = booleanFormat;
+
+	highlightingRules.append(rule);
+
+	// Functions
+
 	QTextCharFormat functionFormat;
 
 	QColor green(80, 250, 123);
@@ -40,6 +84,34 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 	rule.format = functionFormat;
 
 	highlightingRules.append(rule);
+
+	// Integer literals
+
+	QTextCharFormat integerLiteralsFormat;
+
+	integerLiteralsFormat.setForeground(pink);
+
+	rule.pattern = QRegularExpression(QStringLiteral("0(x|b)[a-zA-Z0-9]+"));
+
+	rule.format = integerLiteralsFormat;
+
+	highlightingRules.append(rule);
+
+	// Constants and macros
+
+	QTextCharFormat constAndMacroFormat;
+
+	QColor orange(255, 184, 108);
+
+	constAndMacroFormat.setForeground(orange);
+
+	rule.pattern = QRegularExpression(QStringLiteral("(?<!([a-z]|:))[A-Z_]+(?!=[a-z])"));
+
+	rule.format = constAndMacroFormat;
+
+	highlightingRules.append(rule);
+
+	// Classes
 
 	QTextCharFormat classFormat;
 
@@ -53,9 +125,33 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
-	QTextCharFormat operatorFormat;
+	// Headers
 
-	QColor orange(255, 184, 108);
+	QTextCharFormat headerFormat;
+
+	headerFormat.setForeground(orange);
+
+	rule.pattern = QRegularExpression(QStringLiteral("<[a-zA-Z0-9]+>"));
+
+	rule.format = headerFormat;
+
+	highlightingRules.append(rule);
+
+	// Null values
+
+	QTextCharFormat nullFormat;
+
+	nullFormat.setForeground(cyan);
+
+	rule.pattern = QRegularExpression(QStringLiteral("\\b(nullptr|NULL)\\b"));
+
+	rule.format = nullFormat;
+
+	highlightingRules.append(rule);
+
+	// Operators
+
+	QTextCharFormat operatorFormat;
 
 	operatorFormat.setForeground(orange);
 
@@ -64,6 +160,8 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 	rule.format = operatorFormat;
 
 	highlightingRules.append(rule);
+
+	// Semicolons
 
 	QTextCharFormat semicolonFormat;
 
@@ -74,6 +172,8 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 	rule.format = semicolonFormat;
 
 	highlightingRules.append(rule);
+
+	// Strings
 
 	QTextCharFormat stringFormat;
 
@@ -87,6 +187,8 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
+	// Single line comments
+
 	QTextCharFormat singleLineCommentFormat;
 
 	singleLineCommentFormat.setForeground(Qt::lightGray);
@@ -96,6 +198,8 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 	rule.format = singleLineCommentFormat;
 
 	highlightingRules.append(rule);
+
+	// Multi line comments
 
 	multiLineCommentFormat.setForeground(Qt::lightGray);
 
