@@ -90,7 +90,11 @@ void MainWindow::save() {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	codeEditor->save();
+	bool hasPathDefined = codeEditor->save();
+
+	if (!hasPathDefined) {
+		saveAs();
+	}
 }
 
 void MainWindow::quit() {

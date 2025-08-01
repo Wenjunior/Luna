@@ -39,11 +39,9 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 	new Highlighter(document());
 }
 
-void CodeEditor::save() {
+bool CodeEditor::save() {
 	if (this->path.isNull()) {
-		saveAs();
-
-		return;
+		return false;
 	}
 
 	QFile file(this->path);
@@ -53,6 +51,8 @@ void CodeEditor::save() {
 	}
 
 	file.close();
+
+	return true;
 }
 
 QString CodeEditor::saveAs() {

@@ -15,7 +15,7 @@ public:
 
 	QString saveAs();
 
-	void save();
+	bool save();
 
 	QString getPath();
 
