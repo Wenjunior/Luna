@@ -35,6 +35,8 @@ public:
 	void paste();
 
 	void selectAll();
+
+	void replaceAs();
 };
 
 #endif

@@ -3,8 +3,12 @@
 
 #include <QDir>
 #include <QMenu>
+#include <QLabel>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QFormLayout>
+#include <QInputDialog>
+#include <QDialogButtonBox>
 
 void MainWindow::removeTab(int index) {
 	this->tabs->removeTab(index);
@@ -175,6 +179,40 @@ void MainWindow::selectAll() {
 	codeEditor->selectAll();
 }
 
+void MainWindow::replaceAs() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	QDialog dialog(this);
+
+	QFormLayout formLayout(&dialog);
+
+	QLineEdit *find = new QLineEdit();
+
+	formLayout.addRow(new QLabel("Find: "), find);
+
+	QLineEdit *replaceBy = new QLineEdit();
+
+	formLayout.addRow(new QLabel("Replace By: "), replaceBy);
+
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+
+	connect(buttonBox, &QDialogButtonBox::accepted, this, [currentWidget, find, replaceBy, &dialog]() {
+		CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+		codeEditor->setPlainText(codeEditor->toPlainText().replace(find->text(), replaceBy->text()));
+
+		dialog.accept();
+	});
+
+	formLayout.addRow(buttonBox);
+
+	dialog.exec();
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	resize(1280, 720);
 
@@ -285,4 +323,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(selectAll, &QAction::triggered, this, &MainWindow::selectAll);
 
 	edit->addAction(selectAll);
+
+	QAction *replaceAs = new QAction("Replace As...");
+
+	replaceAs->setShortcut(QKeySequence::Replace);
+
+	connect(replaceAs, &QAction::triggered, this, &MainWindow::replaceAs);
+
+	edit->addAction(replaceAs);
 }
