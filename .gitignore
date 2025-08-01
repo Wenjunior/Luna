@@ -1,9 +1,8 @@
-src/.qt/
-src/build/
-src/CMakeFiles/
-src/Luna_autogen/
-src/cmake_install.cmake
-src/CMakeLists.txt.user
-src/CMakeCache.txt
-src/Makefile
-src/Luna
+/.qt
+CMakeCache.txt
+/CMakeFiles
+CMakeLists.txt
+Luna
+/Luna_autogen
+Makefile
+cmake_install.cmake
