@@ -208,6 +208,10 @@ void MainWindow::replaceAs() {
 		dialog.accept();
 	});
 
+	connect(buttonBox, &QDialogButtonBox::rejected, this, [currentWidget, find, replaceBy, &dialog]() {
+		dialog.reject();
+	});
+
 	formLayout.addRow(buttonBox);
 
 	dialog.exec();

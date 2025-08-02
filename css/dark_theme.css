@@ -81,3 +81,26 @@ QTabWidget {
 	background-color: #2C3239;
 	border: none;
 }
+
+QDialog {
+	background-color: #2E3238;
+}
+
+QLabel {
+	color: white;
+}
+
+QLineEdit {
+	color: white;
+	background-color: #3A3F46;
+}
+
+QLineEdit:focus {
+	border: 1px solid #9966CC;
+}
+
+QDialogButtonBox > QPushButton {
+	color: white;
+	background-color: #22262A;
+	border: 4px solid #22262A;
+}
