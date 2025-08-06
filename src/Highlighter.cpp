@@ -31,20 +31,6 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
-	// Numbers
-
-	QTextCharFormat numberFormat;
-
-	QColor pink(255, 121, 198);
-
-	numberFormat.setForeground(pink);
-
-	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-zA-Z])[0-9](?!=[a-zAZ])"));
-
-	rule.format = numberFormat;
-
-	highlightingRules.append(rule);
-
 	// Primitive types
 
 	QTextCharFormat primitiveTypeFormat;
@@ -89,6 +75,8 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	QTextCharFormat integerLiteralsFormat;
 
+	QColor pink(255, 121, 198);
+
 	integerLiteralsFormat.setForeground(pink);
 
 	rule.pattern = QRegularExpression(QStringLiteral("0(x|b)[a-zA-Z0-9]+"));
@@ -97,31 +85,31 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
-	// Constants and macros
+	// Classes and enums
 
-	QTextCharFormat constAndMacroFormat;
-
-	QColor orange(255, 184, 108);
-
-	constAndMacroFormat.setForeground(orange);
-
-	rule.pattern = QRegularExpression(QStringLiteral("(?<!([a-z]|:))[A-Z_]+(?!=[a-z])"));
-
-	rule.format = constAndMacroFormat;
-
-	highlightingRules.append(rule);
-
-	// Classes
-
-	QTextCharFormat classFormat;
+	QTextCharFormat classAndEnumFormat;
 
 	QColor purple(189, 147, 249);
 
-	classFormat.setForeground(purple);
+	classAndEnumFormat.setForeground(purple);
 
-	rule.pattern = QRegularExpression(QStringLiteral("(?<!([a-z]|::))[A-Z][A-Za-z0-9]+"));
+	rule.pattern = QRegularExpression(QStringLiteral("(?<=(class|enum|new) )(.*)(?=( {|\\())|(?<![a-z]|:|_)[A-Z]+[a-zA-Z]+(?=:|.|\\()"));
 
-	rule.format = classFormat;
+	rule.format = classAndEnumFormat;
+
+	highlightingRules.append(rule);
+
+	// Macros
+
+	QTextCharFormat macroFormat;
+
+	QColor orange(255, 184, 108);
+
+	macroFormat.setForeground(orange);
+
+	rule.pattern = QRegularExpression(QStringLiteral("(?<=#define )(.*)(?= )"));
+
+	rule.format = macroFormat;
 
 	highlightingRules.append(rule);
 
@@ -170,6 +158,18 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 	rule.pattern = QRegularExpression(QStringLiteral(";"));
 
 	rule.format = semicolonFormat;
+
+	highlightingRules.append(rule);
+
+	// Numbers
+
+	QTextCharFormat numberFormat;
+
+	numberFormat.setForeground(pink);
+
+	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-zA-Z])[0-9](?!=[a-zAZ])"));
+
+	rule.format = numberFormat;
 
 	highlightingRules.append(rule);
 
