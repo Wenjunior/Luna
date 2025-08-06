@@ -2,6 +2,7 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
+#include "Highlighter.hpp"
 
 class CodeEditor : public QPlainTextEdit {
 	Q_OBJECT
@@ -10,8 +11,12 @@ class CodeEditor : public QPlainTextEdit {
 
 	QWidget *lineNumberArea;
 
+	Highlighter *highlighter = new Highlighter(0);
+
 public:
 	explicit CodeEditor(QWidget *parent = nullptr, QString path = nullptr, QString code = nullptr);
+
+	void setSyntax();
 
 	QString saveAs();
 

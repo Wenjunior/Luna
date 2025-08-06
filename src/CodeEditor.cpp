@@ -35,8 +35,10 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
+}
 
-	new Highlighter(document());
+void CodeEditor::setSyntax() {
+	highlighter->setDocument(document());
 }
 
 bool CodeEditor::save() {
