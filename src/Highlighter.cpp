@@ -13,7 +13,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	keywordFormat.setFontWeight(QFont::Bold);
 
-	rule.pattern = QRegularExpression(QStringLiteral("\\b(for|alignas|alignof|and|and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto|bitand|bitor|break|case|catch|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|contract_assert|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|forv|friend|goto|if|inline|mutable|namespace|new|noexcept|not|not_eq|nullptrv|operator|or|or_eq|private|protected|public|reflexpr|register|reinterpret_cast|requires|return|signed|sizeof|static|static_assert|static_cast|struct|switch|synchronized|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|volatile|wchar_t|while|xor|xor_eq)\\b"));
+	rule.pattern = QRegularExpression(QStringLiteral("\\b(override|for|alignas|alignof|and|and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto|bitand|bitor|break|case|catch|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|contract_assert|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|forv|friend|goto|if|inline|mutable|namespace|new|noexcept|not|not_eq|nullptrv|operator|or|or_eq|private|protected|public|reflexpr|register|reinterpret_cast|requires|return|signed|sizeof|static|static_assert|static_cast|struct|switch|synchronized|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|volatile|wchar_t|while|xor|xor_eq)\\b"));
 
 	rule.format = keywordFormat;
 
@@ -25,7 +25,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	directiveFormat.setForeground(red);
 
-	rule.pattern = QRegularExpression(QStringLiteral("#(include|define|undef|elif|else|endif|ifdef|ifndef|if|error|warning|pragma|line)"));
+	rule.pattern = QRegularExpression(QStringLiteral("#\\b(include|define|undef|elif|else|endif|ifdef|ifndef|if|error|warning|pragma|line)\\b"));
 
 	rule.format = directiveFormat;
 
@@ -65,7 +65,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	functionFormat.setForeground(green);
 
-	rule.pattern = QRegularExpression(QStringLiteral("[A-Za-z0-9_]+(?=\\()"));
+	rule.pattern = QRegularExpression(QStringLiteral("[0-9a-zA-Z_]+(?=\\()"));
 
 	rule.format = functionFormat;
 
@@ -79,13 +79,13 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	integerLiteralsFormat.setForeground(pink);
 
-	rule.pattern = QRegularExpression(QStringLiteral("0(x|b)[a-zA-Z0-9]+"));
+	rule.pattern = QRegularExpression(QStringLiteral("0(x|b)[0-9a-zA-Z]+"));
 
 	rule.format = integerLiteralsFormat;
 
 	highlightingRules.append(rule);
 
-	// Classes and enums
+	// Classes
 
 	QTextCharFormat classAndEnumFormat;
 
@@ -93,7 +93,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	classAndEnumFormat.setForeground(purple);
 
-	rule.pattern = QRegularExpression(QStringLiteral("(?<=(class|enum|new) )(.*)(?=( {|\\())|(?<![a-z]|:|_)[A-Z]+[a-zA-Z]+(?=:|.|\\()"));
+	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-z0-9])[A-Z][0-9a-zA-Z]+"));
 
 	rule.format = classAndEnumFormat;
 
@@ -105,23 +105,11 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	QColor orange(255, 184, 108);
 
-	macroFormat.setForeground(orange);
+	classAndEnumFormat.setForeground(orange);
 
-	rule.pattern = QRegularExpression(QStringLiteral("(?<=#define )(.*)(?= )"));
+	rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Z_]+\\b"));
 
 	rule.format = macroFormat;
-
-	highlightingRules.append(rule);
-
-	// Headers
-
-	QTextCharFormat headerFormat;
-
-	headerFormat.setForeground(orange);
-
-	rule.pattern = QRegularExpression(QStringLiteral("<[a-zA-Z0-9]+>"));
-
-	rule.format = headerFormat;
 
 	highlightingRules.append(rule);
 
@@ -167,7 +155,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	numberFormat.setForeground(pink);
 
-	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-zA-Z])[0-9](?!=[a-zAZ])"));
+	rule.pattern = QRegularExpression(QStringLiteral("\\b[0-9]+\\b"));
 
 	rule.format = numberFormat;
 
@@ -181,7 +169,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	stringFormat.setForeground(yellow);
 
-	rule.pattern = QRegularExpression(QStringLiteral("\".*\"|'.*'"));
+	rule.pattern = QRegularExpression(QStringLiteral("\"(.*)\"|'(.*)'"));
 
 	rule.format = stringFormat;
 
