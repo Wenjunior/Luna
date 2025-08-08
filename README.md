@@ -1,5 +1,7 @@
 ![Screenshot](/screenshots/luna.png)
 
+Para executar o projeto digite os comandos a seguir:
+
 ```
 git clone https://github.com/Wenjunior/Luna.git && cd Luna
 ls /home/user/Qt/ | grep 6
