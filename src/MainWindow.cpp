@@ -53,7 +53,7 @@ void MainWindow::openFile() {
 		if (byteArray.isValidUtf8()) {
 			CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
 
-			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")  || file.fileName().endsWith(".c")  || file.fileName().endsWith(".h")) {
+			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
 				codeEditor->setSyntax();
 			}
 

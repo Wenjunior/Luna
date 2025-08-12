@@ -93,7 +93,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	classAndEnumFormat.setForeground(purple);
 
-	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-z0-9])[A-Z][0-9a-zA-Z]+"));
+	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-z0-9:])[A-Z][0-9a-zA-Z]+"));
 
 	rule.format = classAndEnumFormat;
 
@@ -169,7 +169,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	stringFormat.setForeground(yellow);
 
-	rule.pattern = QRegularExpression(QStringLiteral("\"(.*)\"|'(.*)'"));
+	rule.pattern = QRegularExpression(QStringLiteral("\"([^\"\\\\]|\\\\.)*\"|'.'"));
 
 	rule.format = stringFormat;
 

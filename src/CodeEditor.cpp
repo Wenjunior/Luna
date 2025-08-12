@@ -18,6 +18,10 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 
 	font.setPixelSize(14);
 
+	font.setFixedPitch(true);
+
+	setCursorWidth(9);
+
 	setFont(font);
 
 	if (code != nullptr) {
