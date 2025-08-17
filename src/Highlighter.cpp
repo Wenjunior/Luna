@@ -99,11 +99,23 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	highlightingRules.append(rule);
 
+	// Includes
+
+	QTextCharFormat includeFormat;
+
+	QColor orange(255, 184, 108);
+
+	includeFormat.setForeground(orange);
+
+	rule.pattern = QRegularExpression(QStringLiteral("(?<=#include )<(.*)>"));
+
+	rule.format = includeFormat;
+
+	highlightingRules.append(rule);
+
 	// Macros
 
 	QTextCharFormat macroFormat;
-
-	QColor orange(255, 184, 108);
 
 	classAndEnumFormat.setForeground(orange);
 

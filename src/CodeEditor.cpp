@@ -41,7 +41,7 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 	highlightCurrentLine();
 }
 
-void CodeEditor::setSyntax() {
+void CodeEditor::applyCppSyntaxHighlighting() {
 	highlighter->setDocument(document());
 }
 

@@ -22,8 +22,6 @@ public:
 
 	void save();
 
-	void quit();
-
 	void undo();
 
 	void redo();

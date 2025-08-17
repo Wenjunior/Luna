@@ -16,7 +16,7 @@ class CodeEditor : public QPlainTextEdit {
 public:
 	explicit CodeEditor(QWidget *parent = nullptr, QString path = nullptr, QString code = nullptr);
 
-	void setSyntax();
+	void applyCppSyntaxHighlighting();
 
 	QString saveAs();
 

@@ -5,10 +5,14 @@
 #include <QMenu>
 #include <QLabel>
 #include <QMenuBar>
+#include <QTreeView>
+#include <QDockWidget>
 #include <QFileDialog>
 #include <QFormLayout>
+#include <QHeaderView>
 #include <QInputDialog>
 #include <QDialogButtonBox>
+#include <QFileSystemModel>
 
 void MainWindow::removeTab(int index) {
 	this->tabs->removeTab(index);
@@ -54,7 +58,7 @@ void MainWindow::openFile() {
 			CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
 
 			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-				codeEditor->setSyntax();
+				codeEditor->applyCppSyntaxHighlighting();
 			}
 
 			QFileInfo fileInfo(file);
@@ -87,6 +91,10 @@ void MainWindow::saveAs() {
 	}
 
 	this->tabs->setTabText(this->tabs->currentIndex(), fileName);
+
+	if (fileName.endsWith(".cpp") || fileName.endsWith(".hpp")) {
+		codeEditor->applyCppSyntaxHighlighting();
+	}
 }
 
 void MainWindow::save() {
@@ -103,10 +111,6 @@ void MainWindow::save() {
 	if (!hasPathDefined) {
 		saveAs();
 	}
-}
-
-void MainWindow::quit() {
-	close();
 }
 
 void MainWindow::undo() {
@@ -226,14 +230,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	showMaximized();
 
-	this->tabs = new QTabWidget();
-
-	this->tabs->setTabsClosable(true);
-
-	connect(this->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::removeTab);
-
-	setCentralWidget(this->tabs);
-
 	QMenuBar *menuBar = this->menuBar();
 
 	QMenu *file = new QMenu("File");
@@ -276,7 +272,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	quit->setShortcut(QKeySequence::Quit);
 
-	connect(quit, &QAction::triggered, this, &MainWindow::quit);
+	connect(quit, &QAction::triggered, this, &MainWindow::close);
 
 	file->addAction(quit);
 
@@ -339,4 +335,38 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(replaceAs, &QAction::triggered, this, &MainWindow::replaceAs);
 
 	edit->addAction(replaceAs);
+
+	QFileSystemModel *fileSystemModel = new QFileSystemModel(this);
+
+	fileSystemModel->setRootPath(QDir::homePath());
+
+	QTreeView *fileExplorer = new QTreeView();
+
+	fileExplorer->setModel(fileSystemModel);
+
+	fileExplorer->setRootIndex(fileSystemModel->index(QDir::homePath()));
+
+	fileExplorer->setHeaderHidden(true);
+
+	for (int i = 1; i < fileExplorer->model()->columnCount(); i++) {
+		fileExplorer->header()->hideSection(i);
+	}
+
+	fileExplorer->show();
+
+	QDockWidget *fileExplorerDockWidget = new QDockWidget(nullptr, this);
+
+	fileExplorerDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+
+	fileExplorerDockWidget->setWidget(fileExplorer);
+
+	addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
+
+	this->tabs = new QTabWidget();
+
+	this->tabs->setTabsClosable(true);
+
+	connect(this->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::removeTab);
+
+	setCentralWidget(this->tabs);
 }
