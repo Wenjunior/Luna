@@ -8,7 +8,7 @@
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	QFile file(QDir::cleanPath(QCoreApplication::applicationDirPath() + QDir::separator() + "css" + QDir::separator() + "dark_theme.css"));
+	QFile file(":/css/dark theme.css");
 
 	if (file.open(QFile::ReadOnly | QFile::Text)) {
 		QString styleSheet = file.readAll();
@@ -19,6 +19,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	MainWindow mainWindow;
+
+	QIcon icon(":/icons/favicon.ico");
+
+	mainWindow.setWindowIcon(icon);
 
 	mainWindow.show();
 

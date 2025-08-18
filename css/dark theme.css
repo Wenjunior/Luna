@@ -33,12 +33,12 @@ QTabBar::tab:selected {
 }
 
 QTabBar::close-button {
-	image: url(./icons/close.png);
+	image: url(./icons/close button.png);
 	subcontrol-position: right;
 }
 
 QTabBar::close-button:hover {
-	image: url(./icons/close-hover.png);
+	image: url(./icons/close button hover.png);
 }
 
 QPlainTextEdit {

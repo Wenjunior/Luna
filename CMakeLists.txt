@@ -5,8 +5,11 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTORCC ON)
+
 qt_add_executable(Luna
 	WIN32 MACOSX_BUNDLE
+	resources.qrc
 	src/Main.cpp
 	src/MainWindow.hpp src/MainWindow.cpp
 	src/CodeEditor.hpp src/CodeEditor.cpp
