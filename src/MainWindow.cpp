@@ -366,6 +366,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	this->tabs->setTabsClosable(true);
 
+	this->tabs->setMovable(true);
+
 	connect(this->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::removeTab);
 
 	setCentralWidget(this->tabs);

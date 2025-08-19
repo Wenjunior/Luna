@@ -32,15 +32,6 @@ QTabBar::tab:selected {
 	background-color: #2C3239;
 }
 
-QTabBar::close-button {
-	image: url(./icons/close button.png);
-	subcontrol-position: right;
-}
-
-QTabBar::close-button:hover {
-	image: url(./icons/close button hover.png);
-}
-
 QPlainTextEdit {
 	color: #F8F8F2;
 	background-color: #2C3239;
