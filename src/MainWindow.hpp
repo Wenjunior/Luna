@@ -3,16 +3,14 @@
 
 #include <QTabWidget>
 #include <QMainWindow>
+#include <QFileSystemModel>
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 	QTabWidget *tabs;
 
-public:
-	MainWindow(QWidget *parent = nullptr);
-
-	void removeTab(int index);
+	QFileSystemModel *fileSystemModel;
 
 	void newFile();
 
@@ -35,6 +33,13 @@ public:
 	void selectAll();
 
 	void replaceAs();
+
+	void removeTab(int index);
+
+	void openFileFromExplorer(const QModelIndex &index);
+
+public:
+	MainWindow(QWidget *parent = nullptr);
 };
 
 #endif

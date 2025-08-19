@@ -6,17 +6,15 @@
 #include <QLabel>
 #include <QMenuBar>
 #include <QTreeView>
+#include <filesystem>
 #include <QDockWidget>
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QDialogButtonBox>
-#include <QFileSystemModel>
 
-void MainWindow::removeTab(int index) {
-	this->tabs->removeTab(index);
-}
+namespace fs = std::filesystem;
 
 void MainWindow::newFile() {
 	CodeEditor *codeEditor = new CodeEditor();
@@ -225,6 +223,52 @@ void MainWindow::replaceAs() {
 	dialog.exec();
 }
 
+void MainWindow::removeTab(int index) {
+	this->tabs->removeTab(index);
+}
+
+void MainWindow::openFileFromExplorer(const QModelIndex &index) {
+	QString filePath = this->fileSystemModel->filePath(index);
+
+	if (fs::is_directory(fs::path(filePath.toStdString()))) {
+		return;
+	}
+
+	for (int index = 0; index < this->tabs->count(); index++) {
+		QWidget *tab = (QWidget *) this->tabs->widget(index);
+
+		CodeEditor *codeEditor = (CodeEditor *) tab;
+
+		if (filePath.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
+			this->tabs->setCurrentWidget(tab);
+
+			return;
+		}
+	}
+
+	QFile file(filePath);
+
+	file.open(QFile::ReadOnly);
+
+	QByteArray byteArray = file.readAll();
+
+	file.close();
+
+	if (byteArray.isValidUtf8()) {
+		CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
+
+		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
+			codeEditor->applyCppSyntaxHighlighting();
+		}
+
+		QFileInfo fileInfo(file);
+
+		this->tabs->addTab(codeEditor, fileInfo.fileName());
+
+		this->tabs->setCurrentIndex(this->tabs->count() - 1);
+	}
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	resize(1280, 720);
 
@@ -336,7 +380,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	edit->addAction(replaceAs);
 
-	QFileSystemModel *fileSystemModel = new QFileSystemModel(this);
+	fileSystemModel = new QFileSystemModel(this);
 
 	fileSystemModel->setRootPath(QDir::homePath());
 
@@ -351,6 +395,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	for (int i = 1; i < fileExplorer->model()->columnCount(); i++) {
 		fileExplorer->header()->hideSection(i);
 	}
+
+	connect(fileExplorer, &QTreeView::doubleClicked, this, &MainWindow::openFileFromExplorer);
 
 	fileExplorer->show();
 
