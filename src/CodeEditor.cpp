@@ -9,18 +9,25 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 
+#define FONT_FAMILY "Monospace"
+#define FONT_SIZE 14
+#define EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE true
+#define CARET_SIZE 9
+
+#define EXTRA_SPACE 10
+
 CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainTextEdit{parent} {
 	this->path = path;
 
 	QFont font;
 
-	font.setFamily("Monospace");
+	font.setFamily(FONT_FAMILY);
 
-	font.setPixelSize(14);
+	font.setPixelSize(FONT_SIZE);
 
-	font.setFixedPitch(true);
+	font.setFixedPitch(EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE);
 
-	setCursorWidth(9);
+	setCursorWidth(CARET_SIZE);
 
 	setFont(font);
 
@@ -102,11 +109,11 @@ int CodeEditor::lineNumberAreaWidth() {
 
 	int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
-	return space;
+	return space + EXTRA_SPACE;
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
-	setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+	setViewportMargins(lineNumberAreaWidth() + EXTRA_SPACE, 0, 0, 0);
 }
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
