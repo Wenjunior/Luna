@@ -1,5 +1,9 @@
 QMainWindow {
-	background-color: #343B46;
+	background-color: #454C5D;
+}
+
+QMainWindow::separator {
+	background-color: #2F3541;
 }
 
 QMenuBar {
@@ -24,23 +28,23 @@ QMenu::item::selected {
 
 QTabBar::tab {
 	color: #F8F8F2;
-	background-color: #353C44;
+	background-color: #454C5D;
 }
 
 QTabBar::tab:selected {
 	color: white;
-	background-color: #2C3239;
+	background-color: #3A414E;
 }
 
 QPlainTextEdit {
 	color: #F8F8F2;
-	background-color: #2C3239;
+	background-color: #3A414E;
 	selection-background-color: #9966CC;
 	border: none;
 }
 
 QScrollBar {
-	background-color: #2C3239;
+	background-color: transparent;
 	width: 10px;
 }
 
@@ -61,7 +65,7 @@ QScrollBar::sub-line:horizontal {
 }
 
 QAbstractScrollArea::corner {
-	background-color: #292E34;
+	background-color: #3A414E;
 }
 
 QTabWidget::pane {
@@ -69,7 +73,7 @@ QTabWidget::pane {
 }
 
 QTabWidget {
-	background-color: #2C3239;
+	background-color: #2E333F;
 	border: none;
 }
 
@@ -97,12 +101,12 @@ QDialogButtonBox > QPushButton {
 }
 
 QDockWidget::title {
-	background-color: #1E2229;
+	background-color: #2F3541;
 }
 
 QTreeView {
 	color: white;
 	font-size: 14px;
-	background-color: #1E2229;
+	background-color: #2F3541;
 	border: none;
 }
