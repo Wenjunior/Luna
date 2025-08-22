@@ -16,7 +16,9 @@
 
 #define EXTRA_SPACE 10
 
-CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainTextEdit{parent} {
+CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code) : QPlainTextEdit{parent} {
+	this->tabs = tabs;
+
 	this->path = path;
 
 	QFont font;
@@ -43,6 +45,8 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 
 	connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
+	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
+
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
@@ -50,6 +54,14 @@ CodeEditor::CodeEditor(QWidget *parent, QString path, QString code) : QPlainText
 
 void CodeEditor::applyCppSyntaxHighlighting() {
 	highlighter->setDocument(document());
+}
+
+void CodeEditor::addAsteriskToTabName() {
+	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
+
+	if (!tabName.endsWith(" *")) {
+		this->tabs->setTabText(this->tabs->currentIndex(), tabName.append(" *"));
+	}
 }
 
 bool CodeEditor::save() {
@@ -64,6 +76,12 @@ bool CodeEditor::save() {
 	}
 
 	file.close();
+
+	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
+
+	if (tabName.endsWith(" *")) {
+		this->tabs->setTabText(this->tabs->currentIndex(), tabName.replace(" *", ""));
+	}
 
 	return true;
 }
@@ -88,6 +106,12 @@ QString CodeEditor::saveAs() {
 	}
 
 	file.close();
+
+	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
+
+	if (tabName.endsWith(" *")) {
+		this->tabs->setTabText(this->tabs->currentIndex(), tabName.replace(" *", ""));
+	}
 
 	return QFileInfo(fileName).fileName();
 }

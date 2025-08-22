@@ -105,7 +105,7 @@ QDockWidget::title {
 }
 
 QTreeView {
-	color: white;
+	color: #F8F8F2;
 	font-size: 14px;
 	background-color: #2F3541;
 	border: none;

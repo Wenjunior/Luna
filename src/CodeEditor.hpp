@@ -1,6 +1,7 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
+#include <QTabWidget>
 #include <QPlainTextEdit>
 #include "Highlighter.hpp"
 
@@ -9,14 +10,18 @@ class CodeEditor : public QPlainTextEdit {
 
 	QString path;
 
+	QTabWidget *tabs;
+
 	QWidget *lineNumberArea;
 
 	Highlighter *highlighter = new Highlighter(0);
 
 public:
-	explicit CodeEditor(QWidget *parent = nullptr, QString path = nullptr, QString code = nullptr);
+	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path = nullptr, QString code = nullptr);
 
 	void applyCppSyntaxHighlighting();
+
+	void addAsteriskToTabName();
 
 	QString saveAs();
 

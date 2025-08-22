@@ -17,7 +17,7 @@
 namespace fs = std::filesystem;
 
 void MainWindow::newFile() {
-	CodeEditor *codeEditor = new CodeEditor();
+	CodeEditor *codeEditor = new CodeEditor(this, this->tabs);
 
 	this->tabs->addTab(codeEditor, "Untitled");
 
@@ -53,7 +53,7 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
+			CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray);
 
 			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
 				codeEditor->applyCppSyntaxHighlighting();
@@ -64,8 +64,8 @@ void MainWindow::openFile() {
 			this->tabs->addTab(codeEditor, fileInfo.fileName());
 
 			/*
-				Colocar a linha de código a seguir aqui evita que a última tab seja selecionada caso o arquivo não seja UTF-8.
-				E se você abrir vários arquivos grandes, a última tab será selecionada de acordo com a ordem em que eles forem abertos.
+Colocar a linha de código a seguir aqui evita que a última tab seja selecionada caso o arquivo não seja UTF-8.
+E se você abrir vários arquivos grandes, a última tab será selecionada de acordo com a ordem em que eles forem abertos.
 			*/
 
 			this->tabs->setCurrentIndex(this->tabs->count() - 1);
@@ -255,7 +255,7 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	file.close();
 
 	if (byteArray.isValidUtf8()) {
-		CodeEditor *codeEditor = new CodeEditor(this, file.fileName(), byteArray);
+		CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray);
 
 		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
 			codeEditor->applyCppSyntaxHighlighting();
