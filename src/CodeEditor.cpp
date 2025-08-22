@@ -64,9 +64,11 @@ void CodeEditor::addAsteriskToTabName() {
 	}
 }
 
-bool CodeEditor::save() {
+void CodeEditor::save() {
 	if (this->path.isNull()) {
-		return false;
+		saveAs();
+
+		return;
 	}
 
 	QFile file(this->path);
@@ -82,11 +84,9 @@ bool CodeEditor::save() {
 	if (tabName.endsWith(" *")) {
 		this->tabs->setTabText(this->tabs->currentIndex(), tabName.replace(" *", ""));
 	}
-
-	return true;
 }
 
-QString CodeEditor::saveAs() {
+void CodeEditor::saveAs() {
 	QFileDialog fileDialog;
 
 	fileDialog.setFilter(QDir::NoDotAndDotDot | QDir::Writable);
@@ -94,7 +94,7 @@ QString CodeEditor::saveAs() {
 	QString fileName = fileDialog.getSaveFileName(this, "Save As...", QDir::homePath());
 
 	if (fileName.isNull()) {
-		return nullptr;
+		return;
 	}
 
 	this->path = fileName;
@@ -107,13 +107,7 @@ QString CodeEditor::saveAs() {
 
 	file.close();
 
-	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
-
-	if (tabName.endsWith(" *")) {
-		this->tabs->setTabText(this->tabs->currentIndex(), tabName.replace(" *", ""));
-	}
-
-	return QFileInfo(fileName).fileName();
+	this->tabs->setTabText(this->tabs->currentIndex(), QFileInfo(fileName).fileName());
 }
 
 QString CodeEditor::getPath() {

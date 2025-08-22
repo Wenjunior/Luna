@@ -73,28 +73,6 @@ E se você abrir vários arquivos grandes, a última tab será selecionada de ac
 	}
 }
 
-void MainWindow::saveAs() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	QString fileName = codeEditor->saveAs();
-
-	if (fileName.isNull()) {
-		return;
-	}
-
-	this->tabs->setTabText(this->tabs->currentIndex(), fileName);
-
-	if (fileName.endsWith(".cpp") || fileName.endsWith(".hpp")) {
-		codeEditor->applyCppSyntaxHighlighting();
-	}
-}
-
 void MainWindow::save() {
 	QWidget *currentWidget = this->tabs->currentWidget();
 
@@ -104,11 +82,19 @@ void MainWindow::save() {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	bool hasPathDefined = codeEditor->save();
+	codeEditor->save();
+}
 
-	if (!hasPathDefined) {
-		saveAs();
+void MainWindow::saveAs() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
 	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->saveAs();
 }
 
 void MainWindow::undo() {

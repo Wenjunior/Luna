@@ -16,9 +16,9 @@ class MainWindow : public QMainWindow {
 
 	void openFile();
 
-	void saveAs();
-
 	void save();
+
+	void saveAs();
 
 	void undo();
 

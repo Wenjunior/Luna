@@ -23,9 +23,9 @@ public:
 
 	void addAsteriskToTabName();
 
-	QString saveAs();
+	void saveAs();
 
-	bool save();
+	void save();
 
 	QString getPath();
 
