@@ -53,11 +53,13 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray);
+			bool isCpp = false;
 
 			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-				codeEditor->applyCppSyntaxHighlighting();
+				isCpp = true;
 			}
+
+			CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray, isCpp);
 
 			QFileInfo fileInfo(file);
 
@@ -73,7 +75,7 @@ E se você abrir vários arquivos grandes, a última tab será selecionada de ac
 	}
 }
 
-void MainWindow::save() {
+void MainWindow::actionPerformed(Actions action) {
 	QWidget *currentWidget = this->tabs->currentWidget();
 
 	if (currentWidget == nullptr) {
@@ -82,93 +84,46 @@ void MainWindow::save() {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	codeEditor->save();
-}
+	switch (action) {
+		case SAVE:
+			codeEditor->save();
 
-void MainWindow::saveAs() {
-	QWidget *currentWidget = this->tabs->currentWidget();
+			break;
 
-	if (currentWidget == nullptr) {
-		return;
+		case SAVE_AS:
+			codeEditor->saveAs();
+
+			break;
+
+		case UNDO:
+			codeEditor->undo();
+
+		case REDO:
+			codeEditor->redo();
+
+			break;
+
+		case CUT:
+			codeEditor->cut();
+
+			break;
+
+		case COPY:
+			codeEditor->copy();
+
+			break;
+
+		case PASTE:
+			if (codeEditor->canPaste()) {
+				codeEditor->paste();
+			}
+
+			break;
+		case SELECT_ALL:
+			codeEditor->selectAll();
+
+			break;
 	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->saveAs();
-}
-
-void MainWindow::undo() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->undo();
-}
-
-void MainWindow::redo() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->redo();
-}
-
-void MainWindow::cut() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->cut();
-}
-
-void MainWindow::copy() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->copy();
-}
-
-void MainWindow::paste() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	if (codeEditor->canPaste()) {
-		codeEditor->paste();
-	}
-}
-
-void MainWindow::selectAll() {
-	QWidget *currentWidget = this->tabs->currentWidget();
-
-	if (currentWidget == nullptr) {
-		return;
-	}
-
-	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
-
-	codeEditor->selectAll();
 }
 
 void MainWindow::replaceAs() {
@@ -241,11 +196,13 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	file.close();
 
 	if (byteArray.isValidUtf8()) {
-		CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray);
+		bool isCpp = false;
 
 		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-			codeEditor->applyCppSyntaxHighlighting();
+			isCpp = true;
 		}
+
+		CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray, isCpp);
 
 		QFileInfo fileInfo(file);
 
@@ -317,7 +274,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(openFolder, &QAction::triggered, this, [this, fileExplorer]() {
 		QString folder = QFileDialog::getExistingDirectory(nullptr, "Open Folder...", QDir::homePath(), QFileDialog::ShowDirsOnly);
 
-		fileExplorer->setRootIndex(fileSystemModel->index(folder));
+		if (!folder.isEmpty() && !folder.isNull()) {
+			fileExplorer->setRootIndex(fileSystemModel->index(folder));
+		}
 	});
 
 	file->addAction(openFolder);
@@ -326,7 +285,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	save->setShortcut(QKeySequence::Save);
 
-	connect(save, &QAction::triggered, this, &MainWindow::save);
+	connect(save, &QAction::triggered, this, [this]() {
+		actionPerformed(SAVE);
+	});
 
 	file->addAction(save);
 
@@ -334,7 +295,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	saveAs->setShortcut(QKeySequence::SaveAs);
 
-	connect(saveAs, &QAction::triggered, this, &MainWindow::saveAs);
+	connect(saveAs, &QAction::triggered, this, [this]() {
+		actionPerformed(SAVE_AS);
+	});
 
 	file->addAction(saveAs);
 
@@ -354,7 +317,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	undo->setShortcut(QKeySequence::Undo);
 
-	connect(undo, &QAction::triggered, this, &MainWindow::undo);
+	connect(undo, &QAction::triggered, this, [this]() {
+		actionPerformed(UNDO);
+	});
 
 	edit->addAction(undo);
 
@@ -362,7 +327,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	redo->setShortcut(QKeySequence::Redo);
 
-	connect(redo, &QAction::triggered, this, &MainWindow::redo);
+	connect(redo, &QAction::triggered, this, [this]() {
+		actionPerformed(REDO);
+	});
 
 	edit->addAction(redo);
 
@@ -370,7 +337,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	cut->setShortcut(QKeySequence::Cut);
 
-	connect(cut, &QAction::triggered, this, &MainWindow::cut);
+	connect(cut, &QAction::triggered, this, [this]() {
+		actionPerformed(CUT);
+	});
 
 	edit->addAction(cut);
 
@@ -378,7 +347,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	copy->setShortcut(QKeySequence::Copy);
 
-	connect(copy, &QAction::triggered, this, &MainWindow::copy);
+	connect(copy, &QAction::triggered, this, [this]() {
+		actionPerformed(COPY);
+	});
 
 	edit->addAction(copy);
 
@@ -386,7 +357,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	paste->setShortcut(QKeySequence::Paste);
 
-	connect(paste, &QAction::triggered, this, &MainWindow::paste);
+	connect(paste, &QAction::triggered, this, [this]() {
+		actionPerformed(PASTE);
+	});
 
 	edit->addAction(paste);
 
@@ -394,7 +367,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	selectAll->setShortcut(QKeySequence::SelectAll);
 
-	connect(selectAll, &QAction::triggered, this, &MainWindow::selectAll);
+	connect(selectAll, &QAction::triggered, this, [this]() {
+		actionPerformed(SELECT_ALL);
+	});
 
 	edit->addAction(selectAll);
 

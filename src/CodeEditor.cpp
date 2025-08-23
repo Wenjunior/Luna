@@ -16,7 +16,7 @@
 
 #define EXTRA_SPACE 10
 
-CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code) : QPlainTextEdit{parent} {
+CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool isCpp) : QPlainTextEdit{parent} {
 	this->tabs = tabs;
 
 	this->path = path;
@@ -31,10 +31,14 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	setFont(font);
 
-	setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
+	setTabStopDistance(fontMetrics().horizontalAdvance(' ') * TAB_SIZE);
 
 	if (code != nullptr) {
 		setPlainText(code);
+	}
+
+	if (isCpp) {
+		highlighter->setDocument(document());
 	}
 
 	lineNumberArea = new LineNumberArea(this);
@@ -45,15 +49,11 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
-	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
-
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
-}
 
-void CodeEditor::applyCppSyntaxHighlighting() {
-	highlighter->setDocument(document());
+	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
 }
 
 void CodeEditor::addAsteriskToTabName() {

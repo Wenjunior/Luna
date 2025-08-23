@@ -5,6 +5,17 @@
 #include <QMainWindow>
 #include <QFileSystemModel>
 
+enum Actions {
+	SAVE,
+	SAVE_AS,
+	UNDO,
+	REDO,
+	CUT,
+	COPY,
+	PASTE,
+	SELECT_ALL
+};
+
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
@@ -16,21 +27,7 @@ class MainWindow : public QMainWindow {
 
 	void openFile();
 
-	void save();
-
-	void saveAs();
-
-	void undo();
-
-	void redo();
-
-	void cut();
-
-	void copy();
-
-	void paste();
-
-	void selectAll();
+	void actionPerformed(Actions action);
 
 	void replaceAs();
 

@@ -19,9 +19,7 @@ class CodeEditor : public QPlainTextEdit {
 	bool wasSaved = true;
 
 public:
-	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path = nullptr, QString code = nullptr);
-
-	void applyCppSyntaxHighlighting();
+	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path = nullptr, QString code = nullptr, bool isCpp = false);
 
 	void addAsteriskToTabName();
 
