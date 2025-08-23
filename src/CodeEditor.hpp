@@ -16,6 +16,8 @@ class CodeEditor : public QPlainTextEdit {
 
 	Highlighter *highlighter = new Highlighter(0);
 
+	bool wasSaved = true;
+
 public:
 	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path = nullptr, QString code = nullptr);
 

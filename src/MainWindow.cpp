@@ -260,6 +260,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	showMaximized();
 
+	fileSystemModel = new QFileSystemModel(this);
+
+	fileSystemModel->setRootPath(QDir::homePath());
+
+	QTreeView *fileExplorer = new QTreeView();
+
+	fileExplorer->setModel(fileSystemModel);
+
+	fileExplorer->setRootIndex(fileSystemModel->index(QDir::homePath()));
+
+	fileExplorer->setHeaderHidden(true);
+
+	for (int i = 1; i < fileExplorer->model()->columnCount(); i++) {
+		fileExplorer->header()->hideSection(i);
+	}
+
+	connect(fileExplorer, &QTreeView::doubleClicked, this, &MainWindow::openFileFromExplorer);
+
+	fileExplorer->show();
+
+	QDockWidget *fileExplorerDockWidget = new QDockWidget(nullptr, this);
+
+	fileExplorerDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+
+	fileExplorerDockWidget->setWidget(fileExplorer);
+
+	addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
+
 	QMenuBar *menuBar = this->menuBar();
 
 	QMenu *file = new QMenu("File");
@@ -281,6 +309,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(openFile, &QAction::triggered, this, &MainWindow::openFile);
 
 	file->addAction(openFile);
+
+	QAction *openFolder = new QAction("Open Folder...");
+
+	openFolder->setShortcut(QKeySequence("Ctrl+Shift+O"));
+
+	connect(openFolder, &QAction::triggered, this, [this, fileExplorer]() {
+		QString folder = QFileDialog::getExistingDirectory(nullptr, "Open Folder...", QDir::homePath(), QFileDialog::ShowDirsOnly);
+
+		fileExplorer->setRootIndex(fileSystemModel->index(folder));
+	});
+
+	file->addAction(openFolder);
 
 	QAction *save = new QAction("Save");
 
@@ -365,34 +405,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	connect(replaceAs, &QAction::triggered, this, &MainWindow::replaceAs);
 
 	edit->addAction(replaceAs);
-
-	fileSystemModel = new QFileSystemModel(this);
-
-	fileSystemModel->setRootPath(QDir::homePath());
-
-	QTreeView *fileExplorer = new QTreeView();
-
-	fileExplorer->setModel(fileSystemModel);
-
-	fileExplorer->setRootIndex(fileSystemModel->index(QDir::homePath()));
-
-	fileExplorer->setHeaderHidden(true);
-
-	for (int i = 1; i < fileExplorer->model()->columnCount(); i++) {
-		fileExplorer->header()->hideSection(i);
-	}
-
-	connect(fileExplorer, &QTreeView::doubleClicked, this, &MainWindow::openFileFromExplorer);
-
-	fileExplorer->show();
-
-	QDockWidget *fileExplorerDockWidget = new QDockWidget(nullptr, this);
-
-	fileExplorerDockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
-
-	fileExplorerDockWidget->setWidget(fileExplorer);
-
-	addDockWidget(Qt::LeftDockWidgetArea, fileExplorerDockWidget);
 
 	this->tabs = new QTabWidget();
 

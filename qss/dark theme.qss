@@ -78,26 +78,26 @@ QTabWidget {
 }
 
 QDialog {
-	background-color: #2E3238;
+	background-color: #2F3541;
 }
 
-QLabel {
+QDialog QLabel {
 	color: white;
 }
 
-QLineEdit {
+QDialog QLineEdit {
 	color: white;
-	background-color: #3A3F46;
+	background-color: #464C54;
 }
 
-QLineEdit:focus {
+QDialog QLineEdit:focus {
 	border: 1px solid #9966CC;
 }
 
 QDialogButtonBox > QPushButton {
 	color: white;
-	background-color: #22262A;
-	border: 4px solid #22262A;
+	background-color: #2E3238;
+	border: 5px solid #2E3238;
 }
 
 QDockWidget::title {

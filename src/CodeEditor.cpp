@@ -12,7 +12,7 @@
 #define FONT_FAMILY "Monospace"
 #define FONT_SIZE 14
 #define EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE true
-#define CARET_SIZE 9
+#define TAB_SIZE 5
 
 #define EXTRA_SPACE 10
 
@@ -29,9 +29,9 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	font.setFixedPitch(EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE);
 
-	setCursorWidth(CARET_SIZE);
-
 	setFont(font);
+
+	setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
 
 	if (code != nullptr) {
 		setPlainText(code);
@@ -57,6 +57,8 @@ void CodeEditor::applyCppSyntaxHighlighting() {
 }
 
 void CodeEditor::addAsteriskToTabName() {
+	wasSaved = false;
+
 	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
 
 	if (!tabName.endsWith(" *")) {
@@ -71,13 +73,21 @@ void CodeEditor::save() {
 		return;
 	}
 
-	QFile file(this->path);
-
-	if (file.open(QFile::WriteOnly)) {
-		file.write(toPlainText().toStdString().c_str());
+	if (wasSaved) {
+		return;
 	}
 
+	QFile file(this->path);
+
+	if (!file.open(QFile::WriteOnly)) {
+		return;
+	}
+
+	file.write(toPlainText().toStdString().c_str());
+
 	file.close();
+
+	wasSaved = true;
 
 	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
 
@@ -101,11 +111,15 @@ void CodeEditor::saveAs() {
 
 	QFile file(fileName);
 
-	if (file.open(QFile::WriteOnly)) {
-		file.write(toPlainText().toStdString().c_str());
+	if (!file.open(QFile::WriteOnly)) {
+		return;
 	}
 
+	file.write(toPlainText().toStdString().c_str());
+
 	file.close();
+
+	wasSaved = true;
 
 	this->tabs->setTabText(this->tabs->currentIndex(), QFileInfo(fileName).fileName());
 }
