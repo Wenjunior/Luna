@@ -39,6 +39,8 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	if (isCpp) {
 		highlighter->setDocument(document());
+	} else {
+		firstTextChange = false;
 	}
 
 	lineNumberArea = new LineNumberArea(this);
