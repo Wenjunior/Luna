@@ -33,7 +33,7 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	setTabStopDistance(fontMetrics().horizontalAdvance(' ') * TAB_SIZE);
 
-	if (code != nullptr) {
+	if (!code.isNull() && !code.isEmpty()) {
 		setPlainText(code);
 	}
 
@@ -49,14 +49,22 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
+	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
+
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
-
-	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
 }
 
 void CodeEditor::addAsteriskToTabName() {
+	// Toda vez que um conteúdo precisa ser realçado o primeiro realce é considerado uma mudança no código.
+
+	if (firstTextChange) {
+		firstTextChange = false;
+
+		return;
+	}
+
 	wasSaved = false;
 
 	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
@@ -121,7 +129,13 @@ void CodeEditor::saveAs() {
 
 	wasSaved = true;
 
-	this->tabs->setTabText(this->tabs->currentIndex(), QFileInfo(fileName).fileName());
+	QString fileName2 = QFileInfo(fileName).fileName();
+
+	this->tabs->setTabText(this->tabs->currentIndex(), fileName2);
+
+	if (fileName2.endsWith(".cpp") || fileName2.endsWith(".hpp")) {
+		highlighter->setDocument(document());
+	}
 }
 
 QString CodeEditor::getPath() {

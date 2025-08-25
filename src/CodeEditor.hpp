@@ -16,6 +16,8 @@ class CodeEditor : public QPlainTextEdit {
 
 	Highlighter *highlighter = new Highlighter(0);
 
+	bool firstTextChange = true;
+
 	bool wasSaved = true;
 
 public:
