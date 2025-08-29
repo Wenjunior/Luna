@@ -1,6 +1,7 @@
 <RCC>
 	<qresource prefix="/">
-        <file>icons/favicon.ico</file>
+		<file>icons/favicon.ico</file>
 		<file>qss/dark theme.qss</file>
+		<file>icons/close button.png</file>
 	</qresource>
 </RCC>

@@ -11,17 +11,71 @@
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QHeaderView>
+#include <QPushButton>
 #include <QInputDialog>
 #include <QDialogButtonBox>
 
 namespace fs = std::filesystem;
 
+int MainWindow::findTabIndexWithPath(QString path) {
+	for (int index = 0; index < this->tabs->count(); index++) {
+		QWidget *tab = (QWidget *) this->tabs->widget(index);
+
+		CodeEditor *codeEditor = (CodeEditor *) tab;
+
+		if (path.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
+			return index;
+		}
+	}
+
+	return -1;
+}
+
+void MainWindow::newTab(QString tabName, QString path, QString code, bool isCpp) {
+	/*
+		Escolhi usar datas porque o tempo sempre avança, então os IDs são sempre únicos.
+		Ou seja, não há necessidade de ficar verificando se ele já esta sendo usado.
+	*/
+
+	QString id = QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzzz");
+
+	CodeEditor *codeEditor = new CodeEditor(this, id, this->tabs, path, code, isCpp);
+
+	this->tabs->addTab(codeEditor, tabName);
+
+	QTabBar *tabBar = this->tabs->tabBar();
+
+	QPushButton *closeButton = new QPushButton();
+
+	closeButton->setIcon(QIcon(":/icons/close button.png"));
+
+	closeButton->setFlat(true);
+
+	closeButton->setFixedSize(QSize(16, 16));
+
+	int tabIndex = this->tabs->count() - 1;
+
+	connect(closeButton, &QAbstractButton::clicked, this, [this, id]() {
+		for (int index = 0; index < this->tabs->count(); index++) {
+			QWidget *tab = (QWidget *) this->tabs->widget(index);
+
+			CodeEditor *codeEditor = (CodeEditor *) tab;
+
+			if (id.compare(codeEditor->getID(), Qt::CaseSensitive) == 0) {
+				this->tabs->removeTab(index);
+
+				break;
+			}
+		}
+	});
+
+	tabBar->setTabButton(tabIndex, QTabBar::RightSide, closeButton);
+
+	this->tabs->setCurrentIndex(tabIndex);
+}
+
 void MainWindow::newFile() {
-	CodeEditor *codeEditor = new CodeEditor(this, this->tabs);
-
-	this->tabs->addTab(codeEditor, "Untitled");
-
-	this->tabs->setCurrentIndex(this->tabs->count() - 1);
+	newTab("Untitled");
 }
 
 void MainWindow::openFile() {
@@ -32,16 +86,12 @@ void MainWindow::openFile() {
 	QStringList fileNames = fileDialog.getOpenFileNames(this, "Open File...", QDir::homePath());
 
 	for (QString fileName : fileNames) {
-		for (int index = 0; index < this->tabs->count(); index++) {
-			QWidget *tab = (QWidget *) this->tabs->widget(index);
+		int tabIndex = findTabIndexWithPath(fileName);
 
-			CodeEditor *codeEditor = (CodeEditor *) tab;
+		if (tabIndex != -1) {
+			this->tabs->setCurrentIndex(tabIndex);
 
-			if (fileName.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
-				this->tabs->setCurrentWidget(tab);
-
-				return;
-			}
+			return;
 		}
 
 		QFile file(fileName);
@@ -59,18 +109,9 @@ void MainWindow::openFile() {
 				isCpp = true;
 			}
 
-			CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray, isCpp);
-
 			QFileInfo fileInfo(file);
 
-			this->tabs->addTab(codeEditor, fileInfo.fileName());
-
-			/*
-Colocar a linha de código a seguir aqui evita que a última tab seja selecionada caso o arquivo não seja UTF-8.
-E se você abrir vários arquivos grandes, a última tab será selecionada de acordo com a ordem em que eles forem abertos.
-			*/
-
-			this->tabs->setCurrentIndex(this->tabs->count() - 1);
+			newTab(fileInfo.fileName(), file.fileName(), byteArray, isCpp);
 		}
 	}
 }
@@ -175,16 +216,12 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 		return;
 	}
 
-	for (int index = 0; index < this->tabs->count(); index++) {
-		QWidget *tab = (QWidget *) this->tabs->widget(index);
+	int tabIndex = findTabIndexWithPath(filePath);
 
-		CodeEditor *codeEditor = (CodeEditor *) tab;
+	if (tabIndex != -1) {
+		this->tabs->setCurrentIndex(tabIndex);
 
-		if (filePath.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
-			this->tabs->setCurrentWidget(tab);
-
-			return;
-		}
+		return;
 	}
 
 	QFile file(filePath);
@@ -202,13 +239,9 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 			isCpp = true;
 		}
 
-		CodeEditor *codeEditor = new CodeEditor(this, this->tabs, file.fileName(), byteArray, isCpp);
-
 		QFileInfo fileInfo(file);
 
-		this->tabs->addTab(codeEditor, fileInfo.fileName());
-
-		this->tabs->setCurrentIndex(this->tabs->count() - 1);
+		newTab(fileInfo.fileName(), file.fileName(), byteArray, isCpp);
 	}
 }
 
@@ -386,8 +419,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->tabs->setTabsClosable(true);
 
 	this->tabs->setMovable(true);
-
-	connect(this->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::removeTab);
 
 	setCentralWidget(this->tabs);
 }

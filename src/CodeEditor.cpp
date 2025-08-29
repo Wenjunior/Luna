@@ -14,9 +14,13 @@
 #define EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE true
 #define TAB_SIZE 5
 
-#define EXTRA_SPACE 10
+#define EXTRA_SPACE_AT_LEFT 10
+#define EXTRA_SPACE_AT_RIGHT 10
+#define EXTRA_SPACE_AT_BOTTOM 100
 
-CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool isCpp) : QPlainTextEdit{parent} {
+CodeEditor::CodeEditor(QWidget *parent, QString id, QTabWidget *&tabs, QString path, QString code, bool isCpp) : QPlainTextEdit{parent} {
+	this->id = id;
+
 	this->tabs = tabs;
 
 	this->path = path;
@@ -144,6 +148,10 @@ QString CodeEditor::getPath() {
 	return this->path;
 }
 
+QString CodeEditor::getID() {
+	return this->id;
+}
+
 int CodeEditor::lineNumberAreaWidth() {
 	int digits = 1;
 
@@ -157,11 +165,11 @@ int CodeEditor::lineNumberAreaWidth() {
 
 	int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
-	return space + EXTRA_SPACE;
+	return space + EXTRA_SPACE_AT_RIGHT;
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
-	setViewportMargins(lineNumberAreaWidth() + EXTRA_SPACE, 0, 0, 0);
+	setViewportMargins(lineNumberAreaWidth() + EXTRA_SPACE_AT_LEFT, 0, 0, EXTRA_SPACE_AT_BOTTOM);
 }
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {

@@ -8,9 +8,11 @@
 class CodeEditor : public QPlainTextEdit {
 	Q_OBJECT
 
-	QString path;
+	QString id;
 
 	QTabWidget *tabs;
+
+	QString path;
 
 	QWidget *lineNumberArea;
 
@@ -21,7 +23,7 @@ class CodeEditor : public QPlainTextEdit {
 	bool wasSaved = true;
 
 public:
-	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path = nullptr, QString code = nullptr, bool isCpp = false);
+	explicit CodeEditor(QWidget *parent, QString id, QTabWidget *&tabs, QString path, QString code, bool isCpp);
 
 	void addAsteriskToTabName();
 
@@ -30,6 +32,8 @@ public:
 	void save();
 
 	QString getPath();
+
+	QString getID();
 
 	void lineNumberAreaPaintEvent(QPaintEvent *paintEvent);
 
