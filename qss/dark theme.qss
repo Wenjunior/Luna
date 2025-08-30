@@ -110,3 +110,8 @@ QTreeView {
 	background-color: #2F3541;
 	border: none;
 }
+
+QPushButton::pressed {
+	background-color: transparent;
+	border: none;
+}
