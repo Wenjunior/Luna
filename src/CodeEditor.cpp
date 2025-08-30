@@ -16,11 +16,8 @@
 
 #define EXTRA_SPACE_AT_LEFT 10
 #define EXTRA_SPACE_AT_RIGHT 10
-#define EXTRA_SPACE_AT_BOTTOM 100
 
-CodeEditor::CodeEditor(QWidget *parent, QString id, QTabWidget *&tabs, QString path, QString code, bool isCpp) : QPlainTextEdit{parent} {
-	this->id = id;
-
+CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool applyCppSyntaxHighlighting) : QPlainTextEdit{parent} {
 	this->tabs = tabs;
 
 	this->path = path;
@@ -41,7 +38,7 @@ CodeEditor::CodeEditor(QWidget *parent, QString id, QTabWidget *&tabs, QString p
 		setPlainText(code);
 	}
 
-	if (isCpp) {
+	if (applyCppSyntaxHighlighting) {
 		highlighter->setDocument(document());
 	} else {
 		firstTextChange = false;
@@ -148,10 +145,6 @@ QString CodeEditor::getPath() {
 	return this->path;
 }
 
-QString CodeEditor::getID() {
-	return this->id;
-}
-
 int CodeEditor::lineNumberAreaWidth() {
 	int digits = 1;
 
@@ -169,7 +162,7 @@ int CodeEditor::lineNumberAreaWidth() {
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
-	setViewportMargins(lineNumberAreaWidth() + EXTRA_SPACE_AT_LEFT, 0, 0, EXTRA_SPACE_AT_BOTTOM);
+	setViewportMargins(lineNumberAreaWidth() + EXTRA_SPACE_AT_LEFT, 0, 0, 0);
 }
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {

@@ -23,19 +23,17 @@ class MainWindow : public QMainWindow {
 
 	QFileSystemModel *fileSystemModel;
 
-	int findTabIndexWithPath(QString path);
-
 	void newTab(QString tabName, QString path = nullptr, QString code = nullptr, bool isCpp = false);
 
 	void newFile();
+
+	int findTabIndexWithPath(QString path);
 
 	void openFile();
 
 	void actionPerformed(Actions action);
 
 	void replaceAs();
-
-	void removeTab(int index);
 
 	void openFileFromExplorer(const QModelIndex &index);
 

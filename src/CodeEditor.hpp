@@ -23,7 +23,7 @@ class CodeEditor : public QPlainTextEdit {
 	bool wasSaved = true;
 
 public:
-	explicit CodeEditor(QWidget *parent, QString id, QTabWidget *&tabs, QString path, QString code, bool isCpp);
+	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool applyCppSyntaxHighlighting);
 
 	void addAsteriskToTabName();
 
@@ -32,8 +32,6 @@ public:
 	void save();
 
 	QString getPath();
-
-	QString getID();
 
 	void lineNumberAreaPaintEvent(QPaintEvent *paintEvent);
 

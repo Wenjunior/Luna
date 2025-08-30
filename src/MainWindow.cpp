@@ -17,29 +17,8 @@
 
 namespace fs = std::filesystem;
 
-int MainWindow::findTabIndexWithPath(QString path) {
-	for (int index = 0; index < this->tabs->count(); index++) {
-		QWidget *tab = (QWidget *) this->tabs->widget(index);
-
-		CodeEditor *codeEditor = (CodeEditor *) tab;
-
-		if (path.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
-			return index;
-		}
-	}
-
-	return -1;
-}
-
-void MainWindow::newTab(QString tabName, QString path, QString code, bool isCpp) {
-	/*
-		Escolhi usar datas porque o tempo sempre avança, então os IDs são sempre únicos.
-		Ou seja, não há necessidade de ficar verificando se ele já esta sendo usado.
-	*/
-
-	QString id = QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzzz");
-
-	CodeEditor *codeEditor = new CodeEditor(this, id, this->tabs, path, code, isCpp);
+void MainWindow::newTab(QString tabName, QString path, QString code, bool applyCppSyntaxHighlighting) {
+	CodeEditor *codeEditor = new CodeEditor(this, this->tabs, path, code, applyCppSyntaxHighlighting);
 
 	this->tabs->addTab(codeEditor, tabName);
 
@@ -55,13 +34,11 @@ void MainWindow::newTab(QString tabName, QString path, QString code, bool isCpp)
 
 	int tabIndex = this->tabs->count() - 1;
 
-	connect(closeButton, &QAbstractButton::clicked, this, [this, id]() {
+	tabBar->setTabButton(tabIndex, QTabBar::RightSide, closeButton);
+
+	connect(closeButton, &QPushButton::clicked, this, [this, closeButton]() {
 		for (int index = 0; index < this->tabs->count(); index++) {
-			QWidget *tab = (QWidget *) this->tabs->widget(index);
-
-			CodeEditor *codeEditor = (CodeEditor *) tab;
-
-			if (id.compare(codeEditor->getID(), Qt::CaseSensitive) == 0) {
+			if (this->tabs->tabBar()->tabButton(index, QTabBar::RightSide) == closeButton) {
 				this->tabs->removeTab(index);
 
 				break;
@@ -69,13 +46,25 @@ void MainWindow::newTab(QString tabName, QString path, QString code, bool isCpp)
 		}
 	});
 
-	tabBar->setTabButton(tabIndex, QTabBar::RightSide, closeButton);
-
 	this->tabs->setCurrentIndex(tabIndex);
 }
 
 void MainWindow::newFile() {
 	newTab("Untitled");
+}
+
+int MainWindow::findTabIndexWithPath(QString path) {
+	for (int index = 0; index < this->tabs->count(); index++) {
+		QWidget *tab = (QWidget *) this->tabs->widget(index);
+
+		CodeEditor *codeEditor = (CodeEditor *) tab;
+
+		if (path.compare(codeEditor->getPath(), Qt::CaseSensitive) == 0) {
+			return index;
+		}
+	}
+
+	return -1;
 }
 
 void MainWindow::openFile() {
@@ -103,15 +92,15 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			bool isCpp = false;
+			bool applyCppSyntaxHighlighting = false;
 
 			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-				isCpp = true;
+				applyCppSyntaxHighlighting = true;
 			}
 
 			QFileInfo fileInfo(file);
 
-			newTab(fileInfo.fileName(), file.fileName(), byteArray, isCpp);
+			newTab(fileInfo.fileName(), file.fileName(), byteArray, applyCppSyntaxHighlighting);
 		}
 	}
 }
@@ -205,10 +194,6 @@ void MainWindow::replaceAs() {
 	dialog.exec();
 }
 
-void MainWindow::removeTab(int index) {
-	this->tabs->removeTab(index);
-}
-
 void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	QString filePath = this->fileSystemModel->filePath(index);
 
@@ -233,15 +218,15 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	file.close();
 
 	if (byteArray.isValidUtf8()) {
-		bool isCpp = false;
+		bool applyCppSyntaxHighlighting = false;
 
 		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-			isCpp = true;
+			applyCppSyntaxHighlighting = true;
 		}
 
 		QFileInfo fileInfo(file);
 
-		newTab(fileInfo.fileName(), file.fileName(), byteArray, isCpp);
+		newTab(fileInfo.fileName(), file.fileName(), byteArray, applyCppSyntaxHighlighting);
 	}
 }
 
@@ -415,8 +400,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	edit->addAction(replaceAs);
 
 	this->tabs = new QTabWidget();
-
-	this->tabs->setTabsClosable(true);
 
 	this->tabs->setMovable(true);
 
