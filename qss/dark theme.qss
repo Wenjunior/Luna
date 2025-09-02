@@ -45,7 +45,7 @@ QPlainTextEdit {
 
 QScrollBar {
 	background-color: transparent;
-	width: 10px;
+	width: 5px;
 }
 
 QScrollBar::handle:vertical,

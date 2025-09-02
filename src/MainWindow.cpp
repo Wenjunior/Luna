@@ -1,5 +1,6 @@
 #include "CodeEditor.hpp"
 #include "MainWindow.hpp"
+#include "IconProvider.hpp"
 
 #include <QDir>
 #include <QMenu>
@@ -238,6 +239,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	fileSystemModel = new QFileSystemModel(this);
 
 	fileSystemModel->setRootPath(QDir::homePath());
+
+	fileSystemModel->setIconProvider(new IconProvider());
 
 	QTreeView *fileExplorer = new QTreeView();
 

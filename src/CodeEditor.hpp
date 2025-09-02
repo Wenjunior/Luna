@@ -8,8 +8,6 @@
 class CodeEditor : public QPlainTextEdit {
 	Q_OBJECT
 
-	QString id;
-
 	QTabWidget *tabs;
 
 	QString path;
@@ -25,11 +23,11 @@ class CodeEditor : public QPlainTextEdit {
 public:
 	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool applyCppSyntaxHighlighting);
 
-	void addAsteriskToTabName();
-
-	void saveAs();
+	void changeTabName();
 
 	void save();
+
+	void saveAs();
 
 	QString getPath();
 

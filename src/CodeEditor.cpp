@@ -34,6 +34,8 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	setTabStopDistance(fontMetrics().horizontalAdvance(' ') * TAB_SIZE);
 
+	setCursorWidth(2);
+
 	if (!code.isNull() && !code.isEmpty()) {
 		setPlainText(code);
 	}
@@ -52,15 +54,15 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 
 	connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
 
-	connect(this, &CodeEditor::textChanged, this, &CodeEditor::addAsteriskToTabName);
+	connect(this, &CodeEditor::textChanged, this, &CodeEditor::changeTabName);
 
 	updateLineNumberAreaWidth(0);
 
 	highlightCurrentLine();
 }
 
-void CodeEditor::addAsteriskToTabName() {
-	// Toda vez que um conteúdo precisa ser realçado o primeiro realce é considerado uma mudança no código.
+void CodeEditor::changeTabName() {
+	// Toda vez que o conteúdo precisa ser realçado o primeiro realce é considerado uma mudança no código.
 
 	if (firstTextChange) {
 		firstTextChange = false;
