@@ -1,7 +1,2 @@
-/.qt
-CMakeCache.txt
-/CMakeFiles
-Luna
-/Luna_autogen
-Makefile
-cmake_install.cmake
+/build
+CMakeLists.txt.user

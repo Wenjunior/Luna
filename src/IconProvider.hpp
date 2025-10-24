@@ -5,7 +5,7 @@
 
 class IconProvider : public QAbstractFileIconProvider {
 public:
-  virtual QIcon icon(const QFileInfo &info) const override;
+	virtual QIcon icon(const QFileInfo &info) const override;
 };
 
 #endif

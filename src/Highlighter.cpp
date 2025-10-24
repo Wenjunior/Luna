@@ -7,7 +7,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	QTextCharFormat keywordFormat;
 
-	QColor red(255, 85, 85);
+	QColor red(255, 85, 86);
 
 	keywordFormat.setForeground(red);
 
