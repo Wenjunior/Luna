@@ -1,9 +1,10 @@
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#ifndef CODEEDITOR_HPP
+#define CODEEDITOR_HPP
 
 #include <QTabWidget>
 #include <QPlainTextEdit>
 #include "Highlighter.hpp"
+#include "Languages.hpp"
 
 class CodeEditor : public QPlainTextEdit {
 	Q_OBJECT
@@ -21,7 +22,7 @@ class CodeEditor : public QPlainTextEdit {
 	bool wasSaved = true;
 
 public:
-	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool applyCppSyntaxHighlighting);
+	explicit CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, Languages language);
 
 	void changeTabName();
 

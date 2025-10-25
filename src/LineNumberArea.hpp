@@ -1,5 +1,5 @@
-#ifndef LINENUMBERAREA
-#define LINENUMBERAREA
+#ifndef LINENUMBERAREA_HPP
+#define LINENUMBERAREA_HPP
 
 class LineNumberArea : public QWidget {
 	CodeEditor *codeEditor;

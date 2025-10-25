@@ -16,6 +16,7 @@ qt_add_executable(Luna
 	src/LineNumberArea.hpp
 	src/Highlighter.hpp src/Highlighter.cpp
 	src/IconProvider.hpp src/IconProvider.cpp
+	src/Languages.hpp
 )
 
 target_link_libraries(Luna

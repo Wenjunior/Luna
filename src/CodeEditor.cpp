@@ -17,7 +17,7 @@
 #define EXTRA_SPACE_AT_LEFT 10
 #define EXTRA_SPACE_AT_RIGHT 10
 
-CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, bool applyCppSyntaxHighlighting) : QPlainTextEdit{parent} {
+CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString code, Languages language) : QPlainTextEdit{parent} {
 	this->tabs = tabs;
 
 	this->path = path;
@@ -40,7 +40,7 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 		setPlainText(code);
 	}
 
-	if (applyCppSyntaxHighlighting) {
+	if (language == CPP) {
 		highlighter->setDocument(document());
 	} else {
 		firstTextChange = false;

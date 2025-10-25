@@ -1,5 +1,5 @@
-#ifndef HIGHLIGHTER_H
-#define HIGHLIGHTER_H
+#ifndef HIGHLIGHTER_HPP
+#define HIGHLIGHTER_HPP
 
 #include <QRegularExpression>
 #include <QSyntaxHighlighter>

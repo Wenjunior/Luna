@@ -18,8 +18,8 @@
 
 namespace fs = std::filesystem;
 
-void MainWindow::newTab(QString tabName, QString path, QString code, bool applyCppSyntaxHighlighting) {
-	CodeEditor *codeEditor = new CodeEditor(this, this->tabs, path, code, applyCppSyntaxHighlighting);
+void MainWindow::newTab(QString tabName, QString path, QString code, Languages language) {
+	CodeEditor *codeEditor = new CodeEditor(this, this->tabs, path, code, language);
 
 	this->tabs->addTab(codeEditor, tabName);
 
@@ -91,15 +91,15 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			bool applyCppSyntaxHighlighting = false;
+			Languages language = PLAIN_TEXT;
 
 			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-				applyCppSyntaxHighlighting = true;
+				language = CPP;
 			}
 
 			QFileInfo fileInfo(file);
 
-			newTab(fileInfo.fileName(), file.fileName(), byteArray, applyCppSyntaxHighlighting);
+			(fileInfo.fileName(), file.fileName(), byteArray, language);
 		}
 	}
 }
@@ -217,15 +217,15 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	file.close();
 
 	if (byteArray.isValidUtf8()) {
-		bool applyCppSyntaxHighlighting = false;
+		Languages language = PLAIN_TEXT;
 
 		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-			applyCppSyntaxHighlighting = true;
+			language = CPP;
 		}
 
 		QFileInfo fileInfo(file);
 
-		newTab(fileInfo.fileName(), file.fileName(), byteArray, applyCppSyntaxHighlighting);
+		(fileInfo.fileName(), file.fileName(), byteArray, language);
 	}
 }
 

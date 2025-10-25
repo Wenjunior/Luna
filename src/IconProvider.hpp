@@ -1,5 +1,5 @@
-#ifndef FILEICONPROVIDER_H
-#define FILEICONPROVIDER_H
+#ifndef FILEICONPROVIDER_HPP
+#define FILEICONPROVIDER_HPP
 
 #include <QAbstractFileIconProvider>
 

@@ -1,9 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <QTabWidget>
 #include <QMainWindow>
 #include <QFileSystemModel>
+
+#include "Languages.hpp"
 
 enum Actions {
 	SAVE,
@@ -23,7 +25,7 @@ class MainWindow : public QMainWindow {
 
 	QFileSystemModel *fileSystemModel;
 
-	void newTab(QString tabName, QString path = nullptr, QString code = nullptr, bool isCpp = false);
+	void newTab(QString tabName, QString path = nullptr, QString code = nullptr, Languages language = PLAIN_TEXT);
 
 	void newFile();
 
