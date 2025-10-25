@@ -27,11 +27,9 @@ void MainWindow::newTab(QString tabName, QString path, QString code, bool applyC
 
 	QPushButton *closeButton = new QPushButton();
 
-	closeButton->setIcon(QIcon(":/icons/close button.png"));
+	closeButton->setIcon(QIcon(":/icons/close button.svg"));
 
 	closeButton->setFlat(true);
-
-	closeButton->setFixedSize(QSize(16, 16));
 
 	int tabIndex = this->tabs->count() - 1;
 

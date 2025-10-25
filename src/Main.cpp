@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 
 	MainWindow mainWindow;
 
-	QIcon icon(":/icons/window icon.ico");
+	QIcon icon(":/icons/favicon.ico");
 
 	mainWindow.setWindowIcon(icon);
 
