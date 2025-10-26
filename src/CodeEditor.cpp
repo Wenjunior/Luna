@@ -3,14 +3,16 @@
 #include "LineNumberArea.hpp"
 
 #include <QFile>
+#include <QTabBar>
 #include <QPainter>
 #include <QTextBlock>
 #include <QFileDialog>
+#include <QPushButton>
 #include <QTextStream>
 #include <QVBoxLayout>
 
-#define FONT_FAMILY "Monospace"
-#define FONT_SIZE 14
+#define FONT_FAMILY "Consolas"
+#define FONT_SIZE 16
 #define EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE true
 #define TAB_SIZE 5
 
@@ -72,11 +74,25 @@ void CodeEditor::changeTabName() {
 
 	wasSaved = false;
 
-	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
+	QTabBar *tabBar = this->tabs->tabBar();
 
-	if (!tabName.endsWith(" *")) {
-		this->tabs->setTabText(this->tabs->currentIndex(), tabName.append(" *"));
-	}
+	QPushButton *closeButton = new QPushButton();
+
+	closeButton->setIcon(QIcon(":/icons/alert.svg"));
+
+	closeButton->setFlat(true);
+
+	tabBar->setTabButton(this->tabs->currentIndex(), QTabBar::RightSide, closeButton);
+
+	connect(closeButton, &QPushButton::clicked, this, [this, closeButton]() {
+		for (int index = 0; index < this->tabs->count(); index++) {
+			if (this->tabs->tabBar()->tabButton(index, QTabBar::RightSide) == closeButton) {
+				this->tabs->removeTab(index);
+
+				break;
+			}
+		}
+	});
 }
 
 void CodeEditor::save() {
