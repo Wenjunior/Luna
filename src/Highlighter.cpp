@@ -67,7 +67,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 							rule.format = format;
 
-							highlightingRules.append(rule);
+							this->highlightingRules.append(rule);
 						}
 					}
 				}
@@ -79,27 +79,25 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
 
 	HighlightingRule rule;
 
-	QTextCharFormat singleLineCommentFormat;
-
-	singleLineCommentFormat.setForeground(Qt::lightGray);
+	this->singleLineCommentFormat.setForeground(Qt::lightGray);
 
 	rule.pattern = QRegularExpression(QStringLiteral("//[^\n]*"));
 
-	rule.format = singleLineCommentFormat;
+	rule.format = this->singleLineCommentFormat;
 
-	highlightingRules.append(rule);
+	this->highlightingRules.append(rule);
 
 	// Multi line comments
 
-	multiLineCommentFormat.setForeground(Qt::lightGray);
+	this->multiLineCommentFormat.setForeground(Qt::lightGray);
 
-	commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
+	this->commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
 
-	commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
+	this->commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
 }
 
 void Highlighter::highlightBlock(const QString &text) {
-	for (const HighlightingRule &rule : std::as_const(highlightingRules)) {
+	for (const HighlightingRule &rule : std::as_const(this->highlightingRules)) {
 		QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
 
 		while (matchIterator.hasNext()) {
@@ -114,11 +112,11 @@ void Highlighter::highlightBlock(const QString &text) {
 	int startIndex = 0;
 
 	if (previousBlockState() != 1) {
-		startIndex = text.indexOf(commentStartExpression);
+		startIndex = text.indexOf(this->commentStartExpression);
 	}
 
 	while (startIndex >= 0) {
-		QRegularExpressionMatch match = commentEndExpression.match(text, startIndex);
+		QRegularExpressionMatch match = this->commentEndExpression.match(text, startIndex);
 
 		int endIndex = match.capturedStart();
 
@@ -132,8 +130,8 @@ void Highlighter::highlightBlock(const QString &text) {
 			commentLength = endIndex - startIndex + match.capturedLength();
 		}
 
-		setFormat(startIndex, commentLength, multiLineCommentFormat);
+		setFormat(startIndex, commentLength, this->multiLineCommentFormat);
 
-		startIndex = text.indexOf(commentStartExpression, startIndex + commentLength);
+		startIndex = text.indexOf(this->commentStartExpression, startIndex + commentLength);
 	}
 }

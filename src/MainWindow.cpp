@@ -18,7 +18,13 @@
 
 namespace fs = std::filesystem;
 
-void MainWindow::newTab(QString tabName, QString path, QString code, Languages language) {
+void MainWindow::newTab(QString tabName, QString path, QString code) {
+	Languages language = PLAIN_TEXT;
+
+	if (tabName.endsWith(".cpp") || tabName.endsWith(".hpp")) {
+		language = CPP;
+	}
+
 	CodeEditor *codeEditor = new CodeEditor(this, this->tabs, path, code, language);
 
 	this->tabs->addTab(codeEditor, tabName);
@@ -91,20 +97,14 @@ void MainWindow::openFile() {
 		file.close();
 
 		if (byteArray.isValidUtf8()) {
-			Languages language = PLAIN_TEXT;
-
-			if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-				language = CPP;
-			}
-
 			QFileInfo fileInfo(file);
 
-			newTab(fileInfo.fileName(), file.fileName(), byteArray, language);
+			newTab(fileInfo.fileName(), file.fileName(), byteArray);
 		}
 	}
 }
 
-void MainWindow::actionPerformed(Actions action) {
+void MainWindow::save() {
 	QWidget *currentWidget = this->tabs->currentWidget();
 
 	if (currentWidget == nullptr) {
@@ -113,46 +113,93 @@ void MainWindow::actionPerformed(Actions action) {
 
 	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
 
-	switch (action) {
-		case SAVE:
-			codeEditor->save();
+	codeEditor->save();
+}
 
-			break;
+void MainWindow::saveAs() {
+	QWidget *currentWidget = this->tabs->currentWidget();
 
-		case SAVE_AS:
-			codeEditor->saveAs();
-
-			break;
-
-		case UNDO:
-			codeEditor->undo();
-
-		case REDO:
-			codeEditor->redo();
-
-			break;
-
-		case CUT:
-			codeEditor->cut();
-
-			break;
-
-		case COPY:
-			codeEditor->copy();
-
-			break;
-
-		case PASTE:
-			if (codeEditor->canPaste()) {
-				codeEditor->paste();
-			}
-
-			break;
-		case SELECT_ALL:
-			codeEditor->selectAll();
-
-			break;
+	if (currentWidget == nullptr) {
+		return;
 	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->saveAs();
+}
+
+void MainWindow::undo() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->undo();
+}
+
+void MainWindow::redo() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->redo();
+}
+
+void MainWindow::cut() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->cut();
+}
+
+void MainWindow::copy() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->copy();
+}
+
+void MainWindow::paste() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	if (codeEditor->canPaste()) {
+		codeEditor->paste();
+	}
+}
+
+void MainWindow::selectAll() {
+	QWidget *currentWidget = this->tabs->currentWidget();
+
+	if (currentWidget == nullptr) {
+		return;
+	}
+
+	CodeEditor *codeEditor = (CodeEditor *) currentWidget;
+
+	codeEditor->selectAll();
 }
 
 void MainWindow::replaceAs() {
@@ -217,15 +264,9 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 	file.close();
 
 	if (byteArray.isValidUtf8()) {
-		Languages language = PLAIN_TEXT;
-
-		if (file.fileName().endsWith(".cpp") || file.fileName().endsWith(".hpp")) {
-			language = CPP;
-		}
-
 		QFileInfo fileInfo(file);
 
-		newTab(fileInfo.fileName(), file.fileName(), byteArray, language);
+		newTab(fileInfo.fileName(), file.fileName(), byteArray);
 	}
 }
 
@@ -234,17 +275,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	showMaximized();
 
-	fileSystemModel = new QFileSystemModel(this);
+	this->fileSystemModel = new QFileSystemModel(this);
 
-	fileSystemModel->setRootPath(QDir::homePath());
+	this->fileSystemModel->setRootPath(QDir::homePath());
 
-	fileSystemModel->setIconProvider(new IconProvider());
+	this->fileSystemModel->setIconProvider(new IconProvider());
 
 	QTreeView *fileExplorer = new QTreeView();
 
-	fileExplorer->setModel(fileSystemModel);
+	fileExplorer->setModel(this->fileSystemModel);
 
-	fileExplorer->setRootIndex(fileSystemModel->index(QDir::homePath()));
+	fileExplorer->setRootIndex(this->fileSystemModel->index(QDir::homePath()));
 
 	fileExplorer->setHeaderHidden(true);
 
@@ -294,7 +335,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 		QString folder = QFileDialog::getExistingDirectory(nullptr, "Open Folder...", QDir::homePath(), QFileDialog::ShowDirsOnly);
 
 		if (!folder.isEmpty() && !folder.isNull()) {
-			fileExplorer->setRootIndex(fileSystemModel->index(folder));
+			fileExplorer->setRootIndex(this->fileSystemModel->index(folder));
 		}
 	});
 
@@ -304,9 +345,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	save->setShortcut(QKeySequence::Save);
 
-	connect(save, &QAction::triggered, this, [this]() {
-		actionPerformed(SAVE);
-	});
+	connect(save, &QAction::triggered, this, &MainWindow::save);
 
 	file->addAction(save);
 
@@ -314,9 +353,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	saveAs->setShortcut(QKeySequence::SaveAs);
 
-	connect(saveAs, &QAction::triggered, this, [this]() {
-		actionPerformed(SAVE_AS);
-	});
+	connect(saveAs, &QAction::triggered, this, &MainWindow::saveAs);
 
 	file->addAction(saveAs);
 
@@ -336,9 +373,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	undo->setShortcut(QKeySequence::Undo);
 
-	connect(undo, &QAction::triggered, this, [this]() {
-		actionPerformed(UNDO);
-	});
+	connect(undo, &QAction::triggered, this, &MainWindow::undo);
 
 	edit->addAction(undo);
 
@@ -346,9 +381,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	redo->setShortcut(QKeySequence::Redo);
 
-	connect(redo, &QAction::triggered, this, [this]() {
-		actionPerformed(REDO);
-	});
+	connect(redo, &QAction::triggered, this, &MainWindow::redo);
 
 	edit->addAction(redo);
 
@@ -356,9 +389,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	cut->setShortcut(QKeySequence::Cut);
 
-	connect(cut, &QAction::triggered, this, [this]() {
-		actionPerformed(CUT);
-	});
+	connect(cut, &QAction::triggered, this, &MainWindow::cut);
 
 	edit->addAction(cut);
 
@@ -366,9 +397,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	copy->setShortcut(QKeySequence::Copy);
 
-	connect(copy, &QAction::triggered, this, [this]() {
-		actionPerformed(COPY);
-	});
+	connect(copy, &QAction::triggered, this, &MainWindow::copy);
 
 	edit->addAction(copy);
 
@@ -376,9 +405,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	paste->setShortcut(QKeySequence::Paste);
 
-	connect(paste, &QAction::triggered, this, [this]() {
-		actionPerformed(PASTE);
-	});
+	connect(paste, &QAction::triggered, this, &MainWindow::paste);
 
 	edit->addAction(paste);
 
@@ -386,9 +413,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	selectAll->setShortcut(QKeySequence::SelectAll);
 
-	connect(selectAll, &QAction::triggered, this, [this]() {
-		actionPerformed(SELECT_ALL);
-	});
+	connect(selectAll, &QAction::triggered, this, &MainWindow::selectAll);
 
 	edit->addAction(selectAll);
 

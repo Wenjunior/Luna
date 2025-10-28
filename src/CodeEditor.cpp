@@ -43,12 +43,12 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 	}
 
 	if (language == CPP) {
-		highlighter->setDocument(document());
+		this->highlighter->setDocument(document());
 	} else {
-		firstTextChange = false;
+		this->firstTextChange = false;
 	}
 
-	lineNumberArea = new LineNumberArea(this);
+	this->lineNumberArea = new LineNumberArea(this);
 
 	connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
 
@@ -66,13 +66,13 @@ CodeEditor::CodeEditor(QWidget *parent, QTabWidget *&tabs, QString path, QString
 void CodeEditor::changeTabName() {
 	// Toda vez que o conteúdo precisa ser realçado o primeiro realce é considerado uma mudança no código.
 
-	if (firstTextChange) {
-		firstTextChange = false;
+	if (this->firstTextChange) {
+		this->firstTextChange = false;
 
 		return;
 	}
 
-	wasSaved = false;
+	this->wasSaved = false;
 
 	QTabBar *tabBar = this->tabs->tabBar();
 
@@ -102,7 +102,7 @@ void CodeEditor::save() {
 		return;
 	}
 
-	if (wasSaved) {
+	if (this->wasSaved) {
 		return;
 	}
 
@@ -116,7 +116,7 @@ void CodeEditor::save() {
 
 	file.close();
 
-	wasSaved = true;
+	this->wasSaved = true;
 
 	QString tabName = this->tabs->tabText(this->tabs->currentIndex());
 
@@ -148,14 +148,14 @@ void CodeEditor::saveAs() {
 
 	file.close();
 
-	wasSaved = true;
+	this->wasSaved = true;
 
 	QString fileName2 = QFileInfo(fileName).fileName();
 
 	this->tabs->setTabText(this->tabs->currentIndex(), fileName2);
 
 	if (fileName2.endsWith(".cpp") || fileName2.endsWith(".hpp")) {
-		highlighter->setDocument(document());
+		this->highlighter->setDocument(document());
 	}
 }
 
@@ -185,9 +185,9 @@ void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
 	if (dy) {
-		lineNumberArea->scroll(0, dy);
+		this->lineNumberArea->scroll(0, dy);
 	} else {
-		lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+		this->lineNumberArea->update(0, rect.y(), this->lineNumberArea->width(), rect.height());
 	}
 
 	if (rect.contains(viewport()->rect())) {
@@ -200,7 +200,7 @@ void CodeEditor::resizeEvent(QResizeEvent *resizeEvent) {
 
 	QRect cRect = contentsRect();
 
-	lineNumberArea->setGeometry(QRect(cRect.left(), cRect.top(), lineNumberAreaWidth(), cRect.height()));
+	this->lineNumberArea->setGeometry(QRect(cRect.left(), cRect.top(), lineNumberAreaWidth(), cRect.height()));
 }
 
 void CodeEditor::highlightCurrentLine() {
@@ -228,7 +228,7 @@ void CodeEditor::highlightCurrentLine() {
 }
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *paintEvent) {
-	QPainter painter(lineNumberArea);
+	QPainter painter(this->lineNumberArea);
 
 	painter.setFont(font());
 
@@ -248,7 +248,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *paintEvent) {
 
 			painter.setPen(lightGray);
 
-			painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
+			painter.drawText(0, top, this->lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
 		}
 
 		block = block.next();

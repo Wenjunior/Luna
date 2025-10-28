@@ -7,17 +7,6 @@
 
 #include "Languages.hpp"
 
-enum Actions {
-	SAVE,
-	SAVE_AS,
-	UNDO,
-	REDO,
-	CUT,
-	COPY,
-	PASTE,
-	SELECT_ALL
-};
-
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
@@ -25,7 +14,7 @@ class MainWindow : public QMainWindow {
 
 	QFileSystemModel *fileSystemModel;
 
-	void newTab(QString tabName, QString path = nullptr, QString code = nullptr, Languages language = PLAIN_TEXT);
+	void newTab(QString tabName, QString path = nullptr, QString code = nullptr);
 
 	void newFile();
 
@@ -33,7 +22,21 @@ class MainWindow : public QMainWindow {
 
 	void openFile();
 
-	void actionPerformed(Actions action);
+	void save();
+
+	void saveAs();
+
+	void undo();
+
+	void redo();
+
+	void cut();
+
+	void copy();
+
+	void paste();
+
+	void selectAll();
 
 	void replaceAs();
 
