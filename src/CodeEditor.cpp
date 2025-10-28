@@ -12,7 +12,7 @@
 #include <QVBoxLayout>
 
 #define FONT_FAMILY "Consolas"
-#define FONT_SIZE 16
+#define FONT_SIZE 14
 #define EVERY_CHAR_SHOULD_HAVE_THE_SAME_SIZE true
 #define TAB_SIZE 5
 

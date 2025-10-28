@@ -99,7 +99,7 @@ void MainWindow::openFile() {
 
 			QFileInfo fileInfo(file);
 
-			(fileInfo.fileName(), file.fileName(), byteArray, language);
+			newTab(fileInfo.fileName(), file.fileName(), byteArray, language);
 		}
 	}
 }
@@ -225,7 +225,7 @@ void MainWindow::openFileFromExplorer(const QModelIndex &index) {
 
 		QFileInfo fileInfo(file);
 
-		(fileInfo.fileName(), file.fileName(), byteArray, language);
+		newTab(fileInfo.fileName(), file.fileName(), byteArray, language);
 	}
 }
 

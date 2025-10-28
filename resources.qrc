@@ -6,5 +6,6 @@
 		<file>icons/folder.svg</file>
 		<file>icons/file.svg</file>
 		<file>icons/alert.svg</file>
+		<file>patterns/cpp.json</file>
 	</qresource>
 </RCC>

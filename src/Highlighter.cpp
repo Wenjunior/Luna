@@ -1,193 +1,83 @@
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QMessageBox>
+
 #include "Highlighter.hpp"
 
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
-	// Keywords
+	QFile file(":/patterns/cpp.json");
 
-	HighlightingRule rule;
+	if (file.open(QFile::ReadOnly | QFile::Text)) {
+		QByteArray json = file.readAll();
 
-	QTextCharFormat keywordFormat;
+		file.close();
 
-	QColor red(255, 85, 86);
+		QJsonDocument doc = QJsonDocument::fromJson(json);
 
-	keywordFormat.setForeground(red);
+		if (doc.isArray()) {
+			QJsonArray values = doc.array();
 
-	keywordFormat.setFontWeight(QFont::Bold);
+			for (QJsonValue value : values) {
+				if (value.isObject()) {
+					QJsonObject obj = value.toObject();
 
-	rule.pattern = QRegularExpression(QStringLiteral("\\b(override|for|alignas|alignof|and|and_eq|asm|atomic_cancel|atomic_commit|atomic_noexcept|auto|bitand|bitor|break|case|catch|class|compl|concept|const|consteval|constexpr|constinit|const_cast|continue|contract_assert|co_await|co_return|co_yield|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|forv|friend|goto|if|inline|mutable|namespace|new|noexcept|not|not_eq|nullptrv|operator|or|or_eq|private|protected|public|reflexpr|register|reinterpret_cast|requires|return|signed|sizeof|static|static_assert|static_cast|struct|switch|synchronized|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|volatile|wchar_t|while|xor|xor_eq)\\b"));
+					if (obj.contains("pattern") && obj.contains("color")) {
+						QJsonValue pattern = obj["pattern"];
 
-	rule.format = keywordFormat;
+						if (pattern.isString() && obj["color"].isString()) {
+							HighlightingRule rule;
 
-	highlightingRules.append(rule);
+							rule.pattern = QRegularExpression(pattern.toString());
 
-	// Directives
+							QTextCharFormat format;
 
-	QTextCharFormat directiveFormat;
+							format.setForeground(QColor(248, 248, 242));
 
-	directiveFormat.setForeground(red);
+							QString color = obj["color"].toString();
 
-	rule.pattern = QRegularExpression(QStringLiteral("#\\b(include|define|undef|elif|else|endif|ifdef|ifndef|if|error|warning|pragma|line)\\b"));
+							if (color.compare("red", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(255, 85, 85));
+							}
 
-	rule.format = directiveFormat;
+							if (color.compare("cyan", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(139, 233, 253));
+							}
 
-	highlightingRules.append(rule);
+							if (color.compare("green", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(80, 250, 123));
+							}
 
-	// Primitive types
+							if (color.compare("pink", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(255, 121, 198));
+							}
 
-	QTextCharFormat primitiveTypeFormat;
+							if (color.compare("purple", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(255, 121, 198));
+							}
 
-	QColor cyan(139, 233, 253);
+							if (color.compare("orange", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(255, 184, 108));
+							}
 
-	primitiveTypeFormat.setForeground(cyan);
+							if (color.compare("yellow", Qt::CaseSensitivity::CaseInsensitive) == 0) {
+								format.setForeground(QColor(241, 250, 140));
+							}
 
-	rule.pattern = QRegularExpression(QStringLiteral("\\b(int|float|double|char|bool|short|long|void|char8_t|char16_t|char32_t)\\b"));
+							rule.format = format;
 
-	rule.format = primitiveTypeFormat;
-
-	highlightingRules.append(rule);
-
-	// Booleans
-
-	QTextCharFormat booleanFormat;
-
-	booleanFormat.setForeground(cyan);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\\b(true|false)\\b"));
-
-	rule.format = booleanFormat;
-
-	highlightingRules.append(rule);
-
-	// Functions
-
-	QTextCharFormat functionFormat;
-
-	QColor green(80, 250, 123);
-
-	functionFormat.setForeground(green);
-
-	rule.pattern = QRegularExpression(QStringLiteral("[0-9a-zA-Z_]+(?=\\()"));
-
-	rule.format = functionFormat;
-
-	highlightingRules.append(rule);
-
-	// Integer literals
-
-	QTextCharFormat integerLiteralsFormat;
-
-	QColor pink(255, 121, 198);
-
-	integerLiteralsFormat.setForeground(pink);
-
-	rule.pattern = QRegularExpression(QStringLiteral("0(x|b)[0-9a-zA-Z]+"));
-
-	rule.format = integerLiteralsFormat;
-
-	highlightingRules.append(rule);
-
-	// Classes
-
-	QTextCharFormat classAndEnumFormat;
-
-	QColor purple(189, 147, 249);
-
-	classAndEnumFormat.setForeground(purple);
-
-	rule.pattern = QRegularExpression(QStringLiteral("(?<![a-z0-9:])[A-Z][0-9a-zA-Z]+"));
-
-	rule.format = classAndEnumFormat;
-
-	highlightingRules.append(rule);
-
-	// Includes
-
-	QTextCharFormat includeFormat;
-
-	QColor orange(255, 184, 108);
-
-	includeFormat.setForeground(orange);
-
-	rule.pattern = QRegularExpression(QStringLiteral("(?<=#include )<(.*)>"));
-
-	rule.format = includeFormat;
-
-	highlightingRules.append(rule);
-
-	// Macros
-
-	QTextCharFormat macroFormat;
-
-	classAndEnumFormat.setForeground(orange);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Z_]+\\b"));
-
-	rule.format = macroFormat;
-
-	highlightingRules.append(rule);
-
-	// Null values
-
-	QTextCharFormat nullFormat;
-
-	nullFormat.setForeground(cyan);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\\b(nullptr|NULL)\\b"));
-
-	rule.format = nullFormat;
-
-	highlightingRules.append(rule);
-
-	// Operators
-
-	QTextCharFormat operatorFormat;
-
-	operatorFormat.setForeground(orange);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\\+|-|\\*|\\/|=|!|&|\\||<|>|:"));
-
-	rule.format = operatorFormat;
-
-	highlightingRules.append(rule);
-
-	// Semicolons
-
-	QTextCharFormat semicolonFormat;
-
-	semicolonFormat.setForeground(Qt::lightGray);
-
-	rule.pattern = QRegularExpression(QStringLiteral(";"));
-
-	rule.format = semicolonFormat;
-
-	highlightingRules.append(rule);
-
-	// Numbers
-
-	QTextCharFormat numberFormat;
-
-	numberFormat.setForeground(pink);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\\b[0-9]+\\b"));
-
-	rule.format = numberFormat;
-
-	highlightingRules.append(rule);
-
-	// Strings
-
-	QTextCharFormat stringFormat;
-
-	QColor yellow(241, 250, 140);
-
-	stringFormat.setForeground(yellow);
-
-	rule.pattern = QRegularExpression(QStringLiteral("\"([^\"\\\\]|\\\\.)*\"|'.'"));
-
-	rule.format = stringFormat;
-
-	highlightingRules.append(rule);
+							highlightingRules.append(rule);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	// Single line comments
+
+	HighlightingRule rule;
 
 	QTextCharFormat singleLineCommentFormat;
 

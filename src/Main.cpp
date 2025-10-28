@@ -13,9 +13,9 @@ int main(int argc, char *argv[]) {
 	if (file.open(QFile::ReadOnly | QFile::Text)) {
 		QString styleSheet = file.readAll();
 
-		app.setStyleSheet(styleSheet);
-
 		file.close();
+
+		app.setStyleSheet(styleSheet);
 	}
 
 	MainWindow mainWindow;
