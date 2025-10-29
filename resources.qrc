@@ -1,7 +1,7 @@
 <RCC>
 	<qresource prefix="/">
 		<file>icons/favicon.ico</file>
-		<file>qss/dark theme.qss</file>
+		<file>css/dark theme.css</file>
 		<file>icons/close button.svg</file>
 		<file>icons/folder.svg</file>
 		<file>icons/file.svg</file>

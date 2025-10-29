@@ -1,14 +1,14 @@
 QMainWindow {
-	background-color: #454C5D;
+	background-color: #31364A;
 }
 
 QMainWindow::separator {
-	background-color: #2F3541;
+	background-color: #25293A;
 }
 
 QMenuBar {
 	color: #F8F8F2;
-	background-color: #2F2F2F;
+	background-color: #212432;
 }
 
 QMenuBar::item::selected {
@@ -18,7 +18,7 @@ QMenuBar::item::selected {
 
 QMenu {
 	color: #F8F8F2;
-	background-color: #2F2F2F;
+	background-color: #212432;
 }
 
 QMenu::item::selected {
@@ -29,16 +29,17 @@ QMenu::item::selected {
 QTabBar::tab {
 	color: #F8F8F2;
 	background-color: #454C5D;
+	height: 30px;
 }
 
 QTabBar::tab:selected {
 	color: white;
-	background-color: #3A414E;
+	background-color: #292d3E;
 }
 
 QPlainTextEdit {
 	color: #F8F8F2;
-	background-color: #3A414E;
+	background-color: #292d3E;
 	selection-background-color: #9966CC;
 	border: none;
 }
@@ -78,7 +79,7 @@ QTabWidget {
 }
 
 QDialog {
-	background-color: #2F3541;
+	background-color: #1A2032;
 }
 
 QDialog QLabel {
@@ -88,6 +89,7 @@ QDialog QLabel {
 QDialog QLineEdit {
 	color: white;
 	background-color: #464C54;
+	border: 1px solid #464C54;
 }
 
 QDialog QLineEdit:focus {
@@ -95,23 +97,25 @@ QDialog QLineEdit:focus {
 }
 
 QDialogButtonBox > QPushButton {
+	height: 25px;
+	width: 50px;
 	color: white;
-	background-color: #2E3238;
-	border: 5px solid #2E3238;
+	background-color: #1A2032;
+	border: 1px solid whitesmoke;
 }
 
 QDockWidget::title {
-	background-color: #2F3541;
+	background-color: #25293A;
 }
 
 QTreeView {
 	color: #F8F8F2;
 	font-size: 14px;
-	background-color: #2F3541;
+	background-color: #25293A;
 	border: none;
 }
 
-QPushButton::pressed {
+QPushButton {
 	background-color: transparent;
 	border: none;
 }

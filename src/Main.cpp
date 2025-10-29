@@ -8,7 +8,7 @@
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	QFile file(":/qss/dark theme.qss");
+	QFile file(":/css/dark theme.css");
 
 	if (file.open(QFile::ReadOnly | QFile::Text)) {
 		QString styleSheet = file.readAll();
